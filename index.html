@@ -365,8 +365,8 @@
       : `<div class="award-icons-spacer"></div>`;
 
     // Thumbnail
-    const thumbHTML = p.image
-      ? `<div class="project-thumb"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>`
+    const thumbHTML = p.thumbnail
+      ? `<div class="project-thumb"><img src="thumbnail/${p.thumbnail}" alt="${p.name}" loading="lazy"></div>`
       : `<div class="project-thumb"></div>`;
 
     const descHTML = p.description

@@ -342,7 +342,7 @@
   function renderProject(p, next) {
     // Build images grid from comma-separated image URLs in "images" column
     const imageUrls = p.images ? p.images.split(',').map(s => s.trim()).filter(Boolean) : [];
-    const heroUrl = p.image || (imageUrls[0] || '');
+    const heroUrl = p.thumbnail ? `thumbnail/${p.thumbnail}` : (imageUrls[0] || '');
     const bodyImages = p.images ? imageUrls : [];
 
     // Awards from comma-separated "awards" column
