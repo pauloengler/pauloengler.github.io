@@ -29,6 +29,19 @@
       background: #0A0A0A;
       z-index: 100;
     }
+    .nav-left {
+      display: flex;
+      gap: 32px;
+    }
+    .nav-left a {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-left a:hover { color: #F0EDE8; }
     .nav-logo {
       font-size: 13px;
       letter-spacing: 0.15em;
@@ -256,11 +269,13 @@
 <body>
 
 <nav>
-  <a class="nav-logo" href="index.html">Paulo Engler</a>
+  <div class="nav-left">
+    <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
+    <a href="tel:+971556690393">+971 55 6690393</a>
+  </div>
   <ul class="nav-links">
     <li><a href="index.html">Work</a></li>
     <li><a href="about.html">About</a></li>
-    <li><a href="mailto:hello@pauloengler.com">Contact</a></li>
   </ul>
 </nav>
 
@@ -279,11 +294,13 @@
 </main>
 
 <footer>
-  <p>© 2026 Paulo Engler</p>
   <div class="footer-links">
-    <a href="https://linkedin.com/in/pauloengler" target="_blank">LinkedIn</a>
-    <a href="https://instagram.com/pauloengler_art" target="_blank">Instagram</a>
-    <a href="mailto:hello@pauloengler.com">hello@pauloengler.com</a>
+    <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
+    <a href="tel:+971556690393">+971 55 6690393</a>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Work</a>
+    <a href="about.html">About</a>
   </div>
 </footer>
 
