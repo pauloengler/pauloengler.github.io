@@ -118,6 +118,8 @@
       gap: 4px;
       margin-bottom: 6px;
       align-items: flex-end;
+      /* height matches one icon: (100% - 7 gaps) / 8 */
+      min-height: calc((100% - 28px) / 8);
     }
     .award-icons img {
       width: calc((100% - 28px) / 8);
@@ -125,9 +127,10 @@
       display: block;
       flex-shrink: 0;
     }
+    /* Spacer uses padding-top as % of WIDTH to mimic square icon height */
     .award-icons-spacer {
       width: 100%;
-      aspect-ratio: 8;
+      padding-top: calc(100% / 8);
       margin-bottom: 6px;
     }
 
