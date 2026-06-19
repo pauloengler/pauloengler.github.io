@@ -95,7 +95,7 @@
     /* ── PROJECT GRID ── */
     .projects-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 2px;
     }
 
@@ -172,6 +172,21 @@
       transition: transform 0.2s, opacity 0.2s;
       opacity: 0;
       margin-left: auto;
+    }
+    .btn-view {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.5);
+      border: 0.5px solid rgba(240,237,232,0.2);
+      padding: 8px 16px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .project-card:hover .btn-view {
+      color: #F0EDE8;
+      border-color: rgba(240,237,232,0.5);
     }
 
     /* ── LOADING / EMPTY ── */
@@ -377,6 +392,7 @@
           ${tagsHTML}
           <span class="project-arrow">→</span>
         </div>
+        <span class="btn-view">View Project</span>
       </div>
     `;
 
