@@ -260,8 +260,8 @@
 </nav>
 
 <section class="hero">
-  <h1>Senior Creative Director &amp; Head of Art</h1>
-  <p class="hero-sub">20+ years &nbsp;•&nbsp; Brazil – Dubai &nbsp;•&nbsp; 1 Grand Prix, 20+ Lions, D&amp;AD &nbsp;•&nbsp; One Show &nbsp;•&nbsp; Clio</p>
+  <h1 id="hero-headline">Senior Creative Director &amp; Head of Art</h1>
+  <p class="hero-sub" id="hero-subline">20+ years &nbsp;•&nbsp; Brazil – Dubai &nbsp;•&nbsp; 1 Grand Prix, 20+ Lions, D&amp;AD &nbsp;•&nbsp; One Show &nbsp;•&nbsp; Clio</p>
 </section>
 
 <main id="main-content">
@@ -288,6 +288,9 @@
   // Replace this URL after you publish your Google Sheet (instructions in README.md)
   // ─────────────────────────────────────────────
   const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
+
+  // ← Paste your settings sheet CSV URL here once you publish that tab
+  const SETTINGS_URL = '';
 
   // Chapter order — add or rename chapters here
   const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
@@ -318,6 +321,21 @@
   // ─────────────────────────────────────────────
   // FETCH & RENDER
   // ─────────────────────────────────────────────
+  async function loadSettings() {
+    if (!SETTINGS_URL) return;
+    try {
+      const res = await fetch(SETTINGS_URL);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      const settings = {};
+      rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
+      if (settings.headline) document.getElementById('hero-headline').textContent = settings.headline;
+      if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
+    } catch (err) {
+      console.error('Settings load error:', err);
+    }
+  }
+
   async function loadProjects() {
     try {
       const res = await fetch(SHEET_URL);
@@ -409,6 +427,7 @@
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
 
+  loadSettings();
   loadProjects();
 </script>
 
