@@ -312,7 +312,7 @@
   }
 
   function parseCSV(text, filterKey) {
-    const lines = text.trim().split('\n');
+    const lines = text.trim().replace(/\r/g, '').split('\n');
     const headers = parseLine(lines[0]).map(h => h.toLowerCase().trim());
     return lines.slice(1).map(line => {
       const cols = parseLine(line);
