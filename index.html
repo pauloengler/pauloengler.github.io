@@ -333,8 +333,23 @@
       const rows = parseCSV(text, 'key');
       const settings = {};
       rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
+
+      // Load Google Fonts dynamically if specified
+      const fontsToLoad = [];
+      if (settings.headline_font) fontsToLoad.push(settings.headline_font);
+      if (settings.subline_font) fontsToLoad.push(settings.subline_font);
+      if (fontsToLoad.length) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        const families = fontsToLoad.map(f => 'family=' + f.replace(/ /g, '+')).join('&');
+        link.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
+        document.head.appendChild(link);
+      }
+
       if (settings.headline) document.getElementById('hero-headline').textContent = settings.headline;
       if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
+      if (settings.headline_font) document.getElementById('hero-headline').style.fontFamily = `'${settings.headline_font}', serif`;
+      if (settings.subline_font) document.getElementById('hero-subline').style.fontFamily = `'${settings.subline_font}', sans-serif`;
     } catch (err) {
       console.error('Settings load error:', err);
     }
