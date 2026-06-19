@@ -109,7 +109,8 @@
       background: #0A0A0A;
     }
     .project-card:hover { background: #0A0A0A; }
-    .project-card:hover .project-thumb img { opacity: 0.9; }
+    .project-card:hover .project-thumb img,
+    .project-card:hover .project-thumb video { opacity: 0.9; }
 
     /* ── AWARD ICONS ── */
     .award-icons {
@@ -140,7 +141,8 @@
       overflow: hidden;
       background: #E4A0B8; /* pink placeholder */
     }
-    .project-thumb img {
+    .project-thumb img,
+    .project-thumb video {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -418,10 +420,22 @@
       ? `<div class="award-icons">${icons.map(f => `<img src="icons/${f}" alt="${f.replace(/\.\w+$/,'')}">`).join('')}</div>`
       : `<div class="award-icons-spacer"></div>`;
 
-    // Thumbnail
-    const thumbHTML = p.thumbnail
-      ? `<div class="project-thumb"><img src="thumbnail/${p.thumbnail}" alt="${p.name}" loading="lazy"></div>`
-      : `<div class="project-thumb"></div>`;
+    // Thumbnail — supports jpg, png, gif, mp4
+    let thumbHTML;
+    if (p.thumbnail) {
+      const isVideo = p.thumbnail.toLowerCase().endsWith('.mp4');
+      if (isVideo) {
+        thumbHTML = `<div class="project-thumb">
+          <video src="thumbnail/${p.thumbnail}" autoplay loop muted playsinline></video>
+        </div>`;
+      } else {
+        thumbHTML = `<div class="project-thumb">
+          <img src="thumbnail/${p.thumbnail}" alt="${p.name}" loading="lazy">
+        </div>`;
+      }
+    } else {
+      thumbHTML = `<div class="project-thumb"></div>`;
+    }
 
     const descHTML = p.description
       ? `<p class="project-desc">${p.description}</p>`
