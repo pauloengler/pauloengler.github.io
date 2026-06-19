@@ -96,7 +96,7 @@
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2px;
+      gap: 40px;
     }
 
     .project-card {
@@ -108,9 +108,24 @@
       color: inherit;
       background: #0A0A0A;
     }
-    .project-card:hover { background: #111; }
+    .project-card:hover { background: #0A0A0A; }
     .project-card:hover .project-thumb img { opacity: 0.9; }
-    .project-card:hover .project-arrow { transform: translateX(4px); opacity: 1; }
+
+    /* ── AWARD ICONS ── */
+    .award-icons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-bottom: 6px;
+      min-height: 60px;
+      align-items: flex-end;
+    }
+    .award-icons img {
+      width: 60px;
+      height: 60px;
+      display: block;
+      flex-shrink: 0;
+    }
 
     .project-thumb {
       width: 100%;
@@ -128,7 +143,7 @@
     }
 
     .project-info {
-      padding: 20px 24px 24px;
+      padding: 16px 0 24px;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -151,31 +166,9 @@
       color: rgba(240,237,232,0.4);
       line-height: 1.65;
     }
-    .project-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-    }
-    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .tag {
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.28);
-      border: 0.5px solid rgba(240,237,232,0.13);
-      padding: 3px 7px;
-    }
-    .project-arrow {
-      font-size: 14px;
-      color: rgba(240,237,232,0.25);
-      transition: transform 0.2s, opacity 0.2s;
-      opacity: 0;
-      margin-left: auto;
-    }
     .btn-view {
       display: inline-block;
-      margin-top: 16px;
+      margin-top: 4px;
       font-size: 10px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
@@ -183,6 +176,7 @@
       border: 0.5px solid rgba(240,237,232,0.2);
       padding: 8px 16px;
       transition: color 0.2s, border-color 0.2s;
+      align-self: flex-start;
     }
     .project-card:hover .btn-view {
       color: #F0EDE8;
@@ -356,42 +350,34 @@
   function buildCard(p) {
     const a = document.createElement('a');
     a.className = 'project-card';
-    // Link to project page — slug is generated from project name
     const slug = p.slug || slugify(p.name);
     a.href = `project.html?id=${slug}`;
 
-    // Thumbnail
-    const thumb = document.createElement('div');
-    thumb.className = 'project-thumb';
-    if (p.image) {
-      const img = document.createElement('img');
-      img.src = p.image;
-      img.alt = p.name;
-      img.loading = 'lazy';
-      thumb.appendChild(img);
-    }
-    a.appendChild(thumb);
+    // Award icons — read award1 through award8, skip empty
+    const awardKeys = ['award1','award2','award3','award4','award5','award6','award7','award8'];
+    const icons = awardKeys.map(k => p[k]).filter(v => v && v.trim());
+    const iconsHTML = icons.length
+      ? `<div class="award-icons">${icons.map(f => `<img src="icons/${f}" alt="${f.replace(/\.\w+$/,'')}">`).join('')}</div>`
+      : `<div class="award-icons"></div>`;
 
-    // Info
-    const tagsHTML = p.award
-      ? `<div class="project-tags"><span class="tag">${p.award}</span></div>`
-      : '<div></div>';
+    // Thumbnail
+    const thumbHTML = p.image
+      ? `<div class="project-thumb"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>`
+      : `<div class="project-thumb"></div>`;
 
     const descHTML = p.description
       ? `<p class="project-desc">${p.description}</p>`
       : '';
 
-    a.innerHTML += `
+    a.innerHTML = `
+      ${iconsHTML}
+      ${thumbHTML}
       <div class="project-info">
         <div>
           <p class="project-client">${p.client || ''}</p>
           <p class="project-name">${p.name}</p>
         </div>
         ${descHTML}
-        <div class="project-footer">
-          ${tagsHTML}
-          <span class="project-arrow">→</span>
-        </div>
         <span class="btn-view">View Project</span>
       </div>
     `;
