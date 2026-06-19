@@ -31,7 +31,7 @@
     }
     .nav-left {
       display: flex;
-      gap: 32px;
+      gap: 16px;
     }
     .nav-left a {
       font-size: 12px;
@@ -51,7 +51,7 @@
     }
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 16px;
       list-style: none;
     }
     .nav-links a {
@@ -126,26 +126,30 @@
     .project-card:hover .project-thumb video { opacity: 0.9; }
 
     /* ── AWARD ICONS ── */
+    /* Both .award-icons and .award-icons-spacer use padding-top: 12.5% 
+       which equals 100%/8 — the height of one square icon at 1/8 card width */
+    .award-icons,
+    .award-icons-spacer {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 6px;
+    }
     .award-icons {
       display: flex;
       justify-content: flex-end;
       gap: 4px;
-      margin-bottom: 6px;
-      align-items: flex-end;
-      /* height matches one icon: (100% - 7 gaps) / 8 */
-      min-height: calc((100% - 28px) / 8);
+      align-items: center;
+      height: calc(100% / 8);
+      min-height: calc((100vw / 4) / 8);
+    }
+    .award-icons-spacer {
+      padding-top: calc(100% / 8);
     }
     .award-icons img {
       width: calc((100% - 28px) / 8);
       aspect-ratio: 1;
       display: block;
       flex-shrink: 0;
-    }
-    /* Spacer uses padding-top as % of WIDTH to mimic square icon height */
-    .award-icons-spacer {
-      width: 100%;
-      padding-top: calc(100% / 8);
-      margin-bottom: 6px;
     }
 
     .project-thumb {
@@ -244,7 +248,7 @@
       letter-spacing: 0.1em;
       color: rgba(240,237,232,0.25);
     }
-    .footer-links { display: flex; gap: 24px; }
+    .footer-links { display: flex; gap: 16px; }
     .footer-links a {
       font-size: 11px;
       letter-spacing: 0.12em;
