@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paulo Engler — Senior Creative Director & Head of Art</title>
+  <meta name="description" content="Senior Creative Director & Head of Art. 20+ years. Brazil – Dubai. 1 Grand Prix, 20+ Lions, D&AD, One Show, Clio.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0A0A0A;
+      color: #F0EDE8;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 40px;
+      border-bottom: 0.5px solid rgba(240,237,232,0.12);
+      position: sticky;
+      top: 0;
+      background: #0A0A0A;
+      z-index: 100;
+    }
+    .nav-logo {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #F0EDE8;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #F0EDE8; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 40px 60px;
+      border-bottom: 0.5px solid rgba(240,237,232,0.08);
+      text-align: center;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(34px, 4.5vw, 62px);
+      font-weight: 400;
+      line-height: 1.15;
+      color: #F0EDE8;
+    }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.4);
+    }
+
+    /* ── CHAPTERS ── */
+    .chapter {
+      padding: 60px 40px 0;
+    }
+    .chapter-header {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+      border-bottom: 0.5px solid rgba(240,237,232,0.12);
+      padding-bottom: 16px;
+    }
+    .chapter-label {
+      font-size: 13px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #F0EDE8;
+      font-weight: 400;
+    }
+
+    /* ── PROJECT GRID ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+      background: #0A0A0A;
+    }
+    .project-card:hover { background: #111; }
+    .project-card:hover .project-thumb img { opacity: 0.9; }
+    .project-card:hover .project-arrow { transform: translateX(4px); opacity: 1; }
+
+    .project-thumb {
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: #E4A0B8; /* pink placeholder */
+    }
+    .project-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.75;
+      transition: opacity 0.3s;
+      display: block;
+    }
+
+    .project-info {
+      padding: 20px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+    .project-client {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.35);
+    }
+    .project-name {
+      font-size: 17px;
+      font-weight: 400;
+      color: #F0EDE8;
+      line-height: 1.25;
+    }
+    .project-desc {
+      font-size: 12px;
+      color: rgba(240,237,232,0.4);
+      line-height: 1.65;
+    }
+    .project-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+    }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.28);
+      border: 0.5px solid rgba(240,237,232,0.13);
+      padding: 3px 7px;
+    }
+    .project-arrow {
+      font-size: 14px;
+      color: rgba(240,237,232,0.25);
+      transition: transform 0.2s, opacity 0.2s;
+      opacity: 0;
+      margin-left: auto;
+    }
+
+    /* ── LOADING / EMPTY ── */
+    .loading {
+      grid-column: 1 / -1;
+      padding: 60px 0;
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.2);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 48px 40px;
+      border-top: 0.5px solid rgba(240,237,232,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+    }
+    footer p {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(240,237,232,0.25);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(240,237,232,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #F0EDE8; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      nav { padding: 20px; }
+      .nav-links { gap: 16px; }
+      .hero { padding: 48px 20px 36px; }
+      .chapter { padding: 40px 20px 0; }
+      .projects-grid { grid-template-columns: 1fr; gap: 1px; }
+      footer { padding: 32px 20px; flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Paulo Engler</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="mailto:hello@pauloengler.com">Contact</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <h1>Senior Creative Director &amp; Head of Art</h1>
+  <p class="hero-sub">20+ years &nbsp;•&nbsp; Brazil – Dubai &nbsp;•&nbsp; 1 Grand Prix, 20+ Lions, D&amp;AD &nbsp;•&nbsp; One Show &nbsp;•&nbsp; Clio</p>
+</section>
+
+<main id="main-content">
+  <!-- chapters are built here by JavaScript from Google Sheets -->
+  <div class="chapter">
+    <div class="projects-grid">
+      <p class="loading">Loading projects…</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 Paulo Engler</p>
+  <div class="footer-links">
+    <a href="https://linkedin.com/in/pauloengler" target="_blank">LinkedIn</a>
+    <a href="https://instagram.com/pauloengler_art" target="_blank">Instagram</a>
+    <a href="mailto:hello@pauloengler.com">hello@pauloengler.com</a>
+  </div>
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────
+  // CONFIGURATION
+  // Replace this URL after you publish your Google Sheet (instructions in README.md)
+  // ─────────────────────────────────────────────
+  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
+
+  // Chapter order — add or rename chapters here
+  const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
+
+  // ─────────────────────────────────────────────
+  // CSV PARSER
+  // ─────────────────────────────────────────────
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim().toLowerCase());
+    return lines.slice(1).map(line => {
+      // Handle commas inside quoted fields
+      const cols = [];
+      let cur = '', inQ = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') { inQ = !inQ; }
+        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else { cur += ch; }
+      }
+      cols.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => { obj[h] = (cols[i] || '').replace(/^"|"$/g, ''); });
+      return obj;
+    }).filter(p => p.name);
+  }
+
+  // ─────────────────────────────────────────────
+  // FETCH & RENDER
+  // ─────────────────────────────────────────────
+  async function loadProjects() {
+    try {
+      const res = await fetch(SHEET_URL);
+      const text = await res.text();
+      const projects = parseCSV(text);
+      renderProjects(projects);
+    } catch (err) {
+      document.getElementById('main-content').innerHTML =
+        '<div class="chapter"><div class="projects-grid"><p class="loading">Could not load projects. Check README.md for setup instructions.</p></div></div>';
+      console.error('Sheet load error:', err);
+    }
+  }
+
+  function renderProjects(projects) {
+    // Group by chapter
+    const chapters = {};
+    CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
+    projects.forEach(p => {
+      const ch = p.chapter || 'Other';
+      if (!chapters[ch]) chapters[ch] = [];
+      chapters[ch].push(p);
+    });
+
+    const main = document.getElementById('main-content');
+    main.innerHTML = '';
+
+    CHAPTER_ORDER.forEach(chapterName => {
+      const items = chapters[chapterName];
+      if (!items || items.length === 0) return;
+
+      const section = document.createElement('section');
+      section.className = 'chapter';
+      section.innerHTML = `
+        <div class="chapter-header">
+          <span class="chapter-label">${chapterName}</span>
+        </div>
+        <div class="projects-grid" id="grid-${chapterName.replace(/\W/g,'_')}"></div>
+      `;
+      main.appendChild(section);
+
+      const grid = section.querySelector('.projects-grid');
+      items.forEach(p => {
+        grid.appendChild(buildCard(p));
+      });
+    });
+  }
+
+  function buildCard(p) {
+    const a = document.createElement('a');
+    a.className = 'project-card';
+    // Link to project page — slug is generated from project name
+    const slug = p.slug || slugify(p.name);
+    a.href = `project.html?id=${slug}`;
+
+    // Thumbnail
+    const thumb = document.createElement('div');
+    thumb.className = 'project-thumb';
+    if (p.image) {
+      const img = document.createElement('img');
+      img.src = p.image;
+      img.alt = p.name;
+      img.loading = 'lazy';
+      thumb.appendChild(img);
+    }
+    a.appendChild(thumb);
+
+    // Info
+    const tagsHTML = p.award
+      ? `<div class="project-tags"><span class="tag">${p.award}</span></div>`
+      : '<div></div>';
+
+    const descHTML = p.description
+      ? `<p class="project-desc">${p.description}</p>`
+      : '';
+
+    a.innerHTML += `
+      <div class="project-info">
+        <div>
+          <p class="project-client">${p.client || ''}</p>
+          <p class="project-name">${p.name}</p>
+        </div>
+        ${descHTML}
+        <div class="project-footer">
+          ${tagsHTML}
+          <span class="project-arrow">→</span>
+        </div>
+      </div>
+    `;
+
+    return a;
+  }
+
+  function slugify(str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  loadProjects();
+</script>
+
+</body>
+</html>
