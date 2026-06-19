@@ -330,12 +330,9 @@
     try {
       const res = await fetch(SETTINGS_URL);
       const text = await res.text();
-      console.log('Settings raw CSV:', text);
       const rows = parseCSV(text, 'key');
-      console.log('Settings parsed rows:', rows);
       const settings = {};
       rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
-      console.log('Settings object:', settings);
       if (settings.headline) document.getElementById('hero-headline').textContent = settings.headline;
       if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
     } catch (err) {
