@@ -117,14 +117,18 @@
       justify-content: flex-end;
       gap: 4px;
       margin-bottom: 6px;
-      min-height: 60px;
       align-items: flex-end;
     }
     .award-icons img {
-      width: 60px;
-      height: 60px;
+      width: calc((100% - 28px) / 8);
+      aspect-ratio: 1;
       display: block;
       flex-shrink: 0;
+    }
+    .award-icons-spacer {
+      width: 100%;
+      aspect-ratio: 8;
+      margin-bottom: 6px;
     }
 
     .project-thumb {
@@ -358,7 +362,7 @@
     const icons = awardKeys.map(k => p[k]).filter(v => v && v.trim());
     const iconsHTML = icons.length
       ? `<div class="award-icons">${icons.map(f => `<img src="icons/${f}" alt="${f.replace(/\.\w+$/,'')}">`).join('')}</div>`
-      : `<div class="award-icons"></div>`;
+      : `<div class="award-icons-spacer"></div>`;
 
     // Thumbnail
     const thumbHTML = p.image
