@@ -109,6 +109,7 @@
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 2px;
       background: #0A0A0A;
+      border-top: 2px solid #0A0A0A;
       border-bottom: 2px solid #0A0A0A;
     }
 
@@ -206,11 +207,13 @@
       color: rgba(10,10,10,0.45);
       border: 1px solid rgba(10,10,10,0.2);
       padding: 0 12px;
+      height: 44px;
       white-space: nowrap;
       display: flex;
       align-items: center;
       border-radius: 4px;
       transition: color 0.2s, border-color 0.2s;
+      align-self: flex-start;
     }
     .project-card:hover .btn-view {
       color: #0A0A0A;
