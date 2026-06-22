@@ -109,6 +109,7 @@
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 2px;
       background: #0A0A0A;
+      border-bottom: 2px solid #0A0A0A;
     }
 
     /* ── PROJECT CARD ── */
@@ -143,6 +144,7 @@
       width: 100%;
       padding-top: calc(100% / 8);
       margin-bottom: 6px;
+      background: #F7F4EE;
     }
 
     /* Thumbnail */
@@ -286,7 +288,7 @@
 </nav>
 
 <section class="hero">
-  <h1 id="hero-headline">Senior Creative<em>Director</em>& Head of Art</h1>
+  <h1>Senior Creative<em>Director</em>& Head of Art</h1>
   <p class="hero-sub" id="hero-subline">20+ years &nbsp;·&nbsp; Brazil – Dubai &nbsp;·&nbsp; 1 Grand Prix, 20+ Lions, D&AD &nbsp;·&nbsp; One Show &nbsp;·&nbsp; Clio</p>
 </section>
 
@@ -346,20 +348,7 @@
       const rows = parseCSV(text, 'key');
       const settings = {};
       rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
-      const fontsToLoad = [];
-      if (settings.headline_font) fontsToLoad.push(settings.headline_font);
-      if (settings.subline_font) fontsToLoad.push(settings.subline_font);
-      if (fontsToLoad.length) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        const families = fontsToLoad.map(f => 'family=' + f.replace(/ /g, '+')).join('&');
-        link.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
-        document.head.appendChild(link);
-      }
-      if (settings.headline) document.getElementById('hero-headline').textContent = settings.headline;
       if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
-      if (settings.headline_font) document.getElementById('hero-headline').style.fontFamily = `'${settings.headline_font}', serif`;
-      if (settings.subline_font) document.getElementById('hero-subline').style.fontFamily = `'${settings.subline_font}', sans-serif`;
     } catch (err) {
       console.error('Settings load error:', err);
     }
