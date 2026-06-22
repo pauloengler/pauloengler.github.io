@@ -5,15 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paulo Engler — Senior Creative Director & Head of Art</title>
   <meta name="description" content="Senior Creative Director & Head of Art. 20+ years. Brazil – Dubai. 1 Grand Prix, 20+ Lions, D&AD, One Show, Clio.">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: #0A0A0A;
-      color: #F0EDE8;
-      font-family: 'Inter', sans-serif;
+      color: #0A0A0A;
+      font-family: 'Unbounded', sans-serif;
       font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── SITE WRAPPER ── */
+    .site {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: #0A0A0A;
       min-height: 100vh;
     }
 
@@ -22,307 +31,288 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 28px 40px;
-      border-bottom: 0.5px solid rgba(240,237,232,0.12);
+      padding: 20px 40px;
+      background: #F7F4EE;
       position: sticky;
       top: 0;
-      background: #0A0A0A;
       z-index: 100;
     }
-    .nav-left {
+    .nav-left, .nav-right {
       display: flex;
-      gap: 16px;
+      gap: 20px;
     }
-    .nav-left a {
-      font-size: 12px;
-      letter-spacing: 0.12em;
+    .nav-left a, .nav-right a {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 9px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(240,237,232,0.5);
+      color: rgba(10,10,10,0.35);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .nav-left a:hover { color: #F0EDE8; }
-    .nav-logo {
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #F0EDE8;
-      text-decoration: none;
-    }
-    .nav-links {
-      display: flex;
-      gap: 16px;
-      list-style: none;
-    }
-    .nav-links a {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.5);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: #F0EDE8; }
+    .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
 
     /* ── HERO ── */
     .hero {
-      padding: 80px 40px 60px;
-      border-bottom: 0.5px solid rgba(240,237,232,0.08);
+      padding: 72px 40px 60px;
       text-align: center;
+      background: #F7F4EE;
     }
     .hero h1 {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: clamp(24px, 3.5vw, 40px);
+      color: #0A0A0A;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+    .hero h1 em {
+      display: block;
+      font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: clamp(34px, 4.5vw, 62px);
       font-weight: 400;
-      line-height: 1.15;
-      color: #F0EDE8;
+      font-size: clamp(48px, 7vw, 80px);
+      letter-spacing: -0.02em;
+      text-transform: none;
+      line-height: 0.9;
+      color: #0A0A0A;
     }
     .hero-sub {
-      margin-top: 20px;
-      font-size: 12px;
-      letter-spacing: 0.1em;
+      margin-top: 24px;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 9px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(240,237,232,0.4);
+      color: rgba(10,10,10,0.35);
     }
 
-    /* ── CHAPTERS ── */
-    .chapter {
-      padding: 60px 40px 0;
-    }
+    /* ── CHAPTER HEADER ── */
     .chapter-header {
       display: flex;
       justify-content: center;
-      margin-bottom: 28px;
-      border-bottom: 0.5px solid rgba(240,237,232,0.12);
-      padding-bottom: 16px;
+      padding: 20px 40px;
+      background: #F7F4EE;
     }
     .chapter-label {
-      font-size: 13px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: #F0EDE8;
-      font-weight: 400;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-size: 32px;
+      color: #0A0A0A;
     }
 
     /* ── PROJECT GRID ── */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 40px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2px;
+      background: #0A0A0A;
     }
 
+    /* ── PROJECT CARD ── */
     .project-card {
       display: flex;
       flex-direction: column;
-      cursor: pointer;
-      transition: background 0.2s;
+      background: #F7F4EE;
+      padding: 12px 12px 12px;
       text-decoration: none;
       color: inherit;
-      background: #0A0A0A;
+      transition: background 0.2s;
     }
-    .project-card:hover { background: #0A0A0A; }
-    .project-card:hover .project-thumb img,
-    .project-card:hover .project-thumb video { opacity: 0.9; }
+    .project-card:hover { background: #EEEAE2; }
 
-    /* ── AWARD ICONS ── */
-    /* Both .award-icons and .award-icons-spacer use padding-top: 12.5% 
-       which equals 100%/8 — the height of one square icon at 1/8 card width */
-    .award-icons,
-    .award-icons-spacer {
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 6px;
-    }
+    /* Award icons */
     .award-icons {
       display: flex;
       justify-content: flex-end;
       gap: 4px;
-      align-items: center;
-      height: calc(100% / 8);
-      min-height: calc((100vw / 4) / 8);
-    }
-    .award-icons-spacer {
-      padding-top: calc(100% / 8);
+      margin-bottom: 6px;
+      min-height: 36px;
+      align-items: flex-end;
     }
     .award-icons img {
       width: calc((100% - 28px) / 8);
       aspect-ratio: 1;
       display: block;
       flex-shrink: 0;
+      border-radius: 4px;
+    }
+    .award-icons-spacer {
+      width: 100%;
+      padding-top: calc(100% / 8);
+      margin-bottom: 6px;
     }
 
+    /* Thumbnail */
     .project-thumb {
       width: 100%;
       aspect-ratio: 16/9;
       overflow: hidden;
-      background: #E4A0B8; /* pink placeholder */
+      background: #DDD9D0;
+      border-radius: 10px;
     }
     .project-thumb img,
     .project-thumb video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: 0.75;
-      transition: opacity 0.3s;
       display: block;
     }
 
+    /* Card info */
     .project-info {
-      padding: 16px 0 24px;
+      padding: 12px 4px 4px;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      flex: 1;
+      gap: 10px;
     }
     .project-info-top {
       display: flex;
       justify-content: space-between;
       align-items: stretch;
-      gap: 16px;
+      gap: 10px;
     }
-    .project-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
+    .project-meta { flex: 1; }
     .project-client {
-      font-size: 10px;
-      letter-spacing: 0.18em;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 8px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: rgba(240,237,232,0.35);
+      color: rgba(10,10,10,0.3);
+      margin-bottom: 5px;
     }
     .project-name {
-      font-size: 17px;
-      font-weight: 400;
-      color: #F0EDE8;
-      line-height: 1.25;
-    }
-    .project-desc {
-      font-size: 12px;
-      color: rgba(240,237,232,0.4);
-      line-height: 1.65;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: #0A0A0A;
+      line-height: 1.15;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
     }
     .btn-view {
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex-shrink: 0;
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.5);
-      border: 0.5px solid rgba(240,237,232,0.2);
-      padding: 0 16px;
-      transition: color 0.2s, border-color 0.2s;
-      white-space: nowrap;
-    }
-    .project-card:hover .btn-view {
-      color: #F0EDE8;
-      border-color: rgba(240,237,232,0.5);
-    }
-
-    /* ── LOADING / EMPTY ── */
-    .loading {
-      grid-column: 1 / -1;
-      padding: 60px 0;
-      text-align: center;
-      font-size: 12px;
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 7px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(240,237,232,0.2);
+      color: rgba(10,10,10,0.45);
+      border: 1px solid rgba(10,10,10,0.2);
+      padding: 0 12px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .project-card:hover .btn-view {
+      color: #0A0A0A;
+      border-color: rgba(10,10,10,0.5);
+    }
+    .project-desc {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 9px;
+      color: rgba(10,10,10,0.4);
+      line-height: 1.75;
+    }
+
+    /* ── LOADING ── */
+    .loading {
+      padding: 60px;
+      text-align: center;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.3);
+      background: #F7F4EE;
+      grid-column: 1 / -1;
     }
 
     /* ── FOOTER ── */
     footer {
-      padding: 48px 40px;
-      border-top: 0.5px solid rgba(240,237,232,0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 60px;
+      padding: 20px 40px;
+      background: #F7F4EE;
+      margin-top: auto;
     }
-    footer p {
-      font-size: 11px;
+    .footer-left, .footer-right {
+      display: flex;
+      gap: 20px;
+    }
+    .footer-left a, .footer-right a {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 300;
+      font-size: 9px;
       letter-spacing: 0.1em;
-      color: rgba(240,237,232,0.25);
-    }
-    .footer-links { display: flex; gap: 16px; }
-    .footer-links a {
-      font-size: 11px;
-      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: rgba(240,237,232,0.3);
+      color: rgba(10,10,10,0.35);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .footer-links a:hover { color: #F0EDE8; }
+    .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
 
     /* ── MOBILE ── */
     @media (max-width: 600px) {
-      nav { padding: 20px; }
-      .nav-links { gap: 16px; }
-      .hero { padding: 48px 20px 36px; }
-      .chapter { padding: 40px 20px 0; }
-      .projects-grid { grid-template-columns: 1fr; gap: 1px; }
-      footer { padding: 32px 20px; flex-direction: column; gap: 16px; text-align: center; }
+      nav { padding: 16px 20px; }
+      .nav-left { gap: 12px; }
+      .nav-right { gap: 12px; }
+      .hero { padding: 48px 20px 40px; }
+      .chapter-header { padding: 16px 20px; }
+      .projects-grid { grid-template-columns: 1fr; }
+      footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
 </head>
 <body>
+<div class="site">
 
 <nav>
   <div class="nav-left">
     <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
     <a href="tel:+971556690393">+971 55 6690393</a>
   </div>
-  <ul class="nav-links">
-    <li><a href="index.html">Work</a></li>
-    <li><a href="about.html">About</a></li>
-  </ul>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="about.html">About</a>
+  </div>
 </nav>
 
 <section class="hero">
-  <h1 id="hero-headline">Senior Creative Director &amp; Head of Art</h1>
-  <p class="hero-sub" id="hero-subline">20+ years &nbsp;•&nbsp; Brazil – Dubai &nbsp;•&nbsp; 1 Grand Prix, 20+ Lions, D&amp;AD &nbsp;•&nbsp; One Show &nbsp;•&nbsp; Clio</p>
+  <h1 id="hero-headline">Senior Creative<em>Director</em>& Head of Art</h1>
+  <p class="hero-sub" id="hero-subline">20+ years &nbsp;·&nbsp; Brazil – Dubai &nbsp;·&nbsp; 1 Grand Prix, 20+ Lions, D&AD &nbsp;·&nbsp; One Show &nbsp;·&nbsp; Clio</p>
 </section>
 
 <main id="main-content">
-  <!-- chapters are built here by JavaScript from Google Sheets -->
-  <div class="chapter">
-    <div class="projects-grid">
-      <p class="loading">Loading projects…</p>
-    </div>
+  <div class="projects-grid">
+    <p class="loading">Loading projects…</p>
   </div>
 </main>
 
 <footer>
-  <div class="footer-links">
+  <div class="footer-left">
     <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
     <a href="tel:+971556690393">+971 55 6690393</a>
   </div>
-  <div class="footer-links">
+  <div class="footer-right">
     <a href="index.html">Work</a>
     <a href="about.html">About</a>
   </div>
 </footer>
 
+</div>
 <script>
-  // ─────────────────────────────────────────────
-  // CONFIGURATION
-  // Replace this URL after you publish your Google Sheet (instructions in README.md)
-  // ─────────────────────────────────────────────
   const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
-
   const SETTINGS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=843736092&single=true&output=csv';
-
-  // Chapter order — add or rename chapters here
   const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
 
-  // ─────────────────────────────────────────────
-  // CSV PARSER
-  // ─────────────────────────────────────────────
   function parseLine(line) {
     const cols = [];
     let cur = '', inQ = false;
@@ -348,9 +338,6 @@
     }).filter(r => filterKey ? r[filterKey] : Object.values(r).some(v => v));
   }
 
-  // ─────────────────────────────────────────────
-  // FETCH & RENDER
-  // ─────────────────────────────────────────────
   async function loadSettings() {
     if (!SETTINGS_URL) return;
     try {
@@ -359,8 +346,6 @@
       const rows = parseCSV(text, 'key');
       const settings = {};
       rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
-
-      // Load Google Fonts dynamically if specified
       const fontsToLoad = [];
       if (settings.headline_font) fontsToLoad.push(settings.headline_font);
       if (settings.subline_font) fontsToLoad.push(settings.subline_font);
@@ -371,7 +356,6 @@
         link.href = `https://fonts.googleapis.com/css2?${families}&display=swap`;
         document.head.appendChild(link);
       }
-
       if (settings.headline) document.getElementById('hero-headline').textContent = settings.headline;
       if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
       if (settings.headline_font) document.getElementById('hero-headline').style.fontFamily = `'${settings.headline_font}', serif`;
@@ -388,14 +372,12 @@
       const projects = parseCSV(text, 'name');
       renderProjects(projects);
     } catch (err) {
-      document.getElementById('main-content').innerHTML =
-        '<div class="chapter"><div class="projects-grid"><p class="loading">Could not load projects. Check README.md for setup instructions.</p></div></div>';
+      document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
       console.error('Sheet load error:', err);
     }
   }
 
   function renderProjects(projects) {
-    // Group by chapter
     const chapters = {};
     CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
     projects.forEach(p => {
@@ -411,20 +393,15 @@
       const items = chapters[chapterName];
       if (!items || items.length === 0) return;
 
-      const section = document.createElement('section');
-      section.className = 'chapter';
-      section.innerHTML = `
-        <div class="chapter-header">
-          <span class="chapter-label">${chapterName}</span>
-        </div>
-        <div class="projects-grid" id="grid-${chapterName.replace(/\W/g,'_')}"></div>
-      `;
-      main.appendChild(section);
+      const header = document.createElement('div');
+      header.className = 'chapter-header';
+      header.innerHTML = `<span class="chapter-label">${chapterName}</span>`;
+      main.appendChild(header);
 
-      const grid = section.querySelector('.projects-grid');
-      items.forEach(p => {
-        grid.appendChild(buildCard(p));
-      });
+      const grid = document.createElement('div');
+      grid.className = 'projects-grid';
+      items.forEach(p => grid.appendChild(buildCard(p)));
+      main.appendChild(grid);
     });
   }
 
@@ -434,33 +411,23 @@
     const slug = p.slug || slugify(p.name);
     a.href = `project.html?id=${slug}`;
 
-    // Award icons — read award1 through award8, skip empty
     const awardKeys = ['award1','award2','award3','award4','award5','award6','award7','award8'];
     const icons = awardKeys.map(k => p[k]).filter(v => v && v.trim());
     const iconsHTML = icons.length
       ? `<div class="award-icons">${icons.map(f => `<img src="icons/${f}" alt="${f.replace(/\.\w+$/,'')}">`).join('')}</div>`
       : `<div class="award-icons-spacer"></div>`;
 
-    // Thumbnail — supports jpg, png, gif, mp4
     let thumbHTML;
     if (p.thumbnail) {
       const isVideo = p.thumbnail.toLowerCase().endsWith('.mp4');
-      if (isVideo) {
-        thumbHTML = `<div class="project-thumb">
-          <video src="thumbnail/${p.thumbnail}" autoplay loop muted playsinline></video>
-        </div>`;
-      } else {
-        thumbHTML = `<div class="project-thumb">
-          <img src="thumbnail/${p.thumbnail}" alt="${p.name}" loading="lazy">
-        </div>`;
-      }
+      thumbHTML = isVideo
+        ? `<div class="project-thumb"><video src="thumbnail/${p.thumbnail}" autoplay loop muted playsinline></video></div>`
+        : `<div class="project-thumb"><img src="thumbnail/${p.thumbnail}" alt="${p.name}" loading="lazy"></div>`;
     } else {
       thumbHTML = `<div class="project-thumb"></div>`;
     }
 
-    const descHTML = p.description
-      ? `<p class="project-desc">${p.description}</p>`
-      : '';
+    const descHTML = p.description ? `<p class="project-desc">${p.description}</p>` : '';
 
     a.innerHTML = `
       ${iconsHTML}
@@ -476,7 +443,6 @@
         ${descHTML}
       </div>
     `;
-
     return a;
   }
 
@@ -487,6 +453,5 @@
   loadSettings();
   loadProjects();
 </script>
-
 </body>
 </html>
