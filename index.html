@@ -107,6 +107,7 @@
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-auto-rows: auto auto auto; /* awards row, thumb row, info row */
       gap: 2px;
       background: #0A0A0A;
       border-top: 2px solid #0A0A0A;
@@ -115,8 +116,9 @@
 
     /* ── PROJECT CARD ── */
     .project-card {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-row: span 3;
       background: #F7F4EE;
       padding: 12px 12px 12px;
       text-decoration: none;
@@ -175,7 +177,6 @@
     /* Card info */
     .project-info {
       padding: 12px 4px 4px;
-      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 10px;
