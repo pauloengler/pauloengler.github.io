@@ -17,7 +17,6 @@
       min-height: 100vh;
     }
 
-    /* ── SITE WRAPPER ── */
     .site {
       display: flex;
       flex-direction: column;
@@ -26,7 +25,7 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
+    /* NAV */
     nav {
       display: flex;
       justify-content: space-between;
@@ -37,10 +36,7 @@
       top: 0;
       z-index: 100;
     }
-    .nav-left, .nav-right {
-      display: flex;
-      gap: 20px;
-    }
+    .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left a, .nav-right a {
       font-family: 'Unbounded', sans-serif;
       font-weight: 300;
@@ -53,7 +49,7 @@
     }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
 
-    /* ── HERO ── */
+    /* HERO */
     .hero {
       padding: 72px 40px 60px;
       text-align: center;
@@ -77,7 +73,6 @@
       letter-spacing: -0.02em;
       text-transform: none;
       line-height: 0.9;
-      color: #0A0A0A;
     }
     .hero-sub {
       margin-top: 24px;
@@ -89,7 +84,7 @@
       color: rgba(10,10,10,0.35);
     }
 
-    /* ── CHAPTER HEADER ── */
+    /* CHAPTER */
     .chapter-header {
       display: flex;
       justify-content: center;
@@ -103,7 +98,7 @@
       color: #0A0A0A;
     }
 
-    /* ── PROJECT GRID ── */
+    /* GRID */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -113,48 +108,31 @@
       border-bottom: 2px solid #0A0A0A;
     }
 
-    /* Each card section is its own grid item */
-    .card-awards {
-      background: #F7F4EE;
-      padding: 12px 12px 6px;
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      gap: 4px;
-    }
-    .card-thumb {
-      background: #F7F4EE;
-      padding: 0 12px;
-    }
-    .card-body {
-      background: #F7F4EE;
-      padding: 12px 12px 16px;
+    /* CARD */
+    .project-card {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      background: #F7F4EE;
+      padding: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
     }
-    /* Hover: all three sections of a card highlight together */
-    .card-awards:hover ~ .card-thumb,
-    .card-awards:hover,
-    .card-thumb:hover,
-    .card-thumb:hover ~ .card-body,
-    .card-body:hover { background: #EEEAE2; }
+    .project-card:hover { background: #EEEAE2; }
+    .project-card:hover .btn-view {
+      color: #0A0A0A;
+      border-color: rgba(10,10,10,0.5);
+    }
 
-    /* Award icons — fixed height area so thumbnails always align */
-    .award-icons,
-    .award-icons-spacer {
-      width: 100%;
-      height: 160px;
-      margin-bottom: 6px;
+    /* AWARD ICONS */
+    .award-icons {
       display: flex;
       justify-content: flex-end;
-      gap: 4px;
       align-items: flex-end;
+      gap: 4px;
+      margin-bottom: 6px;
+      /* height set by JS to match tallest in row */
     }
-    .award-icons-spacer {
-      background: #F7F4EE;
-    }
-    /* Each slot is a column of fully visible icons */
     .award-slot {
       display: flex;
       flex-direction: column;
@@ -170,8 +148,12 @@
       display: block;
       object-fit: cover;
     }
+    .award-spacer {
+      margin-bottom: 6px;
+      /* height set by JS */
+    }
 
-    /* Thumbnail */
+    /* THUMBNAIL */
     .project-thumb {
       width: 100%;
       aspect-ratio: 16/9;
@@ -187,9 +169,10 @@
       display: block;
     }
 
-    /* Card info */
+    /* CARD INFO */
     .project-info {
       padding: 12px 4px 4px;
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -237,10 +220,6 @@
       transition: color 0.2s, border-color 0.2s;
       align-self: flex-start;
     }
-    .project-card:hover .btn-view {
-      color: #0A0A0A;
-      border-color: rgba(10,10,10,0.5);
-    }
     .project-desc {
       font-family: 'Unbounded', sans-serif;
       font-weight: 300;
@@ -249,7 +228,7 @@
       line-height: 1.75;
     }
 
-    /* ── LOADING ── */
+    /* LOADING */
     .loading {
       padding: 60px;
       text-align: center;
@@ -261,7 +240,7 @@
       grid-column: 1 / -1;
     }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
       display: flex;
       justify-content: space-between;
@@ -270,10 +249,7 @@
       background: #F7F4EE;
       margin-top: auto;
     }
-    .footer-left, .footer-right {
-      display: flex;
-      gap: 20px;
-    }
+    .footer-left, .footer-right { display: flex; gap: 20px; }
     .footer-left a, .footer-right a {
       font-family: 'Unbounded', sans-serif;
       font-weight: 300;
@@ -286,11 +262,9 @@
     }
     .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
 
-    /* ── MOBILE ── */
+    /* MOBILE */
     @media (max-width: 600px) {
       nav { padding: 16px 20px; }
-      .nav-left { gap: 12px; }
-      .nav-right { gap: 12px; }
       .hero { padding: 48px 20px 40px; }
       .chapter-header { padding: 16px 20px; }
       .projects-grid { grid-template-columns: 1fr; }
@@ -387,7 +361,6 @@
       renderProjects(projects);
     } catch (err) {
       document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
-      console.error('Sheet load error:', err);
     }
   }
 
@@ -418,31 +391,61 @@
       main.appendChild(grid);
     });
 
-    // Wait for layout then equalise
-    requestAnimationFrame(() => {
-      requestAnimationFrame(equaliseAwardHeights);
+    // Wait for full render then equalise award heights per row
+    requestAnimationFrame(() => requestAnimationFrame(equaliseAwardHeights));
+  }
+
+  function equaliseAwardHeights() {
+    document.querySelectorAll('.projects-grid').forEach(grid => {
+      const awardDivs = Array.from(grid.querySelectorAll('.award-icons, .award-spacer'));
+      if (!awardDivs.length) return;
+
+      // Reset
+      awardDivs.forEach(el => { el.style.height = ''; });
+
+      // Group by row (same offsetTop relative to grid)
+      const rows = {};
+      awardDivs.forEach(el => {
+        const key = Math.round(el.getBoundingClientRect().top);
+        if (!rows[key]) rows[key] = [];
+        rows[key].push(el);
+      });
+
+      // Set all in same row to tallest
+      Object.values(rows).forEach(row => {
+        const maxH = Math.max(...row.map(el => el.scrollHeight));
+        row.forEach(el => { el.style.height = maxH + 'px'; });
+      });
     });
   }
 
   window.addEventListener('resize', equaliseAwardHeights);
 
   function buildCard(p) {
-    const slug = p.slug || slugify(p.name);
-    const href = `project.html?id=${slug}`;
+    const a = document.createElement('a');
+    a.className = 'project-card';
+    a.href = `project.html?id=${p.slug || slugify(p.name)}`;
 
     // Award icons
     const awardSlots = [];
     for (let i = 1; i <= 12; i++) {
-      const file = p[`award${i}`] ? p[`award${i}`].trim() : '';
+      const file = (p[`award${i}`] || '').trim();
       const count = parseInt(p[`award${i}count`]) || 1;
       if (file) awardSlots.push({ file, count });
     }
-    const slotsHTML = awardSlots.map(({ file, count }) => {
-      const imgs = Array.from({ length: count }, () =>
-        `<img src="icons/${file}" alt="${file.replace(/\.\w+$/,'')}">`
-      ).join('');
-      return `<div class="award-slot">${imgs}</div>`;
-    }).join('');
+
+    let iconsHTML;
+    if (awardSlots.length) {
+      const slotsHTML = awardSlots.map(({ file, count }) => {
+        const imgs = Array.from({ length: count }, () =>
+          `<img src="icons/${file}" alt="${file.replace(/\.\w+$/, '')}">`
+        ).join('');
+        return `<div class="award-slot">${imgs}</div>`;
+      }).join('');
+      iconsHTML = `<div class="award-icons">${slotsHTML}</div>`;
+    } else {
+      iconsHTML = `<div class="award-spacer"></div>`;
+    }
 
     // Thumbnail
     let thumbInner = '';
@@ -455,66 +458,25 @@
 
     const descHTML = p.description ? `<p class="project-desc">${p.description}</p>` : '';
 
-    // Return 3 sibling elements — grid places them in rows automatically
-    const frag = document.createDocumentFragment();
-
-    const awards = document.createElement('a');
-    awards.className = 'card-awards';
-    awards.href = href;
-    awards.innerHTML = slotsHTML || '';
-
-    const thumb = document.createElement('a');
-    thumb.className = 'card-thumb';
-    thumb.href = href;
-    thumb.innerHTML = `<div class="project-thumb">${thumbInner}</div>`;
-
-    const body = document.createElement('a');
-    body.className = 'card-body';
-    body.href = href;
-    body.innerHTML = `
-      <div class="project-info-top">
-        <div class="project-meta">
-          <p class="project-client">${p.client || ''}</p>
-          <p class="project-name">${p.name}</p>
+    a.innerHTML = `
+      ${iconsHTML}
+      <div class="project-thumb">${thumbInner}</div>
+      <div class="project-info">
+        <div class="project-info-top">
+          <div class="project-meta">
+            <p class="project-client">${p.client || ''}</p>
+            <p class="project-name">${p.name}</p>
+          </div>
+          <span class="btn-view">View Project</span>
         </div>
-        <span class="btn-view">View Project</span>
+        ${descHTML}
       </div>
-      ${descHTML}
     `;
-
-    frag.appendChild(awards);
-    frag.appendChild(thumb);
-    frag.appendChild(body);
-    return frag;
+    return a;
   }
 
   function slugify(str) {
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-  }
-
-  function equaliseAwardHeights() {
-    document.querySelectorAll('.projects-grid').forEach(grid => {
-      const awards = Array.from(grid.querySelectorAll('.card-awards'));
-      if (!awards.length) return;
-
-      // Reset heights first
-      awards.forEach(a => { a.style.height = ''; });
-
-      // Group by row using offsetTop
-      const rows = {};
-      awards.forEach(a => {
-        const top = a.getBoundingClientRect().top;
-        const key = Math.round(top);
-        if (!rows[key]) rows[key] = [];
-        rows[key].push(a);
-      });
-
-      // Set all in same row to the max height
-      Object.values(rows).forEach(row => {
-        const max = Math.max(...row.map(a => a.scrollHeight));
-        row.forEach(a => { a.style.height = max + 'px'; });
-      });
-    });
   }
 
   loadSettings();
