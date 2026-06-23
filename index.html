@@ -422,16 +422,12 @@
     let iconsHTML;
     if (awardSlots.length) {
       const slotsHTML = awardSlots.map(({ file, count }) => {
-        // Stack icons with slight vertical + shadow offset per layer
-        const stackOffset = 3; // px offset per layer
-        const layers = Array.from({ length: count }, (_, i) => {
-          const offset = (count - 1 - i) * stackOffset;
-          return `<img src="icons/${file}" alt="${file.replace(/\.\w+$/,'')}" style="top:${-offset}px; left:${i % 2 === 0 ? 0 : 1}px; box-shadow: ${offset > 0 ? `0 ${offset}px ${offset+2}px rgba(0,0,0,0.2)` : 'none'};">`;
-        }).join('');
-        const totalOffset = (count - 1) * stackOffset;
-        return `<div class="award-slot" style="margin-top:${totalOffset}px">${layers}</div>`;
+        const layers = Array.from({ length: count }, () =>
+          `<img src="icons/${file}" alt="${file.replace(/\.\w+$/,'')}" style="width:100%; aspect-ratio:1; border-radius:4px; object-fit:cover; display:block;">`
+        ).join('');
+        return `<div style="display:flex; flex-direction:column; gap:3px; width:calc((100% - 44px) / 12); flex-shrink:0;">${layers}</div>`;
       }).join('');
-      iconsHTML = `<div class="award-icons">${slotsHTML}</div>`;
+      iconsHTML = `<div class="award-icons" style="align-items:flex-end;">${slotsHTML}</div>`;
     } else {
       iconsHTML = `<div class="award-icons-spacer"></div>`;
     }
