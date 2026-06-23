@@ -134,16 +134,24 @@
       min-height: 36px;
       align-items: flex-end;
     }
-    .award-icons img {
-      width: calc((100% - 28px) / 8);
+    /* Each slot is a stack — icons overlap with offset */
+    .award-slot {
+      position: relative;
+      width: calc((100% - 44px) / 12);
       aspect-ratio: 1;
-      display: block;
       flex-shrink: 0;
+    }
+    .award-slot img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
       border-radius: 4px;
+      display: block;
+      object-fit: cover;
     }
     .award-icons-spacer {
       width: 100%;
-      padding-top: calc(100% / 8);
+      padding-top: calc(100% / 12);
       margin-bottom: 6px;
       background: #F7F4EE;
     }
@@ -403,11 +411,30 @@
     const slug = p.slug || slugify(p.name);
     a.href = `project.html?id=${slug}`;
 
-    const awardKeys = ['award1','award2','award3','award4','award5','award6','award7','award8'];
-    const icons = awardKeys.map(k => p[k]).filter(v => v && v.trim());
-    const iconsHTML = icons.length
-      ? `<div class="award-icons">${icons.map(f => `<img src="icons/${f}" alt="${f.replace(/\.\w+$/,'')}">`).join('')}</div>`
-      : `<div class="award-icons-spacer"></div>`;
+    // Award icons — 12 slots, each with optional count for stacking
+    const awardSlots = [];
+    for (let i = 1; i <= 12; i++) {
+      const file = p[`award${i}`] ? p[`award${i}`].trim() : '';
+      const count = parseInt(p[`award${i}count`]) || 1;
+      if (file) awardSlots.push({ file, count });
+    }
+
+    let iconsHTML;
+    if (awardSlots.length) {
+      const slotsHTML = awardSlots.map(({ file, count }) => {
+        // Stack icons with slight vertical + shadow offset per layer
+        const stackOffset = 3; // px offset per layer
+        const layers = Array.from({ length: count }, (_, i) => {
+          const offset = (count - 1 - i) * stackOffset;
+          return `<img src="icons/${file}" alt="${file.replace(/\.\w+$/,'')}" style="top:${-offset}px; left:${i % 2 === 0 ? 0 : 1}px; box-shadow: ${offset > 0 ? `0 ${offset}px ${offset+2}px rgba(0,0,0,0.2)` : 'none'};">`;
+        }).join('');
+        const totalOffset = (count - 1) * stackOffset;
+        return `<div class="award-slot" style="margin-top:${totalOffset}px">${layers}</div>`;
+      }).join('');
+      iconsHTML = `<div class="award-icons">${slotsHTML}</div>`;
+    } else {
+      iconsHTML = `<div class="award-icons-spacer"></div>`;
+    }
 
     let thumbHTML;
     if (p.thumbnail) {
