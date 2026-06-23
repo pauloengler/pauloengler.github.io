@@ -417,7 +417,14 @@
       items.forEach(p => grid.appendChild(buildCard(p)));
       main.appendChild(grid);
     });
+
+    // Wait for layout then equalise
+    requestAnimationFrame(() => {
+      requestAnimationFrame(equaliseAwardHeights);
+    });
   }
+
+  window.addEventListener('resize', equaliseAwardHeights);
 
   function buildCard(p) {
     const slug = p.slug || slugify(p.name);
@@ -483,6 +490,31 @@
 
   function slugify(str) {
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  }
+
+  function equaliseAwardHeights() {
+    document.querySelectorAll('.projects-grid').forEach(grid => {
+      const awards = Array.from(grid.querySelectorAll('.card-awards'));
+      if (!awards.length) return;
+
+      // Reset heights first
+      awards.forEach(a => { a.style.height = ''; });
+
+      // Group by row using offsetTop
+      const rows = {};
+      awards.forEach(a => {
+        const top = a.getBoundingClientRect().top;
+        const key = Math.round(top);
+        if (!rows[key]) rows[key] = [];
+        rows[key].push(a);
+      });
+
+      // Set all in same row to the max height
+      Object.values(rows).forEach(row => {
+        const max = Math.max(...row.map(a => a.scrollHeight));
+        row.forEach(a => { a.style.height = max + 'px'; });
+      });
+    });
   }
 
   loadSettings();
