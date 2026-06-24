@@ -23,7 +23,8 @@
     .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #EEEAE2; }
     .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
-    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 4px; margin-bottom: 6px; }
+    .award-icons { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; margin-bottom: 6px; }
+    .award-row { display: flex; justify-content: flex-end; align-items: flex-end; gap: 4px; }
     .award-slot { display: flex; flex-direction: column; gap: 3px; width: calc((100% - 44px) / 12); flex-shrink: 0; justify-content: flex-end; align-items: center; }
     .award-slot img { width: 100%; aspect-ratio: 1; border-radius: 4px; display: block; object-fit: cover; }
     .award-label { font-family: 'Inter', sans-serif; font-size: 5px; font-weight: 400; color: rgba(10,10,10,0.35); text-align: center; line-height: 1.2; word-break: break-word; }
@@ -205,35 +206,43 @@ function buildCard(p) {
   a.href = 'project.html?id=' + (p.slug || slugify(p.name));
 
   const awardSlots = [];
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 20; i++) {
     const name  = (p['award' + i]           || '').trim();
     const metal = (p['award' + i + 'label'] || '').trim();
-    const countRaw = (p['award' + i + 'count'] || '').trim(); const count = countRaw ? parseInt(countRaw) : 1; if (count > 1) console.log('[COUNT]', p.name, 'slot', i, 'countRaw=', JSON.stringify(countRaw), 'count=', count, '>3=', count>3);
+    const countRaw = (p['award' + i + 'count'] || '').trim();
+    const count = countRaw ? parseInt(countRaw) : 1;
     if (name && name.toUpperCase() !== 'NA' && metal && metal.toUpperCase() !== 'NA') {
       awardSlots.push({ file: name + '_' + metal + '.png', name: name, metal: metal, count: count });
     }
   }
 
+  function buildSlotHTML(slot) {
+    let imgs = '';
+    if (slot.count > 1) {
+      imgs = '<div class="award-icon-wrap">'
+        + '<span class="award-count-badge">X' + slot.count + '</span>'
+        + '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">'
+        + '</div>';
+    } else {
+      imgs = '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">';
+    }
+    const labelHTML = '<span class="award-label">'
+      + slot.name.toUpperCase()
+      + '<br>'
+      + slot.metal.toUpperCase()
+      + '</span>';
+    return '<div class="award-slot">' + imgs + labelHTML + '</div>';
+  }
+
   let iconsHTML;
   if (awardSlots.length) {
-    const slotsHTML = awardSlots.map(function(slot) {
-      let imgs = '';
-      if (slot.count > 1) {
-        imgs = '<div class="award-icon-wrap">'
-          + '<span class="award-count-badge">X' + slot.count + '</span>'
-          + '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">'
-          + '</div>';
-      } else {
-        imgs = '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">';
-      }
-      const labelHTML = '<span class="award-label">'
-        + slot.name.toUpperCase()
-        + '<br>'
-        + slot.metal.toUpperCase()
-        + '</span>';
-      return '<div class="award-slot">' + imgs + labelHTML + '</div>';
-    }).join('');
-    iconsHTML = '<div class="award-icons">' + slotsHTML + '</div>';
+    const topRow = awardSlots.slice(15, 20);
+    const bottomRow = awardSlots.slice(0, 15);
+    const topHTML = topRow.length
+      ? '<div class="award-row award-row-top">' + topRow.map(buildSlotHTML).join('') + '</div>'
+      : '<div class="award-row award-row-top"></div>';
+    const bottomHTML = '<div class="award-row award-row-bottom">' + bottomRow.map(buildSlotHTML).join('') + '</div>';
+    iconsHTML = '<div class="award-icons">' + topHTML + bottomHTML + '</div>';
   } else {
     iconsHTML = '<div class="award-spacer"></div>';
   }
