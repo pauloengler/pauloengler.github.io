@@ -218,15 +218,13 @@ function buildCard(p) {
   if (awardSlots.length) {
     const slotsHTML = awardSlots.map(function(slot) {
       let imgs = '';
-      if (slot.count > 3) {
+      if (slot.count > 1) {
         imgs = '<div class="award-icon-wrap">'
           + '<span class="award-count-badge">X' + slot.count + '</span>'
           + '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">'
           + '</div>';
       } else {
-        for (let j = 0; j < slot.count; j++) {
-          imgs += '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">';
-        }
+        imgs = '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">';
       }
       const labelHTML = '<span class="award-label">'
         + slot.name.toUpperCase()
