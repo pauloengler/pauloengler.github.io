@@ -209,7 +209,7 @@ function buildCard(p) {
     const name  = (p['award' + i]           || '').trim();
     const metal = (p['award' + i + 'label'] || '').trim();
     const count = parseInt(p['award' + i + 'count']) || 1;
-    if (name && metal) {
+    if (name && name.toUpperCase() !== 'NA' && metal && metal.toUpperCase() !== 'NA') {
       awardSlots.push({ file: name + '_' + metal + '.png', name: name, metal: metal, count: count });
     }
   }
@@ -221,7 +221,7 @@ function buildCard(p) {
       if (slot.count > 3) {
         imgs = '<div class="award-icon-wrap">'
           + '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">'
-          + '<span class="award-count-badge">×' + slot.count + '</span>'
+          + '<span class="award-count-badge">X' + slot.count + '</span>'
           + '</div>';
       } else {
         for (let j = 0; j < slot.count; j++) {
