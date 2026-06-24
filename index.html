@@ -140,6 +140,7 @@ async function loadProjects() {
     const res = await fetch(SHEET_URL);
     const text = await res.text();
     const projects = parseCSV(text, 'name');
+    if (projects.length > 0) { const ak = Object.keys(projects[0]).filter(k => k.includes('award')); console.log('[DEBUG] award keys:', ak); console.log('[DEBUG] award1:', projects[0]['award1'], '| award1label:', projects[0]['award1label']); }
     renderProjects(projects);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
