@@ -140,7 +140,7 @@ async function loadProjects() {
     const res = await fetch(SHEET_URL);
     const text = await res.text();
     const projects = parseCSV(text, 'name');
-    if (projects.length > 0) { const ak = Object.keys(projects[0]).filter(k => k.includes('award')); console.log('[DEBUG] award keys:', ak); console.log('[DEBUG] award1:', projects[0]['award1'], '| award1label:', projects[0]['award1label']); }
+    if (projects.length > 0) { projects.forEach(function(proj, idx) { for (var i = 1; i <= 12; i++) { var cnt = parseInt(proj['award' + i + 'count']); if (cnt > 3) console.log('[DEBUG] project', idx, proj.name, 'award' + i + 'count =', proj['award' + i + 'count'], 'parsed =', cnt); } }); }
     renderProjects(projects);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
