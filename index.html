@@ -140,7 +140,7 @@ async function loadProjects() {
     const res = await fetch(SHEET_URL);
     const text = await res.text();
     const projects = parseCSV(text, 'name');
-    if (projects.length > 0) { projects.forEach(function(proj, idx) { for (var i = 1; i <= 12; i++) { var cnt = parseInt(proj['award' + i + 'count']); if (cnt > 3) console.log('[DEBUG] project', idx, proj.name, 'award' + i + 'count =', proj['award' + i + 'count'], 'parsed =', cnt); } }); }
+    if (projects.length > 0) { projects.forEach(function(proj, idx) { for (var i = 1; i <= 12; i++) { var raw = (proj['award' + i + 'count'] || '').trim(); var cnt = raw ? parseInt(raw) : 1; console.log('[DEBUG]', proj.name, 'slot', i, '| name:', proj['award'+i], '| label:', proj['award'+i+'label'], '| countRaw:', JSON.stringify(raw), '| count:', cnt, '| >3:', cnt > 3); } }); }
     renderProjects(projects);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
@@ -208,7 +208,7 @@ function buildCard(p) {
   for (let i = 1; i <= 12; i++) {
     const name  = (p['award' + i]           || '').trim();
     const metal = (p['award' + i + 'label'] || '').trim();
-    const count = parseInt(p['award' + i + 'count']) || 1;
+    const countRaw = (p['award' + i + 'count'] || '').trim(); const count = countRaw ? parseInt(countRaw) : 1;
     if (name && name.toUpperCase() !== 'NA' && metal && metal.toUpperCase() !== 'NA') {
       awardSlots.push({ file: name + '_' + metal + '.png', name: name, metal: metal, count: count });
     }
