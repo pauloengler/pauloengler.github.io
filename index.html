@@ -208,7 +208,7 @@ function buildCard(p) {
   for (let i = 1; i <= 12; i++) {
     const name  = (p['award' + i]           || '').trim();
     const metal = (p['award' + i + 'label'] || '').trim();
-    const countRaw = (p['award' + i + 'count'] || '').trim(); const count = countRaw ? parseInt(countRaw) : 1;
+    const countRaw = (p['award' + i + 'count'] || '').trim(); const count = countRaw ? parseInt(countRaw) : 1; if (count > 1) console.log('[COUNT]', p.name, 'slot', i, 'countRaw=', JSON.stringify(countRaw), 'count=', count, '>3=', count>3);
     if (name && name.toUpperCase() !== 'NA' && metal && metal.toUpperCase() !== 'NA') {
       awardSlots.push({ file: name + '_' + metal + '.png', name: name, metal: metal, count: count });
     }
