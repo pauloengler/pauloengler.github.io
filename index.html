@@ -211,19 +211,9 @@ function buildCard(p) {
   a.className = 'project-card';
   a.href = 'project.html?id=' + (p.slug || slugify(p.name));
 
-  const awardSlots = [];
-  for (let i = 1; i <= 10; i++) {
-    const name  = (p['award' + i]           || '').trim();
-    const metal = (p['award' + i + 'label'] || '').trim();
-    const countRaw = (p['award' + i + 'count'] || '').trim();
-    const count = countRaw ? parseInt(countRaw) : 1;
-    if (name && name.toUpperCase() !== 'NA' && metal && metal.toUpperCase() !== 'NA') {
-      awardSlots.push({ name: name, metal: metal, count: count });
-    }
-  }
+  const METALS = ['gp', 'gold', 'silver', 'bronze', 'short'];
 
-  function metalClass(metal) {
-    const m = metal.toLowerCase();
+  function metalClass(m) {
     if (m === 'gp')     return 'metal-gp';
     if (m === 'gold')   return 'metal-gold';
     if (m === 'silver') return 'metal-silver';
@@ -231,34 +221,38 @@ function buildCard(p) {
     return 'metal-other';
   }
 
-  let iconsHTML;
-  if (awardSlots.length) {
-    // Group slots by award name
-    const groups = {};
-    const groupOrder = [];
-    awardSlots.forEach(function(slot) {
-      if (!groups[slot.name]) { groups[slot.name] = []; groupOrder.push(slot.name); }
-      groups[slot.name].push(slot);
-    });
-
-    const METAL_ORDER = ['gp', 'gold', 'silver', 'bronze', 'short'];
-
-    function metalSort(a, b) {
-      const ai = METAL_ORDER.indexOf(a.metal.toLowerCase());
-      const bi = METAL_ORDER.indexOf(b.metal.toLowerCase());
-      return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+  function metalLabel(awardName, metal) {
+    if (awardName.toLowerCase() === 'dandad') {
+      const map = { gp: 'BLACK', gold: 'YELLOW', silver: 'GRAPHITE', bronze: 'WOOD', short: 'SHORT' };
+      return map[metal] || metal.toUpperCase();
     }
+    return metal.toUpperCase();
+  }
 
-    const colsHTML = groupOrder.map(function(name) {
-      const sorted = groups[name].slice().sort(metalSort);
-      const cells = sorted.map(function(slot) {
-        const countHTML = '<span class="cell-count">' + (slot.count > 1 ? slot.count : '1') + '</span>';
-        const metalHTML = '<span class="cell-metal">' + slot.metal.toUpperCase() + '</span>';
-        return '<div class="award-cell ' + metalClass(slot.metal) + '">' + metalHTML + countHTML + '</div>';
+  const awardCols = [];
+  for (let i = 1; i <= 10; i++) {
+    const name = (p['award' + i] || '').trim();
+    if (!name || name.toUpperCase() === 'NA') continue;
+    const metals = [];
+    METALS.forEach(function(m) {
+      const val = parseInt(p['award' + i + m] || 0);
+      if (val > 0) metals.push({ metal: m, count: val });
+    });
+    if (metals.length) awardCols.push({ name: name, metals: metals });
+  }
+
+  let iconsHTML;
+  if (awardCols.length) {
+    const colsHTML = awardCols.map(function(col) {
+      const cells = col.metals.map(function(m) {
+        const label = metalLabel(col.name, m.metal);
+        const countHTML = '<span class="cell-count">' + m.count + '</span>';
+        const metalHTML = '<span class="cell-metal">' + label + '</span>';
+        return '<div class="award-cell ' + metalClass(m.metal) + '">' + metalHTML + countHTML + '</div>';
       }).join('');
       const iconCell = '<div class="award-icon-cell">'
         + '<div class="icon-placeholder"></div>'
-        + '<span class="icon-name">' + name.toUpperCase() + '</span>'
+        + '<span class="icon-name">' + col.name.toUpperCase() + '</span>'
         + '</div>';
       return '<div class="award-col">' + cells + iconCell + '</div>';
     }).join('');
