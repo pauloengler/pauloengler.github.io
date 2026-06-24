@@ -111,19 +111,34 @@ function buildCard(p) {
 
   const awardSlots = [];
   for (let i = 1; i <= 12; i++) {
-    const file = (p['award' + i] || '').trim();
+    const name  = (p['award' + i]           || '').trim();
+    const metal = (p['award' + i + 'metal'] || '').trim();
     const count = parseInt(p['award' + i + 'count']) || 1;
-    if (file) awardSlots.push({ file: file, count: count });
+    if (name && metal) {
+      awardSlots.push({ file: name + '_' + metal + '.png', name: name, metal: metal, count: count });
+    }
   }
 
   let iconsHTML;
   if (awardSlots.length) {
     const slotsHTML = awardSlots.map(function(slot) {
       let imgs = '';
-      for (let j = 0; j < slot.count; j++) {
-        imgs += '<img src="icons/' + slot.file + '" alt="' + slot.file.replace(/\.\w+$/, '') + '">';
+      if (slot.count > 3) {
+        imgs = '<div class="award-icon-wrap">'
+          + '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">'
+          + '<span class="award-count-badge">×' + slot.count + '</span>'
+          + '</div>';
+      } else {
+        for (let j = 0; j < slot.count; j++) {
+          imgs += '<img src="icons/' + slot.file + '" alt="' + slot.name + ' ' + slot.metal + '">';
+        }
       }
-      return '<div class="award-slot">' + imgs + '</div>';
+      const labelHTML = '<span class="award-label">'
+        + slot.name.toUpperCase()
+        + '<br>'
+        + slot.metal.toUpperCase()
+        + '</span>';
+      return '<div class="award-slot">' + imgs + labelHTML + '</div>';
     }).join('');
     iconsHTML = '<div class="award-icons">' + slotsHTML + '</div>';
   } else {
