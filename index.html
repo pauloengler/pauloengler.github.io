@@ -23,8 +23,10 @@
     .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #EEEAE2; }
     .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
-    .award-icons { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; margin-bottom: 8px; }
-    .award-row { display: flex; justify-content: flex-end; gap: 2px; }
+    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+    .award-group { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .award-group-pills { display: flex; gap: 2px; }
+    .award-group-name { font-family: 'Inter', sans-serif; font-size: 6px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.4); white-space: nowrap; }
     .award-pill { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 4px; width: 32px; height: 32px; font-family: 'Inter', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; flex-shrink: 0; }
     .award-pill .pill-count { font-size: 8px; font-weight: 700; line-height: 1; }
     .award-pill .pill-metal { font-size: 5px; font-weight: 400; line-height: 1; margin-top: 2px; opacity: 0.9; }
@@ -237,23 +239,19 @@ function buildCard(p) {
       groups[slot.name].push(slot);
     });
 
-    // Build flat list of pills
-    const allPills = [];
-    groupOrder.forEach(function(name) {
-      groups[name].forEach(function(slot) {
+    const groupsHTML = groupOrder.map(function(name) {
+      const pills = groups[name].map(function(slot) {
         const countLine = slot.count > 1 ? '<span class="pill-count">X' + slot.count + '</span>' : '';
         const metalLine = '<span class="pill-metal">' + slot.metal.toUpperCase() + '</span>';
-        allPills.push('<span class="award-pill ' + metalClass(slot.metal) + '">' + countLine + metalLine + '</span>');
-      });
-    });
+        return '<span class="award-pill ' + metalClass(slot.metal) + '">' + countLine + metalLine + '</span>';
+      }).join('');
+      return '<div class="award-group">'
+        + '<div class="award-group-pills">' + pills + '</div>'
+        + '<span class="award-group-name">' + name.toUpperCase() + '</span>'
+        + '</div>';
+    }).join('');
 
-    // Split into max 2 rows of 15
-    const row1 = allPills.slice(0, 15);
-    const row2 = allPills.slice(15, 30);
-    let rowsHTML = '<div class="award-row">' + row1.join('') + '</div>';
-    if (row2.length) rowsHTML = '<div class="award-row">' + row2.join('') + '</div>' + rowsHTML;
-
-    iconsHTML = '<div class="award-icons">' + rowsHTML + '</div>';
+    iconsHTML = '<div class="award-icons">' + groupsHTML + '</div>';
   } else {
     iconsHTML = '<div class="award-spacer"></div>';
   }
