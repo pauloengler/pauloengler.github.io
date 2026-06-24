@@ -23,16 +23,18 @@
     .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #EEEAE2; }
     .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
-    .award-icons { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-bottom: 8px; }
-    .award-group { display: flex; align-items: center; gap: 4px; }
-    .award-group-name { font-family: 'Inter', sans-serif; font-size: 6px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(10,10,10,0.35); white-space: nowrap; }
-    .award-pills { display: flex; gap: 3px; flex-wrap: wrap; justify-content: flex-end; }
-    .award-pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 2px 5px; font-family: 'Inter', sans-serif; font-size: 6px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+    .award-icons { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; margin-bottom: 8px; }
+    .award-group { display: flex; align-items: center; gap: 5px; }
+    .award-group-name { font-family: 'Inter', sans-serif; font-size: 6px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); white-space: nowrap; }
+    .award-pills { display: flex; gap: 2px; }
+    .award-pill { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 4px; padding: 3px 6px; font-family: 'Inter', sans-serif; font-size: 6px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; min-width: 28px; line-height: 1.3; }
+    .award-pill .pill-count { font-size: 7px; }
+    .award-pill .pill-metal { font-size: 5px; font-weight: 400; opacity: 0.85; }
     .award-pill.metal-gp    { background: #0A0A0A; color: #F7F4EE; }
     .award-pill.metal-gold  { background: #C9A84C; color: #fff; }
     .award-pill.metal-silver{ background: #A8A8A8; color: #fff; }
     .award-pill.metal-bronze{ background: #A0522D; color: #fff; }
-    .award-pill.metal-other { background: transparent; color: rgba(10,10,10,0.5); border: 1px solid rgba(10,10,10,0.25); }
+    .award-pill.metal-other { background: transparent; color: rgba(10,10,10,0.6); border: 1px solid rgba(10,10,10,0.25); }
     .award-spacer { margin-bottom: 8px; }
     .project-thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #DDD9D0; border-radius: 10px; }
     .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -239,8 +241,9 @@ function buildCard(p) {
 
     const groupsHTML = groupOrder.map(function(name) {
       const pills = groups[name].map(function(slot) {
-        const label = slot.count > 1 ? slot.metal.toUpperCase() + ' ×' + slot.count : slot.metal.toUpperCase();
-        return '<span class="award-pill ' + metalClass(slot.metal) + '">' + label + '</span>';
+        const countLine = slot.count > 1 ? '<span class="pill-count">X' + slot.count + '</span>' : '';
+        const metalLine = '<span class="pill-metal">' + slot.metal.toUpperCase() + '</span>';
+        return '<span class="award-pill ' + metalClass(slot.metal) + '">' + countLine + metalLine + '</span>';
       }).join('');
       return '<div class="award-group">'
         + '<span class="award-group-name">' + name.toUpperCase() + '</span>'
