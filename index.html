@@ -17,6 +17,11 @@
     .hero h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(24px, 3.5vw, 40px); color: #0A0A0A; line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
     .hero h1 em { display: block; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 80px); letter-spacing: -0.02em; text-transform: none; line-height: 0.9; }
     .hero-sub { margin-top: 24px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); }
+    .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
+    .view-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 40px; background: #F7F4EE; cursor: pointer; border: none; font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; color: rgba(10,10,10,0.3); transition: color 0.2s, background 0.2s; text-align: center; }
+    .view-btn.active { color: #0A0A0A; background: #F7F4EE; }
+    .view-btn:not(.active) { background: #EEEAE2; }
+    .view-btn:hover { color: #0A0A0A; }
     .chapter-header { display: flex; justify-content: center; padding: 20px 40px; background: #F7F4EE; }
     .chapter-label { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; color: #0A0A0A; }
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A; border-top: 2px solid #0A0A0A; border-bottom: 2px solid #0A0A0A; }
@@ -79,6 +84,10 @@
   <p class="hero-sub" id="hero-subline">20+ years &nbsp;·&nbsp; Brazil - Dubai &nbsp;·&nbsp; 1 Grand Prix, 20+ Lions, D&AD &nbsp;·&nbsp; One Show &nbsp;·&nbsp; Clio</p>
 </section>
 
+<div class="view-toggle" id="view-toggle">
+  <button class="view-btn" id="btn-full" onclick="setView('full')">Full Work</button>
+  <button class="view-btn" id="btn-select" onclick="setView('select')">Selected Work</button>
+</div>
 <main id="main-content">
   <div class="projects-grid">
     <p class="loading">Loading projects...</p>
@@ -189,6 +198,14 @@ function renderProjects(projects) {
   const chapters = {};
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
+    // Filter by current view using 'select' and 'full' columns (Google Sheets exports TRUE/FALSE)
+    if (currentView === 'select') {
+      const val = (p['select'] || '').toString().toUpperCase();
+      if (val !== 'TRUE') return;
+    } else {
+      const val = (p['full'] || '').toString().toUpperCase();
+      if (val !== 'TRUE') return;
+    }
     const ch = p.chapter || 'Other';
     if (!chapters[ch]) chapters[ch] = [];
     chapters[ch].push(p);
@@ -266,8 +283,10 @@ function buildCard(p) {
     const name = (p['award' + i] || '').trim();
     if (!name || name.toUpperCase() === 'NA') continue;
     const metals = [];
+    const metalMap = { gp: 'GP', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
-      const val = parseInt(p['award' + i + m] || 0);
+      const col = metalMap[m] + i;
+      const val = parseInt(p[col] || p[col.toLowerCase()] || 0);
       if (val > 0) metals.push({ metal: m, count: val });
     });
     if (metals.length) awardCols.push({ name: name, metals: metals });
@@ -325,6 +344,22 @@ function buildCard(p) {
 function slugify(str) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
+
+let currentView = 'full';
+
+function setView(view) {
+  currentView = view;
+  document.getElementById('btn-full').classList.toggle('active', view === 'full');
+  document.getElementById('btn-select').classList.toggle('active', view === 'select');
+  const cached = sessionStorage.getItem('portfolio_csv_v1');
+  if (cached) {
+    const projects = parseCSV(cached, 'name');
+    renderProjects(projects);
+  }
+}
+
+// Set default active button
+document.getElementById('btn-full').classList.add('active');
 
 loadSettings();
 loadProjects();
