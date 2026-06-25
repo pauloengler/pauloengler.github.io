@@ -289,7 +289,7 @@ async function loadProject() {
   if (!id) { window.location = 'index.html'; return; }
 
   try {
-    const res = await fetch(SHEET_URL);
+    const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(SHEET_URL));
     const text = await res.text();
     const projects = parseCSV(text);
 
