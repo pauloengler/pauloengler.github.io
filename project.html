@@ -18,10 +18,15 @@
 
     /* ── PROJECT NAV (prev/next) ── */
     .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
-    .project-nav a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; max-width: 45%; }
+    .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
+    .project-nav a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; }
     .project-nav a:hover { color: #0A0A0A; }
-    .project-nav .nav-arrow { font-size: 12px; flex-shrink: 0; }
-    .project-nav .nav-project-name { font-weight: 700; color: rgba(10,10,10,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-prev, .nav-next { display: flex; flex-direction: column; gap: 4px; max-width: 35%; color: rgba(10,10,10,0.35); }
+    .nav-next { align-items: flex-end; text-align: right; }
+    .nav-dir { font-size: 7px; letter-spacing: 0.15em; color: rgba(10,10,10,0.25); }
+    .nav-project-name { font-weight: 700; font-size: 9px; color: rgba(10,10,10,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .nav-back { color: rgba(10,10,10,0.4); font-size: 8px; letter-spacing: 0.1em; border: 1px solid rgba(10,10,10,0.15); padding: 8px 16px; border-radius: 4px; white-space: nowrap; }
+    .nav-back:hover { color: #0A0A0A; border-color: rgba(10,10,10,0.4); }
 
     /* ── PROJECT HEADER ── */
     .project-header { padding: 48px 40px 40px; background: #F7F4EE; }
@@ -60,7 +65,7 @@
     .media-text p { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); line-height: 1.85; max-width: 640px; }
 
     /* ── FOOTER NAV ── */
-    .project-nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; background: #F7F4EE; }
+    .project-nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
 
     /* ── FOOTER ── */
     footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
@@ -99,7 +104,7 @@
   <div class="loading">Loading project…</div>
 </div>
 
-<div id="project-nav-bottom" class="project-nav-bottom" style="display:none;"></div>
+<div id="project-nav-bottom" class="project-nav project-nav-bottom" style="display:none;"></div>
 
 <footer>
   <div class="footer-left">
@@ -223,7 +228,7 @@ function buildAwards(p) {
 function youtubeEmbed(url) {
   // handles youtu.be/ID and youtube.com/watch?v=ID and youtube.com/embed/ID
   const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
-  return m ? 'https://www.youtube.com/embed/' + m[1] + '?autoplay=0&rel=0' : url;
+  return m ? 'https://www.youtube.com/embed/' + m[1] + '?rel=0&modestbranding=1&color=white&iv_load_policy=3' : url;
 }
 
 function buildGallery(p) {
@@ -258,12 +263,13 @@ function buildGallery(p) {
 
 function buildNavHTML(prev, next) {
   let prevHTML = prev
-    ? '<a href="project.html?id=' + (prev.slug || slugify(prev.name)) + '"><span class="nav-arrow">←</span><span class="nav-project-name">' + prev.name + '</span></a>'
+    ? '<a href="project.html?id=' + (prev.slug || slugify(prev.name)) + '" class="nav-prev"><span class="nav-dir">Previous</span><span class="nav-project-name">' + prev.name + '</span></a>'
     : '<span></span>';
   let nextHTML = next
-    ? '<a href="project.html?id=' + (next.slug || slugify(next.name)) + '" style="text-align:right"><span class="nav-project-name">' + next.name + '</span><span class="nav-arrow">→</span></a>'
+    ? '<a href="project.html?id=' + (next.slug || slugify(next.name)) + '" class="nav-next"><span class="nav-dir">Next</span><span class="nav-project-name">' + next.name + '</span></a>'
     : '<span></span>';
-  return prevHTML + nextHTML;
+  const backHTML = '<a href="index.html" class="nav-back">← Back to Work</a>';
+  return prevHTML + backHTML + nextHTML;
 }
 
 async function loadProject() {
