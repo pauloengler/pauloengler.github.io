@@ -9,54 +9,71 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
     .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
+
+    /* ── NAV ── */
     nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; position: sticky; top: 0; z-index: 100; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
-    .hero { padding: 72px 40px 60px; text-align: center; background: #F7F4EE; }
-    .hero h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(24px, 3.5vw, 40px); color: #0A0A0A; line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
-    .hero h1 em { display: block; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 80px); letter-spacing: -0.02em; text-transform: none; line-height: 0.9; }
-    .hero-sub { margin-top: 24px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); }
-    .chapter-header { display: flex; justify-content: center; padding: 20px 40px; background: #F7F4EE; }
-    .chapter-label { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; color: #0A0A0A; }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A; border-top: 2px solid #0A0A0A; border-bottom: 2px solid #0A0A0A; }
-    .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
-    .project-card:hover { background: #EEEAE2; }
-    .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
-    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
-    .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 4px; border: none; margin-left: 1px; }
+
+    /* ── PROJECT NAV (prev/next) ── */
+    .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
+    .project-nav a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color 0.2s; max-width: 45%; }
+    .project-nav a:hover { color: #0A0A0A; }
+    .project-nav .nav-arrow { font-size: 12px; flex-shrink: 0; }
+    .project-nav .nav-project-name { font-weight: 700; color: rgba(10,10,10,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── PROJECT HEADER ── */
+    .project-header { padding: 48px 40px 40px; background: #F7F4EE; }
+    .project-client-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-bottom: 10px; }
+    .project-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(22px, 3vw, 40px); color: #0A0A0A; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .project-desc { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.45); line-height: 1.85; max-width: 640px; }
+    .project-desc p { margin-top: 12px; }
+    .project-desc p:first-child { margin-top: 0; }
+    .project-role { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-top: 16px; }
+
+    /* ── AWARDS ── */
+    .awards-section { background: #F7F4EE; padding: 24px 40px; }
+    .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 12px; }
+    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; width: 100%; }
+    .award-col { display: flex; flex-direction: column; flex: 0 0 52px; width: 52px; overflow: hidden; border-radius: 4px; margin-left: 2px; }
     .award-col:first-child { margin-left: 0; }
-    .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 1px 4px; height: 15px; font-family: 'Inter', sans-serif; text-transform: uppercase; }
-    .award-cell .cell-metal { font-size: 7px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; }
-    .award-cell .cell-count { font-size: 8px; font-weight: 700; line-height: 1; }
+    .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 2px 5px; height: 18px; font-family: 'Inter', sans-serif; text-transform: uppercase; }
+    .award-cell .cell-metal { font-size: 8px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; }
+    .award-cell .cell-count { font-size: 9px; font-weight: 700; line-height: 1; }
     .award-cell.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
     .award-cell.metal-gold   { background: #A8874A; color: #fff; }
     .award-cell.metal-silver { background: #9AAFA8; color: #fff; }
     .award-cell.metal-bronze { background: #926650; color: #fff; }
     .award-cell.metal-other  { background: #C8C3B8; color: #555; }
-    .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #E8E3DA; padding: 3px; }
+    .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #E8E3DA; padding: 5px; }
     .award-icon-cell img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .award-spacer { margin-bottom: 8px; }
-    .project-thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #DDD9D0; border-radius: 10px; }
-    .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .project-info { padding: 12px 4px 4px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
-    .project-info-top { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
-    .project-meta { flex: 1; }
-    .project-client { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-bottom: 5px; }
-    .project-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; line-height: 1.15; text-transform: uppercase; letter-spacing: -0.01em; }
-    .btn-view { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.45); border: 1px solid rgba(10,10,10,0.2); padding: 0 12px; height: 44px; white-space: nowrap; display: flex; align-items: center; border-radius: 4px; transition: color 0.2s, border-color 0.2s; align-self: flex-start; }
-    .project-desc { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.4); line-height: 1.75; }
-    .loading { padding: 60px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; grid-column: 1 / -1; }
+
+    /* ── GALLERY ── */
+    .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
+    .media-block { width: 100%; background: #F7F4EE; }
+    .media-image img { width: 100%; height: auto; display: block; }
+    .media-video-local video { width: 100%; height: auto; display: block; }
+    .media-video-embed .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+    .media-video-embed iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .media-text { padding: 40px; background: #F7F4EE; }
+    .media-text p { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); line-height: 1.85; max-width: 640px; }
+
+    /* ── FOOTER NAV ── */
+    .project-nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; background: #F7F4EE; }
+
+    /* ── FOOTER ── */
     footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
     .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
+
+    .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
+
     @media (max-width: 600px) {
-      nav { padding: 16px 20px; }
-      .hero { padding: 48px 20px 40px; }
-      .chapter-header { padding: 16px 20px; }
-      .projects-grid { grid-template-columns: 1fr; }
-      footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
+      nav, .project-nav, .project-header, .awards-section, .project-nav-bottom, footer { padding-left: 20px; padding-right: 20px; }
+      .gallery-row.cols-2, .gallery-row.cols-3 { grid-template-columns: 1fr; }
+      .project-title { font-size: clamp(18px, 5vw, 28px); }
     }
   </style>
 </head>
@@ -74,16 +91,15 @@
   </div>
 </nav>
 
-<section class="hero">
-  <h1>Senior Creative<em>Director</em>& Head of Art</h1>
-  <p class="hero-sub" id="hero-subline">20+ years &nbsp;·&nbsp; Brazil - Dubai &nbsp;·&nbsp; 1 Grand Prix, 20+ Lions, D&AD &nbsp;·&nbsp; One Show &nbsp;·&nbsp; Clio</p>
-</section>
+<div id="project-nav-top" class="project-nav">
+  <span style="font-size:9px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(10,10,10,0.2); font-family:'Unbounded',sans-serif;">Loading…</span>
+</div>
 
-<main id="main-content">
-  <div class="projects-grid">
-    <p class="loading">Loading projects...</p>
-  </div>
-</main>
+<div id="project-content">
+  <div class="loading">Loading project…</div>
+</div>
+
+<div id="project-nav-bottom" class="project-nav-bottom" style="display:none;"></div>
 
 <footer>
   <div class="footer-left">
@@ -99,204 +115,205 @@
 </div>
 <script>
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
-const SETTINGS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=843736092&single=true&output=csv';
-const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
+const METALS = ['gp','gold','silver','bronze','short'];
 
-function parseLine(line) {
-  const cols = [];
-  let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"' && !inQ) { inQ = true; }
-    else if (ch === '"' && inQ) { inQ = false; }
-    else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-    else { cur += ch; }
+function parseCSV(text) {
+  // Handles multi-line quoted cells correctly
+  const result = [];
+  const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  let pos = 0;
+
+  function parseRow() {
+    const cols = [];
+    while (pos < normalized.length) {
+      if (normalized[pos] === '"') {
+        // Quoted field
+        pos++; // skip opening quote
+        let val = '';
+        while (pos < normalized.length) {
+          if (normalized[pos] === '"' && normalized[pos+1] === '"') {
+            val += '"'; pos += 2;
+          } else if (normalized[pos] === '"') {
+            pos++; break; // closing quote
+          } else {
+            val += normalized[pos++];
+          }
+        }
+        cols.push(val);
+        if (normalized[pos] === ',') pos++;
+        else break;
+      } else {
+        // Unquoted field
+        let val = '';
+        while (pos < normalized.length && normalized[pos] !== ',' && normalized[pos] !== '\n') {
+          val += normalized[pos++];
+        }
+        cols.push(val.trim());
+        if (normalized[pos] === ',') pos++;
+        else break;
+      }
+    }
+    if (normalized[pos] === '\n') pos++;
+    return cols;
   }
-  cols.push(cur.trim());
-  return cols;
-}
 
-function parseCSV(text, filterKey) {
-  const lines = text.trim().replace(/\r/g, '').split('\n');
-  const headers = parseLine(lines[0]).map(h => h.toLowerCase().trim());
-  return lines.slice(1).map(line => {
-    const cols = parseLine(line);
+  const headers = parseRow().map(h => h.toLowerCase().trim());
+  while (pos < normalized.length) {
+    const cols = parseRow();
+    if (cols.every(c => !c)) continue;
     const obj = {};
     headers.forEach((h, i) => { obj[h] = cols[i] || ''; });
-    return obj;
-  }).filter(r => filterKey ? r[filterKey] : Object.values(r).some(v => v));
-}
-
-async function loadSettings() {
-  if (!SETTINGS_URL) return;
-  try {
-    const res = await fetch(SETTINGS_URL);
-    const text = await res.text();
-    const rows = parseCSV(text, 'key');
-    const settings = {};
-    rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
-    if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
-  } catch (err) {
-    console.error('Settings load error:', err);
+    if (obj.name) result.push(obj);
   }
-}
-
-async function loadProjects() {
-  try {
-    const res = await fetch(SHEET_URL);
-    const text = await res.text();
-    const projects = parseCSV(text, 'name');
-    if (projects.length > 0) { projects.forEach(function(proj, idx) { for (var i = 1; i <= 12; i++) { var raw = (proj['award' + i + 'count'] || '').trim(); var cnt = raw ? parseInt(raw) : 1; console.log('[DEBUG]', proj.name, 'slot', i, '| name:', proj['award'+i], '| label:', proj['award'+i+'label'], '| countRaw:', JSON.stringify(raw), '| count:', cnt, '| >3:', cnt > 3); } }); }
-    renderProjects(projects);
-  } catch (err) {
-    document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
-  }
-}
-
-function renderProjects(projects) {
-  const chapters = {};
-  CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
-  projects.forEach(p => {
-    const ch = p.chapter || 'Other';
-    if (!chapters[ch]) chapters[ch] = [];
-    chapters[ch].push(p);
-  });
-
-  const main = document.getElementById('main-content');
-  main.innerHTML = '';
-
-  CHAPTER_ORDER.forEach(chapterName => {
-    const items = chapters[chapterName];
-    if (!items || items.length === 0) return;
-
-    const header = document.createElement('div');
-    header.className = 'chapter-header';
-    header.innerHTML = '<span class="chapter-label">' + chapterName + '</span>';
-    main.appendChild(header);
-
-    const grid = document.createElement('div');
-    grid.className = 'projects-grid';
-    items.forEach(p => grid.appendChild(buildCard(p)));
-    main.appendChild(grid);
-  });
-
-  requestAnimationFrame(function() {
-    requestAnimationFrame(equaliseAwardHeights);
-  });
-}
-
-function equaliseAwardHeights() {
-  document.querySelectorAll('.projects-grid').forEach(function(grid) {
-    const awardDivs = Array.from(grid.querySelectorAll('.award-icons, .award-spacer'));
-    if (!awardDivs.length) return;
-    awardDivs.forEach(function(el) { el.style.height = ''; });
-    const rows = {};
-    awardDivs.forEach(function(el) {
-      const key = Math.round(el.getBoundingClientRect().top);
-      if (!rows[key]) rows[key] = [];
-      rows[key].push(el);
-    });
-    Object.values(rows).forEach(function(row) {
-      const maxH = Math.max.apply(null, row.map(function(el) { return el.scrollHeight; }));
-      row.forEach(function(el) { el.style.height = maxH + 'px'; });
-    });
-  });
-}
-
-window.addEventListener('resize', equaliseAwardHeights);
-
-function buildCard(p) {
-  const a = document.createElement('a');
-  a.className = 'project-card';
-  a.href = 'project.html?id=' + (p.slug || slugify(p.name));
-
-  const METALS = ['gp', 'gold', 'silver', 'bronze', 'short'];
-
-  function metalClass(m) {
-    if (m === 'gp')     return 'metal-gp';
-    if (m === 'gold')   return 'metal-gold';
-    if (m === 'silver') return 'metal-silver';
-    if (m === 'bronze') return 'metal-bronze';
-    return 'metal-other';
-  }
-
-  function metalLabel(awardName, metal) {
-    if (awardName.toLowerCase() === 'dandad') {
-      const map = { gp: 'B', gold: 'Y', silver: 'G', bronze: 'W', short: 'Sh' };
-      return map[metal] || metal.toUpperCase();
-    }
-    const map = { gp: 'GP', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh', merit: 'M' };
-    return map[metal.toLowerCase()] || metal.toUpperCase();
-  }
-
-  const awardCols = [];
-  for (let i = 1; i <= 10; i++) {
-    const name = (p['award' + i] || '').trim();
-    if (!name || name.toUpperCase() === 'NA') continue;
-    const metals = [];
-    METALS.forEach(function(m) {
-      const val = parseInt(p['award' + i + m] || 0);
-      if (val > 0) metals.push({ metal: m, count: val });
-    });
-    if (metals.length) awardCols.push({ name: name, metals: metals });
-  }
-
-  let iconsHTML;
-  if (awardCols.length) {
-    const colsHTML = awardCols.map(function(col) {
-      const cells = col.metals.map(function(m) {
-        const label = metalLabel(col.name, m.metal);
-        const countHTML = '<span class="cell-count">' + m.count + '</span>';
-        const metalHTML = '<span class="cell-metal">' + label + '</span>';
-        return '<div class="award-cell ' + metalClass(m.metal) + '">' + metalHTML + countHTML + '</div>';
-      }).join('');
-      const iconCell = '<div class="award-icon-cell">'
-        + '<img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '">'
-        + '</div>';
-      return '<div class="award-col">' + cells + iconCell + '</div>';
-    }).join('');
-
-    iconsHTML = '<div class="award-icons">' + colsHTML + '</div>';
-  } else {
-    iconsHTML = '<div class="award-spacer"></div>';
-  }
-
-  let thumbInner = '';
-  const thumb = (p.thumbnail || '').trim();
-  if (thumb) {
-    const isVideo = thumb.toLowerCase().endsWith('.mp4') || thumb.toLowerCase().endsWith('.webm');
-    if (isVideo) {
-      thumbInner = '<video src="thumbnail/' + thumb + '" autoplay loop muted playsinline></video>';
-    } else {
-      thumbInner = '<img src="thumbnail/' + thumb + '" alt="' + p.name + '" loading="lazy">';
-    }
-  }
-
-  const descHTML = p.description ? '<p class="project-desc">' + p.description + '</p>' : '';
-
-  a.innerHTML = iconsHTML +
-    '<div class="project-thumb">' + thumbInner + '</div>' +
-    '<div class="project-info">' +
-      '<div class="project-info-top">' +
-        '<div class="project-meta">' +
-          '<p class="project-client">' + (p.client || '') + '</p>' +
-          '<p class="project-name">' + p.name + '</p>' +
-        '</div>' +
-        '<span class="btn-view">View Project</span>' +
-      '</div>' +
-      descHTML +
-    '</div>';
-
-  return a;
+  return result;
 }
 
 function slugify(str) {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
 }
 
-console.log('[VERSION] portfolio v3 loaded');
-loadSettings();
-loadProjects();
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function metalClass(m) {
+  if (m==='gp')     return 'metal-gp';
+  if (m==='gold')   return 'metal-gold';
+  if (m==='silver') return 'metal-silver';
+  if (m==='bronze') return 'metal-bronze';
+  return 'metal-other';
+}
+
+function metalLabel(awardName, metal) {
+  if (awardName.toLowerCase() === 'dandad') {
+    return {gp:'B', gold:'Y', silver:'G', bronze:'W', short:'Sh'}[metal] || metal.toUpperCase();
+  }
+  return {gp:'GP', gold:'G', silver:'S', bronze:'B', short:'Sh', merit:'M'}[metal.toLowerCase()] || metal.toUpperCase();
+}
+
+function buildAwards(p) {
+  const cols = [];
+  for (let i = 1; i <= 10; i++) {
+    const name = (p['award'+i]||'').trim();
+    if (!name || name.toUpperCase()==='NA') continue;
+    const metals = [];
+    METALS.forEach(function(m) {
+      const v = parseInt(p['award'+i+m]||0);
+      if (v > 0) metals.push({metal:m, count:v});
+    });
+    if (metals.length) cols.push({name:name, metals:metals});
+  }
+  if (!cols.length) return '';
+
+  const colsHTML = cols.map(function(col) {
+    const cells = col.metals.map(function(m) {
+      return '<div class="award-cell ' + metalClass(m.metal) + '">'
+        + '<span class="cell-metal">' + metalLabel(col.name, m.metal) + '</span>'
+        + '<span class="cell-count">' + m.count + '</span>'
+        + '</div>';
+    }).join('');
+    return '<div class="award-col">' + cells
+      + '<div class="award-icon-cell"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '"></div>'
+      + '</div>';
+  }).join('');
+
+  return '<div class="awards-section"><p class="awards-label">Awards</p><div class="award-icons">' + colsHTML + '</div></div>';
+}
+
+function youtubeEmbed(url) {
+  // handles youtu.be/ID and youtube.com/watch?v=ID and youtube.com/embed/ID
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
+  return m ? 'https://www.youtube.com/embed/' + m[1] + '?autoplay=0&rel=0' : url;
+}
+
+function buildGallery(p) {
+  const mediaRaw = (p.media || '').trim();
+  if (!mediaRaw) return '';
+
+  const items = mediaRaw.split('|').map(s => s.trim()).filter(Boolean);
+  if (!items.length) return '';
+
+  const blocks = items.map(function(item) {
+    if (item.startsWith('img:')) {
+      const file = item.slice(4).trim();
+      return '<div class="media-block media-image"><img src="media/' + file + '" alt="" loading="lazy"></div>';
+    } else if (item.startsWith('vid:')) {
+      const url = item.slice(4).trim();
+      const isLocal = url.endsWith('.mp4') || url.endsWith('.webm');
+      if (isLocal) {
+        return '<div class="media-block media-video-local"><video src="media/' + url + '" controls playsinline></video></div>';
+      } else {
+        const embedUrl = youtubeEmbed(url);
+        return '<div class="media-block media-video-embed"><div class="embed-wrap"><iframe src="' + embedUrl + '" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe></div></div>';
+      }
+    } else if (item.startsWith('txt:')) {
+      const text = item.slice(4).trim();
+      return '<div class="media-block media-text"><p>' + text + '</p></div>';
+    }
+    return '';
+  }).join('');
+
+  return '<div class="gallery-section">' + blocks + '</div>';
+}
+
+function buildNavHTML(prev, next) {
+  let prevHTML = prev
+    ? '<a href="project.html?id=' + (prev.slug || slugify(prev.name)) + '"><span class="nav-arrow">←</span><span class="nav-project-name">' + prev.name + '</span></a>'
+    : '<span></span>';
+  let nextHTML = next
+    ? '<a href="project.html?id=' + (next.slug || slugify(next.name)) + '" style="text-align:right"><span class="nav-project-name">' + next.name + '</span><span class="nav-arrow">→</span></a>'
+    : '<span></span>';
+  return prevHTML + nextHTML;
+}
+
+async function loadProject() {
+  const id = getParam('id');
+  if (!id) { window.location = 'index.html'; return; }
+
+  try {
+    const res = await fetch(SHEET_URL);
+    const text = await res.text();
+    const projects = parseCSV(text);
+
+    const idx = projects.findIndex(p => (p.slug || slugify(p.name)) === id);
+    if (idx === -1) {
+      document.getElementById('project-content').innerHTML = '<div class="loading">Project not found.</div>';
+      return;
+    }
+
+    const p = projects[idx];
+    const prev = idx > 0 ? projects[idx - 1] : null;
+    const next = idx < projects.length - 1 ? projects[idx + 1] : null;
+
+    document.title = p.name + ' — Paulo Engler';
+
+    // Top nav
+    document.getElementById('project-nav-top').innerHTML = buildNavHTML(prev, next);
+
+    // Main content
+    document.getElementById('project-content').innerHTML =
+      '<div class="project-header">'
+        + '<p class="project-client-label">' + (p.client||'') + '</p>'
+        + '<h1 class="project-title">' + p.name + '</h1>'
+        + (p.description ? '<div class="project-desc">' + p.description.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(function(l){return l.trim();}).map(function(l){return '<p>'+l+'</p>';}).join('') + '</div>' : '')
+        + (p.role ? '<p class="project-role">' + p.role + '</p>' : '')
+      + '</div>'
+      + buildGallery(p)
+      + buildAwards(p);
+
+    // Bottom nav
+    const navBottom = document.getElementById('project-nav-bottom');
+    navBottom.innerHTML = buildNavHTML(prev, next);
+    navBottom.style.display = 'flex';
+    navBottom.style.justifyContent = 'space-between';
+
+  } catch(err) {
+    document.getElementById('project-content').innerHTML = '<div class="loading">Could not load project.</div>';
+    console.error(err);
+  }
+}
+
+loadProject();
 </script>
 </body>
 </html>
