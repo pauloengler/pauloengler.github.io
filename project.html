@@ -289,8 +289,18 @@ async function loadProject() {
   if (!id) { window.location = 'index.html'; return; }
 
   try {
-    const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(SHEET_URL));
-    const text = await res.text();
+    const CACHE_KEY = 'portfolio_csv_v1';
+    const CACHE_AGE = 5 * 60 * 1000;
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    const cachedTime = sessionStorage.getItem(CACHE_KEY + '_time');
+    let text;
+    if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
+      text = cached;
+    } else {
+      const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(SHEET_URL));
+      text = await res.text();
+      try { sessionStorage.setItem(CACHE_KEY, text); sessionStorage.setItem(CACHE_KEY + '_time', Date.now()); } catch(e) {}
+    }
     const projects = parseCSV(text);
 
     const idx = projects.findIndex(p => (p.slug || slugify(p.name)) === id);
