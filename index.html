@@ -174,7 +174,7 @@ async function loadProjects() {
     if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
       text = cached;
     } else {
-      const res = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(SHEET_URL));
+      const res = await fetch(SHEET_URL);
       text = await res.text();
       try { sessionStorage.setItem(CACHE_KEY, text); sessionStorage.setItem(CACHE_KEY + '_time', Date.now()); } catch(e) {}
     }
