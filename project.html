@@ -275,12 +275,12 @@ function buildGallery(p) {
 
 function buildNavHTML(prev, next) {
   let prevHTML = prev
-    ? '<a href="project.html?id=' + (prev.slug || slugify(prev.name)) + '" class="nav-prev"><span class="nav-dir">Previous</span><span class="nav-project-name">' + prev.name + '</span></a>'
+    ? '<a href="project.html?id=' + (prev.slug || slugify(prev.name)) + '" class="nav-prev">← Previous</a>'
     : '<span></span>';
   let nextHTML = next
-    ? '<a href="project.html?id=' + (next.slug || slugify(next.name)) + '" class="nav-next"><span class="nav-dir">Next</span><span class="nav-project-name">' + next.name + '</span></a>'
+    ? '<a href="project.html?id=' + (next.slug || slugify(next.name)) + '" class="nav-next">Next →</a>'
     : '<span></span>';
-  const backHTML = '<a href="index.html" class="nav-back">← Back to Work</a>';
+  const backHTML = '<a href="index.html" class="nav-back">Back to Main</a>';
   return prevHTML + backHTML + nextHTML;
 }
 
@@ -323,7 +323,11 @@ async function loadProject() {
       '<div class="project-header">'
         + '<p class="project-client-label">' + (p.client||'') + '</p>'
         + '<h1 class="project-title">' + p.name + '</h1>'
-        + (p.description ? '<div class="project-desc">' + p.description.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(function(l){return l.trim();}).map(function(l){return '<p>'+l+'</p>';}).join('') + '</div>' : '')
+        + (function(){
+            const d = (p['description project'] || p['descriptionproject'] || '').trim();
+            if (!d) return '';
+            return '<div class="project-desc">' + d.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(function(l){return l.trim();}).map(function(l){return '<p>'+l+'</p>';}).join('') + '</div>';
+          }())
         + (p.role || p.year ? '<div class="project-meta-block">'
           + (p.role ? '<div class="project-meta-item"><span class="project-meta-label">Role</span><span class="project-meta-value">' + p.role + '</span></div>' : '')
           + (p.year ? '<div class="project-meta-item"><span class="project-meta-label">Year</span><span class="project-meta-value">' + p.year + '</span></div>' : '')

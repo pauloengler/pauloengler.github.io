@@ -304,7 +304,7 @@ function buildCard(p) {
     }
   }
 
-  const descHTML = p.description ? '<p class="project-desc">' + p.description + '</p>' : '';
+  const descHTML = (p['description thumb'] || p['descriptionthumb'] || p.description || '') ? '<p class="project-desc">' + (p['description thumb'] || p['descriptionthumb'] || p.description || '') + '</p>' : '';
 
   a.innerHTML = iconsHTML +
     '<div class="project-thumb">' + thumbInner + '</div>' +
