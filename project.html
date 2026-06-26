@@ -304,7 +304,7 @@ function buildGallery(p) {
         if (!id) return '';
         const thumb = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
         return '<div class="media-block media-video-yt" id="yt-' + id + '">'
-          + '<div class="yt-thumb-link" onclick="playYT('' + id + '')">'
+          + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')">'
           + '<img src="' + thumb + '" alt="Video" loading="lazy" class="yt-thumb-img">'
           + '<div class="yt-play-btn"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="18,10 62,36 18,62" fill="#fff"/></svg></div>'
           + '</div></div>';
