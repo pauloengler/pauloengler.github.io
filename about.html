@@ -369,18 +369,20 @@ async function loadAbout() {
 
     // Load both sheets in parallel
     async function fetchCSV(url, cacheKey) {
-      // Always fetch fresh on about page to avoid stale cache issues
-      try {
-        const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
-        const text = await res.text();
-        try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
-        return text;
-      } catch(e) {
-        // Fall back to cache if fetch fails
-        const cached = sessionStorage.getItem(cacheKey);
-        if (cached) return cached;
-        throw e;
+      const CACHE_AGE = 5 * 60 * 1000;
+      const cached = sessionStorage.getItem(cacheKey);
+      const cachedTime = sessionStorage.getItem(cacheKey+'_time');
+      if (cached && cachedTime && (Date.now()-parseInt(cachedTime))<CACHE_AGE) {
+        console.log('[FETCH] Using cache for', cacheKey, 'length:', cached.length);
+        return cached;
       }
+      console.log('[FETCH] Fetching fresh:', url.slice(0,60));
+      const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      console.log('[FETCH] Got', text.length, 'chars for', cacheKey);
+      try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
+      return text;
     }
 
     let aboutText, projectsText;
