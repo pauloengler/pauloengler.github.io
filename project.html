@@ -51,13 +51,13 @@
     .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
     .award-metals { display: flex; flex-direction: column; gap: 3px; padding-left: 38px; }
     .award-metal-row { display: flex; align-items: center; gap: 8px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); }
-    .award-metal-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-    .award-metal-dot.metal-gp     { background: #1A1A1A; }
-    .award-metal-dot.metal-gold   { background: #A8874A; }
-    .award-metal-dot.metal-silver { background: #9AAFA8; }
-    .award-metal-dot.metal-bronze { background: #926650; }
-    .award-metal-dot.metal-other  { background: #C8C3B8; }
-    .award-metal-count { font-weight: 700; color: #0A0A0A; }
+    .award-metal-dot { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 20px; border-radius: 3px; flex-shrink: 0; font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; }
+    .award-metal-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
+    .award-metal-dot.metal-gold   { background: #A8874A; color: #fff; }
+    .award-metal-dot.metal-silver { background: #9AAFA8; color: #fff; }
+    .award-metal-dot.metal-bronze { background: #926650; color: #fff; }
+    .award-metal-dot.metal-other  { background: #C8C3B8; color: #555; }
+    .award-metal-count { font-weight: 700; color: #0A0A0A; min-width: 20px; }
 
     /* ── GALLERY ── */
     .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
@@ -220,24 +220,48 @@ function buildAwards(p) {
   }
   if (!cols.length) return '';
 
+  const AWARD_NAMES = {
+    ame: 'AME by New York Festivals',
+    archive: "Lürzer's Archive Magazine",
+    cannes: 'Cannes Lions',
+    caples: 'Caples',
+    clio: 'Clio',
+    cliohealth: 'Clio Health',
+    dandad: 'D&AD',
+    elojo: 'El Ojo de Iberoamérica',
+    fiap: 'Festival Iberoamericano de la Publicidad',
+    lia: 'London International Awards (LIA)',
+    loeries: 'Loeries',
+    lynx: 'Dubai Lynx',
+    madstars: 'Mad Stars',
+    newyork: 'New York Festivals',
+    one: 'One Show',
+    phnks: 'Ad Forum PHNX',
+    wark: 'WARK',
+    wave: 'Wave Festival in Rio',
+    webby: 'Webby Awards',
+    wpp: 'WPP Cream'
+  };
+
   const METAL_FULL = { gp: 'Grand Prix', gold: 'Gold', silver: 'Silver', bronze: 'Bronze', short: 'Shortlist' };
   const DANDAD_FULL = { gp: 'Black Pencil', gold: 'Yellow Pencil', silver: 'Graphite Pencil', bronze: 'Wood Pencil', short: 'Shortlist' };
 
   const itemsHTML = cols.map(function(col) {
     const isDandad = col.name.toLowerCase() === 'dandad';
+    const displayName = AWARD_NAMES[col.name.toLowerCase()] || col.name;
     const metalsHTML = col.metals.map(function(m) {
       const label = isDandad ? (DANDAD_FULL[m.metal] || m.metal) : (METAL_FULL[m.metal] || m.metal);
+      const countStr = m.count > 1 ? m.count + 'x' : '';
       return '<div class="award-metal-row">'
-        + '<span class="award-metal-dot ' + metalClass(m.metal) + '"></span>'
-        + '<span class="award-metal-count">' + m.count + '</span>'
-        + '<span>' + label + '</span>'
+        + '<span class="award-metal-dot ' + metalClass(m.metal) + '">' + label + '</span>'
+        + (countStr ? '<span class="award-metal-count">' + countStr + '</span>' : '')
         + '</div>';
     }).join('');
 
     return '<div class="award-item">'
       + '<div class="award-item-header">'
-      + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '"></div>'
-      + '<span class="award-item-name">' + col.name + '</span>'
+      + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + displayName + '"></div>'
+      + '<span class="award-item-name">' + displayName + '</span>'
       + '</div>'
       + '<div class="award-metals">' + metalsHTML + '</div>'
       + '</div>';
