@@ -59,11 +59,12 @@
     /* ── AWARDS ── */
     .awards-grid { display: flex; flex-direction: column; gap: 24px; }
     .award-about-item { display: flex; flex-direction: column; gap: 8px; }
-    .award-about-header { display: flex; align-items: center; gap: 10px; }
-    .award-about-icon { width: 24px; height: 24px; background: #E8E3DA; border-radius: 3px; padding: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-about-header { display: inline-flex; align-items: center; gap: 0; background: #E8E3DA; border-radius: 3px; overflow: hidden; align-self: flex-start; }
+    .award-about-icon { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .award-about-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .award-about-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
-    .award-about-metals { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 34px; }
+    .award-about-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 8px 0 8px; }
+    .award-about-total { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.4); padding: 0 10px 0 0; letter-spacing: 0; }
+    .award-about-metals { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 0; margin-top: 2px; }
     .award-about-pill { display: inline-flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(10,10,10,0.55); }
     .award-about-dot { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 3px; font-size: 7px; font-weight: 700; font-family: 'Inter', sans-serif; text-transform: uppercase; }
     .award-about-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
@@ -71,7 +72,7 @@
     .award-about-dot.metal-silver { background: #9AAFA8; color: #fff; }
     .award-about-dot.metal-bronze { background: #926650; color: #fff; }
     .award-about-dot.metal-other  { background: #C8C3B8; color: #555; }
-    .award-about-campaigns { margin-left: 34px; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .award-about-campaigns { margin-left: 0; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
     .award-campaign-link { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.06em; color: rgba(10,10,10,0.4); text-decoration: none; text-transform: uppercase; border-bottom: 1px solid rgba(10,10,10,0.15); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
     .award-campaign-link:hover { color: #0A0A0A; border-color: #0A0A0A; }
 
@@ -223,24 +224,15 @@ function buildAwardsFromProjects(projects) {
     }
   });
 
-  // Defined sort order — most prestigious first
-  const AWARD_ORDER = [
-    'cannes','dandad','one','clio','cliohealth','lia','lynx',
-    'newyork','ame','loeries','madstars','elojo','fiap','wave',
-    'caples','webby','phnks','wark','wpp','archive'
-  ];
+  function totalMetals(k) {
+    return METALS.reduce(function(sum, m){ return sum + awardMap[k].metals[m]; }, 0);
+  }
 
-  // Sort: known shows in defined order, then any unknown alphabetically
+  // Sort by total metal count descending, ties broken alphabetically
   const keys = Object.keys(awardMap).filter(function(k) {
-    // Only include award shows that have at least one metal
-    return METALS.some(function(m){ return awardMap[k].metals[m] > 0; });
+    return totalMetals(k) > 0;
   }).sort(function(a, b) {
-    const ai = AWARD_ORDER.indexOf(a);
-    const bi = AWARD_ORDER.indexOf(b);
-    if (ai === -1 && bi === -1) return a.localeCompare(b);
-    if (ai === -1) return 1;
-    if (bi === -1) return -1;
-    return ai - bi;
+    return totalMetals(b) - totalMetals(a) || a.localeCompare(b);
   });
 
   if (!keys.length) return '';
@@ -262,10 +254,13 @@ function buildAwardsFromProjects(projects) {
       return '<a href="project.html?id=' + slugify(c) + '" class="award-campaign-link">' + c + '</a>';
     }).join('');
 
+    const metalTotal = ['gp','gold','silver','bronze'].reduce(function(sum, m){ return sum + award.metals[m]; }, 0);
+
     return '<div class="award-about-item">'
       + '<div class="award-about-header">'
       + '<div class="award-about-icon"><img src="icons/' + key + '.png" alt="' + displayName + '"></div>'
       + '<span class="award-about-name">' + displayName + '</span>'
+      + (metalTotal ? '<span class="award-about-total">' + metalTotal + '</span>' : '')
       + '</div>'
       + '<div class="award-about-metals">' + metalsHTML + '</div>'
       + (campaignsHTML ? '<div class="award-about-campaigns">' + campaignsHTML + '</div>' : '')
