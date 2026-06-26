@@ -92,7 +92,7 @@
   <button class="view-btn" id="btn-full" onclick="setView('full')">Full Work</button>
   <button class="view-btn" id="btn-select" onclick="setView('select')">Selected Work</button>
 </div>
-<div class="search-bar" id="search-bar" style="display:none;">
+<div class="search-bar" id="search-bar">
   <input class="search-input" id="search-input" type="text" placeholder="Search by project, client, category, tags...">
 </div>
 <main id="main-content">
@@ -205,20 +205,19 @@ function renderProjects(projects) {
   const chapters = {};
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
-    if (currentView === 'select') {
-      // Selected view: filter by select column
+    if (currentSearch) {
+      // Search mode: always search full list
+      const fullVal = (p['full'] || '').toString().toUpperCase();
+      if (fullVal !== 'TRUE') return;
+      const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
+        .filter(Boolean).join(' ').toLowerCase();
+      if (!searchable.includes(currentSearch)) return;
+    } else if (currentView === 'select') {
       const val = (p['select'] || '').toString().toUpperCase();
       if (val !== 'TRUE') return;
     } else {
-      // Full view: filter by full column first
       const val = (p['full'] || '').toString().toUpperCase();
       if (val !== 'TRUE') return;
-      // Then apply search if active
-      if (currentSearch) {
-        const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
-          .filter(Boolean).join(' ').toLowerCase();
-        if (!searchable.includes(currentSearch)) return;
-      }
     }
     const ch = p.chapter || 'Other';
     if (!chapters[ch]) chapters[ch] = [];
@@ -366,8 +365,6 @@ function setView(view) {
   currentView = view;
   document.getElementById('btn-full').classList.toggle('active', view === 'full');
   document.getElementById('btn-select').classList.toggle('active', view === 'select');
-  // Show search only in full view
-  document.getElementById('search-bar').style.display = view === 'full' ? 'block' : 'none';
   // Clear search when switching views
   document.getElementById('search-input').value = '';
   currentSearch = '';
@@ -380,6 +377,9 @@ function setView(view) {
 
 function doSearch(query) {
   currentSearch = query.toLowerCase().trim();
+  // Deselect both buttons when search is active
+  document.getElementById('btn-full').classList.toggle('active', !currentSearch && currentView === 'full');
+  document.getElementById('btn-select').classList.toggle('active', !currentSearch && currentView === 'select');
   const cached = sessionStorage.getItem('portfolio_csv_v1');
   if (cached) {
     const projects = parseCSV(cached, 'name');
