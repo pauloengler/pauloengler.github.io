@@ -317,9 +317,9 @@ function buildAbout(rows, projects) {
   if (expertiseRows.length) {
     const tags = [];
     expertiseRows.forEach(function(r) {
-      ['col1','col2','col3','col4','col5','col6','col7','col8','col9','col10'].forEach(function(c) {
-        if (r[c]) tags.push(r[c]);
-      });
+      for (var ci = 1; ci <= 30; ci++) {
+        if (r['col'+ci]) tags.push(r['col'+ci]);
+      }
     });
     html += '<div class="about-section"><p class="section-label">Expertise</p><div class="expertise-list">'
       + tags.map(t=>'<span class="expertise-tag">'+t+'</span>').join('')
@@ -331,9 +331,9 @@ function buildAbout(rows, projects) {
   if (clientRows.length) {
     const clients = [];
     clientRows.forEach(function(r) {
-      ['col1','col2','col3','col4','col5','col6','col7','col8','col9','col10'].forEach(function(c) {
-        if (r[c]) clients.push(r[c]);
-      });
+      for (var ci = 1; ci <= 30; ci++) {
+        if (r['col'+ci]) clients.push(r['col'+ci]);
+      }
     });
     html += '<div class="about-section"><p class="section-label">Selected Clients</p><div class="clients-list">'
       + clients.map(c=>'<span class="client-tag">'+c+'</span>').join('')
@@ -385,6 +385,13 @@ async function loadAbout() {
 
     const rows = parseCSV(aboutText);
     const projects = parseCSV(projectsText);
+
+    console.log('[ABOUT] About rows:', rows.length, '| Projects:', projects.length);
+    if (projects.length > 0) {
+      const sampleKeys = Object.keys(projects[0]).filter(k => k.includes('award'));
+      console.log('[ABOUT] Award keys in first project:', sampleKeys.slice(0,10));
+      console.log('[ABOUT] award1 value:', projects[0]['award1'], '| GP1:', projects[0]['GP1'], '| G1:', projects[0]['G1']);
+    }
 
     document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
 
