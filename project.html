@@ -41,21 +41,23 @@
     .project-meta-value { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: rgba(10,10,10,0.7); letter-spacing: -0.01em; }
 
     /* ── AWARDS ── */
-    .awards-section { background: #F7F4EE; padding: 24px 40px; }
-    .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 12px; }
-    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; width: 100%; }
-    .award-col { display: flex; flex-direction: column; flex: 0 0 52px; width: 52px; overflow: hidden; border-radius: 4px; margin-left: 2px; }
-    .award-col:first-child { margin-left: 0; }
-    .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 2px 5px; height: 18px; font-family: 'Inter', sans-serif; text-transform: uppercase; }
-    .award-cell .cell-metal { font-size: 8px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; }
-    .award-cell .cell-count { font-size: 9px; font-weight: 700; line-height: 1; }
-    .award-cell.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
-    .award-cell.metal-gold   { background: #A8874A; color: #fff; }
-    .award-cell.metal-silver { background: #9AAFA8; color: #fff; }
-    .award-cell.metal-bronze { background: #926650; color: #fff; }
-    .award-cell.metal-other  { background: #C8C3B8; color: #555; }
-    .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #E8E3DA; padding: 5px; }
-    .award-icon-cell img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .awards-section { background: #F7F4EE; padding: 40px; }
+    .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 24px; }
+    .award-list { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
+    .award-item { display: flex; flex-direction: column; gap: 6px; }
+    .award-item-header { display: flex; align-items: center; gap: 10px; }
+    .award-item-icon { width: 28px; height: 28px; background: #E8E3DA; border-radius: 4px; padding: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
+    .award-metals { display: flex; flex-direction: column; gap: 3px; padding-left: 38px; }
+    .award-metal-row { display: flex; align-items: center; gap: 8px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); }
+    .award-metal-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+    .award-metal-dot.metal-gp     { background: #1A1A1A; }
+    .award-metal-dot.metal-gold   { background: #A8874A; }
+    .award-metal-dot.metal-silver { background: #9AAFA8; }
+    .award-metal-dot.metal-bronze { background: #926650; }
+    .award-metal-dot.metal-other  { background: #C8C3B8; }
+    .award-metal-count { font-weight: 700; color: #0A0A0A; }
 
     /* ── GALLERY ── */
     .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
@@ -218,19 +220,30 @@ function buildAwards(p) {
   }
   if (!cols.length) return '';
 
-  const colsHTML = cols.map(function(col) {
-    const cells = col.metals.map(function(m) {
-      return '<div class="award-cell ' + metalClass(m.metal) + '">'
-        + '<span class="cell-metal">' + metalLabel(col.name, m.metal) + '</span>'
-        + '<span class="cell-count">' + m.count + '</span>'
+  const METAL_FULL = { gp: 'Grand Prix', gold: 'Gold', silver: 'Silver', bronze: 'Bronze', short: 'Shortlist' };
+  const DANDAD_FULL = { gp: 'Black Pencil', gold: 'Yellow Pencil', silver: 'Graphite Pencil', bronze: 'Wood Pencil', short: 'Shortlist' };
+
+  const itemsHTML = cols.map(function(col) {
+    const isDandad = col.name.toLowerCase() === 'dandad';
+    const metalsHTML = col.metals.map(function(m) {
+      const label = isDandad ? (DANDAD_FULL[m.metal] || m.metal) : (METAL_FULL[m.metal] || m.metal);
+      return '<div class="award-metal-row">'
+        + '<span class="award-metal-dot ' + metalClass(m.metal) + '"></span>'
+        + '<span class="award-metal-count">' + m.count + '</span>'
+        + '<span>' + label + '</span>'
         + '</div>';
     }).join('');
-    return '<div class="award-col">' + cells
-      + '<div class="award-icon-cell"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '"></div>'
+
+    return '<div class="award-item">'
+      + '<div class="award-item-header">'
+      + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '"></div>'
+      + '<span class="award-item-name">' + col.name + '</span>'
+      + '</div>'
+      + '<div class="award-metals">' + metalsHTML + '</div>'
       + '</div>';
   }).join('');
 
-  return '<div class="awards-section"><p class="awards-label">Awards</p><div class="award-icons">' + colsHTML + '</div></div>';
+  return '<div class="awards-section"><p class="awards-label">Awards</p><div class="award-list">' + itemsHTML + '</div></div>';
 }
 
 function youtubeID(url) {
