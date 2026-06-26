@@ -18,6 +18,10 @@
     .hero h1 em { display: block; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 80px); letter-spacing: -0.02em; text-transform: none; line-height: 0.9; }
     .hero-sub { margin-top: 24px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); }
     .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
+    .search-bar { background: #F7F4EE; padding: 16px 40px; border-top: 2px solid #0A0A0A; }
+    .search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(10,10,10,0.2); padding: 8px 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A; outline: none; }
+    .search-input::placeholder { color: rgba(10,10,10,0.25); }
+    .search-input:focus { border-bottom-color: #0A0A0A; }
     .view-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 40px; background: #F7F4EE; cursor: pointer; border: none; font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; color: rgba(10,10,10,0.3); transition: color 0.2s, background 0.2s; text-align: center; }
     .view-btn.active { color: #0A0A0A; background: #F7F4EE; }
     .view-btn:not(.active) { background: #EEEAE2; }
@@ -87,6 +91,9 @@
 <div class="view-toggle" id="view-toggle">
   <button class="view-btn" id="btn-full" onclick="setView('full')">Full Work</button>
   <button class="view-btn" id="btn-select" onclick="setView('select')">Selected Work</button>
+</div>
+<div class="search-bar" id="search-bar" style="display:none;">
+  <input class="search-input" id="search-input" type="text" placeholder="Search by project, client, category, tags...">
 </div>
 <main id="main-content">
   <div class="projects-grid">
@@ -198,13 +205,20 @@ function renderProjects(projects) {
   const chapters = {};
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
-    // Filter by current view using 'select' and 'full' columns (Google Sheets exports TRUE/FALSE)
     if (currentView === 'select') {
+      // Selected view: filter by select column
       const val = (p['select'] || '').toString().toUpperCase();
       if (val !== 'TRUE') return;
     } else {
+      // Full view: filter by full column first
       const val = (p['full'] || '').toString().toUpperCase();
       if (val !== 'TRUE') return;
+      // Then apply search if active
+      if (currentSearch) {
+        const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
+          .filter(Boolean).join(' ').toLowerCase();
+        if (!searchable.includes(currentSearch)) return;
+      }
     }
     const ch = p.chapter || 'Other';
     if (!chapters[ch]) chapters[ch] = [];
@@ -346,11 +360,26 @@ function slugify(str) {
 }
 
 let currentView = 'full';
+let currentSearch = '';
 
 function setView(view) {
   currentView = view;
   document.getElementById('btn-full').classList.toggle('active', view === 'full');
   document.getElementById('btn-select').classList.toggle('active', view === 'select');
+  // Show search only in full view
+  document.getElementById('search-bar').style.display = view === 'full' ? 'block' : 'none';
+  // Clear search when switching views
+  document.getElementById('search-input').value = '';
+  currentSearch = '';
+  const cached = sessionStorage.getItem('portfolio_csv_v1');
+  if (cached) {
+    const projects = parseCSV(cached, 'name');
+    renderProjects(projects);
+  }
+}
+
+function doSearch(query) {
+  currentSearch = query.toLowerCase().trim();
   const cached = sessionStorage.getItem('portfolio_csv_v1');
   if (cached) {
     const projects = parseCSV(cached, 'name');
@@ -360,6 +389,11 @@ function setView(view) {
 
 // Set default active button
 document.getElementById('btn-full').classList.add('active');
+
+// Search input listener
+document.getElementById('search-input').addEventListener('input', function() {
+  doSearch(this.value);
+});
 
 loadSettings();
 loadProjects();
