@@ -36,11 +36,12 @@
 
     /* ── EXPERIENCE ── */
     .experience-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
-    .experience-row { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
+    .experience-row { display: grid; grid-template-columns: 2fr 1fr 2fr 1.5fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
     .experience-row:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
     .exp-company { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
     .exp-years { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.35); letter-spacing: 0.05em; }
     .exp-role { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); }
+    .exp-location { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.3); letter-spacing: 0.03em; }
 
     /* ── JURY ── */
     .jury-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
@@ -291,8 +292,8 @@ function buildAbout(rows, projects) {
           return '<div class="experience-row">'
             + '<span class="exp-company">' + (r.col1||'') + '</span>'
             + '<span class="exp-years">' + years + '</span>'
-            + '<span class="exp-years">' + (r.col5||'') + '</span>'
             + '<span class="exp-role">' + (r.col4||'') + '</span>'
+            + '<span class="exp-location">' + (r.col5||'') + '</span>'
             + '</div>';
         }).join('')
       + '</div></div>';
