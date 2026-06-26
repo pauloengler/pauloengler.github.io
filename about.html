@@ -369,13 +369,18 @@ async function loadAbout() {
 
     // Load both sheets in parallel
     async function fetchCSV(url, cacheKey) {
-      const cached = sessionStorage.getItem(cacheKey);
-      const cachedTime = sessionStorage.getItem(cacheKey+'_time');
-      if (cached && cachedTime && (Date.now()-parseInt(cachedTime))<CACHE_AGE) return cached;
-      const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
-      const text = await res.text();
-      try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
-      return text;
+      // Always fetch fresh on about page to avoid stale cache issues
+      try {
+        const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
+        const text = await res.text();
+        try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
+        return text;
+      } catch(e) {
+        // Fall back to cache if fetch fails
+        const cached = sessionStorage.getItem(cacheKey);
+        if (cached) return cached;
+        throw e;
+      }
     }
 
     const [aboutText, projectsText] = await Promise.all([
