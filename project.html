@@ -218,7 +218,7 @@ function buildAwards(p) {
     const name = (p['award'+i]||'').trim();
     if (!name || name.toUpperCase()==='NA') continue;
     const metals = [];
-    const metalMap = { gp: 'GP', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
+    const metalMap = { gp: 'Gp', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
       const col = metalMap[m] + i;
       const v = parseInt(p[col] || p[col.toLowerCase()] || 0);

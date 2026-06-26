@@ -201,7 +201,7 @@ function metalClass(m) {
 function buildAwardsFromProjects(projects) {
   // Tally all awards across all projects
   const awardMap = {}; // awardName -> { metals: {gp,gold,silver,bronze,short}, campaigns: [] }
-  const metalMap = { gp:'GP', gold:'G', silver:'S', bronze:'B', short:'Sh' };
+  const metalMap = { gp:'Gp', gold:'G', silver:'S', bronze:'B', short:'Sh' };
 
   projects.forEach(function(p) {
     for (let i = 1; i <= 10; i++) {
