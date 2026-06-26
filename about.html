@@ -146,7 +146,7 @@ const AWARD_NAMES = {
   webby:'Webby Awards', wpp:'WPP Cream'
 };
 
-function parseCSV(text) {
+function parseCSV(text, filterFn) {
   const result = [];
   const normalized = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let pos = 0;
@@ -181,7 +181,7 @@ function parseCSV(text) {
     if (cols.every(c=>!c)) continue;
     const obj = {};
     headers.forEach((h,i)=>{ obj[h]=cols[i]||''; });
-    if (obj.block) result.push(obj);
+    if (filterFn ? filterFn(obj) : true) result.push(obj);
   }
   return result;
 }
@@ -394,8 +394,8 @@ async function loadAbout() {
       console.log('[ABOUT] Projects text length:', projectsText.length, '| First 100 chars:', projectsText.slice(0,100));
     } catch(e) { console.error('[ABOUT] Projects sheet failed:', e); projectsText = ''; }
 
-    const rows = parseCSV(aboutText);
-    const projects = parseCSV(projectsText);
+    const rows = parseCSV(aboutText, function(r){ return !!r.block; });
+    const projects = parseCSV(projectsText, function(r){ return !!r.name; });
 
     console.log('[ABOUT] About rows:', rows.length, '| Projects:', projects.length);
     if (projects.length > 0) {
