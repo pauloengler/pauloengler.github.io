@@ -199,9 +199,12 @@ function metalClass(m) {
 }
 
 function buildAwardsFromProjects(projects) {
+  if (!projects || !projects.length) return '';
+
   // Tally all awards across all projects
   const awardMap = {}; // awardName -> { metals: {gp,gold,silver,bronze,short}, campaigns: [] }
-  const metalMap = { gp:'Gp', gold:'G', silver:'S', bronze:'B', short:'Sh' };
+  // Column names after CSV header lowercasing: gp1, g1, s1, b1, sh1
+  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
 
   projects.forEach(function(p) {
     for (let i = 1; i <= 10; i++) {
@@ -209,11 +212,10 @@ function buildAwardsFromProjects(projects) {
       if (!name || name==='na') continue;
       if (!awardMap[name]) awardMap[name] = { metals:{gp:0,gold:0,silver:0,bronze:0,short:0}, campaigns:[] };
       METALS.forEach(function(m) {
-        const col = metalMap[m] + i;
-        const v = parseInt(p[col]||p[col.toLowerCase()]||0);
-        if (v>0) awardMap[name].metals[m] += v;
+        const col = metalColMap[m] + i;          // e.g. 'gp1', 'g1', 's1', 'b1', 'sh1'
+        const v = parseInt(p[col] || 0);
+        if (v > 0) awardMap[name].metals[m] += v;
       });
-      // Add campaign name if not already listed
       const campName = p.name || '';
       if (campName && !awardMap[name].campaigns.includes(campName)) {
         awardMap[name].campaigns.push(campName);
@@ -221,9 +223,29 @@ function buildAwardsFromProjects(projects) {
     }
   });
 
-  if (!Object.keys(awardMap).length) return '';
+  // Defined sort order — most prestigious first
+  const AWARD_ORDER = [
+    'cannes','dandad','one','clio','cliohealth','lia','lynx',
+    'newyork','ame','loeries','madstars','elojo','fiap','wave',
+    'caples','webby','phnks','wark','wpp','archive'
+  ];
 
-  const itemsHTML = Object.keys(awardMap).map(function(key) {
+  // Sort: known shows in defined order, then any unknown alphabetically
+  const keys = Object.keys(awardMap).filter(function(k) {
+    // Only include award shows that have at least one metal
+    return METALS.some(function(m){ return awardMap[k].metals[m] > 0; });
+  }).sort(function(a, b) {
+    const ai = AWARD_ORDER.indexOf(a);
+    const bi = AWARD_ORDER.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+  if (!keys.length) return '';
+
+  const itemsHTML = keys.map(function(key) {
     const award = awardMap[key];
     const displayName = AWARD_NAMES[key] || key;
     const isDandad = key === 'dandad';
