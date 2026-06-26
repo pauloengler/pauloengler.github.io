@@ -4,175 +4,380 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Paulo Engler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400;600&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0A0A0A; color: #F0EDE8; font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; }
+    body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
+    .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
 
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 28px 40px; border-bottom: 0.5px solid rgba(240,237,232,0.12); position: sticky; top: 0; background: #0A0A0A; z-index: 100; }
-    .nav-logo { font-size: 13px; letter-spacing: 0.15em; text-transform: uppercase; color: #F0EDE8; text-decoration: none; }
-    .nav-links { display: flex; gap: 32px; list-style: none; }
-    .nav-links a { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240,237,232,0.5); text-decoration: none; transition: color 0.2s; }
-    .nav-links a:hover { color: #F0EDE8; }
+    /* ── NAV ── */
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; position: sticky; top: 0; z-index: 100; }
+    .nav-left, .nav-right { display: flex; gap: 20px; }
+    .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
+    .nav-left a:hover, .nav-right a:hover, .nav-right a.active { color: #0A0A0A; }
 
-    .about-wrap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: calc(100vh - 80px);
-    }
+    /* ── SECTIONS ── */
+    .about-section { background: #F7F4EE; padding: 60px 40px; }
+    .about-section + .about-section { border-top: 2px solid #0A0A0A; }
+    .section-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 32px; }
 
-    .about-image {
-      background: #E4A0B8;
-      min-height: 500px;
-      position: sticky;
-      top: 80px;
-      height: calc(100vh - 80px);
-    }
-    .about-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.8;
-      display: block;
-    }
+    /* ── HEADER ── */
+    .about-header { background: #F7F4EE; padding: 72px 40px 60px; }
+    .about-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(10px, 1.8vw, 18px); color: rgba(10,10,10,0.35); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+    .about-name { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(52px, 8vw, 100px); color: #0A0A0A; line-height: 0.95; letter-spacing: -0.02em; }
 
-    .about-text {
-      padding: 80px 60px;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-    }
+    /* ── PHOTO ── */
+    .about-photo { width: 100%; aspect-ratio: 16/7; background: #DDD9D0; overflow: hidden; }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    .about-text h1 {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: clamp(32px, 3.5vw, 52px);
-      font-weight: 400;
-      line-height: 1.15;
-      color: #F0EDE8;
-    }
+    /* ── INTRO ── */
+    .intro-text { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
+    .intro-text p { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); line-height: 1.85; }
 
-    .about-bio {
-      font-size: 14px;
-      line-height: 1.85;
-      color: rgba(240,237,232,0.55);
-      max-width: 520px;
-    }
+    /* ── EXPERIENCE ── */
+    .experience-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
+    .experience-row { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
+    .experience-row:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
+    .exp-company { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
+    .exp-years { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.35); letter-spacing: 0.05em; }
+    .exp-role { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); }
 
-    .about-bio p + p { margin-top: 20px; }
+    /* ── EXPERTISE ── */
+    .expertise-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .expertise-tag { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(10,10,10,0.6); border: 1px solid rgba(10,10,10,0.2); padding: 8px 14px; border-radius: 2px; }
 
-    .about-section-title {
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.25);
-      margin-bottom: 16px;
-    }
+    /* ── CLIENTS ── */
+    .clients-list { display: flex; flex-wrap: wrap; gap: 6px; }
+    .client-tag { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: -0.01em; text-transform: uppercase; color: rgba(10,10,10,0.4); padding: 4px 0; margin-right: 16px; }
 
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    /* ── AWARDS ── */
+    .awards-grid { display: flex; flex-direction: column; gap: 24px; }
+    .award-about-item { display: flex; flex-direction: column; gap: 8px; }
+    .award-about-header { display: flex; align-items: center; gap: 10px; }
+    .award-about-icon { width: 24px; height: 24px; background: #E8E3DA; border-radius: 3px; padding: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-about-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .award-about-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
+    .award-about-metals { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 34px; }
+    .award-about-pill { display: inline-flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(10,10,10,0.55); }
+    .award-about-dot { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 3px; font-size: 7px; font-weight: 700; font-family: 'Inter', sans-serif; text-transform: uppercase; }
+    .award-about-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
+    .award-about-dot.metal-gold   { background: #A8874A; color: #fff; }
+    .award-about-dot.metal-silver { background: #9AAFA8; color: #fff; }
+    .award-about-dot.metal-bronze { background: #926650; color: #fff; }
+    .award-about-dot.metal-other  { background: #C8C3B8; color: #555; }
+    .award-about-campaigns { margin-left: 34px; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .award-campaign-link { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.06em; color: rgba(10,10,10,0.4); text-decoration: none; text-transform: uppercase; border-bottom: 1px solid rgba(10,10,10,0.15); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
+    .award-campaign-link:hover { color: #0A0A0A; border-color: #0A0A0A; }
 
-    .skill-tag {
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(240,237,232,0.4);
-      border: 0.5px solid rgba(240,237,232,0.13);
-      padding: 5px 10px;
-    }
+    /* ── CONTACT ── */
+    .contact-list { display: flex; flex-direction: column; gap: 12px; }
+    .contact-item { display: flex; align-items: center; gap: 16px; }
+    .contact-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.25); width: 80px; flex-shrink: 0; }
+    .contact-value { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; color: rgba(10,10,10,0.6); text-decoration: none; transition: color 0.2s; }
+    .contact-value:hover { color: #0A0A0A; }
+    .resume-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 32px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; padding: 14px 24px; text-decoration: none; border-radius: 4px; transition: background 0.2s; }
+    .resume-btn:hover { background: #333; }
 
-    .clients-list {
-      font-size: 13px;
-      color: rgba(240,237,232,0.35);
-      line-height: 2;
-      letter-spacing: 0.03em;
-    }
+    /* ── FOOTER ── */
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
+    .footer-left, .footer-right { display: flex; gap: 20px; }
+    .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
 
-    footer { padding: 48px 40px; border-top: 0.5px solid rgba(240,237,232,0.08); display: flex; justify-content: space-between; align-items: center; }
-    footer p { font-size: 11px; letter-spacing: 0.1em; color: rgba(240,237,232,0.25); }
-    .footer-links { display: flex; gap: 24px; }
-    .footer-links a { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240,237,232,0.3); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: #F0EDE8; }
+    .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
 
-    @media (max-width: 700px) {
-      nav { padding: 20px; }
-      .about-wrap { grid-template-columns: 1fr; }
-      .about-image { position: relative; top: 0; height: 300px; min-height: 300px; }
-      .about-text { padding: 48px 20px; }
-      footer { padding: 32px 20px; flex-direction: column; gap: 16px; text-align: center; }
+    @media (max-width: 600px) {
+      nav, .about-header, .about-section, footer { padding-left: 20px; padding-right: 20px; }
+      .experience-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .exp-role { grid-column: 1 / -1; }
+      .about-name { font-size: clamp(40px, 12vw, 72px); }
     }
   </style>
 </head>
 <body>
+<div class="site">
 
 <nav>
-  <a class="nav-logo" href="index.html">Paulo Engler</a>
-  <ul class="nav-links">
-    <li><a href="index.html">Work</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="mailto:hello@pauloengler.com">Contact</a></li>
-  </ul>
+  <div class="nav-left">
+    <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
+    <a href="tel:+971556690393">+971 55 6690393</a>
+  </div>
+  <div class="nav-right">
+    <a href="index.html">Work</a>
+    <a href="about.html" class="active">About</a>
+  </div>
 </nav>
 
-<div class="about-wrap">
-  <div class="about-image">
-    <!-- Replace with your photo: <img src="images/paulo.jpg" alt="Paulo Engler"> -->
-  </div>
-
-  <div class="about-text">
-    <h1>Senior Creative Director &amp; Head of Art</h1>
-
-    <div class="about-bio">
-      <p>20+ years building brands across Brazil, the Middle East, and Europe. I've led creative teams at some of the world's top agencies, working across luxury, FMCG, automotive, fashion, and tech.</p>
-      <p>My work has been recognised at Cannes Lions (1 Grand Prix, 20+ Lions), D&AD, One Show, Clio, and others. In 2025 I served as a Cannes Lions juror.</p>
-      <p>I'm currently available for brand-side creative engagements and senior freelance roles, with a focus on Europe and the Middle East.</p>
-      <p>Outside advertising, I'm a practicing fine artist — a dark fantasy and classical realism portraitist working in pencil, with ambitions toward oil painting.</p>
-    </div>
-
-    <div>
-      <p class="about-section-title">Expertise</p>
-      <div class="skills-list">
-        <span class="skill-tag">Creative Direction</span>
-        <span class="skill-tag">Art Direction</span>
-        <span class="skill-tag">Brand Strategy</span>
-        <span class="skill-tag">Integrated Campaigns</span>
-        <span class="skill-tag">Activations</span>
-        <span class="skill-tag">Film</span>
-        <span class="skill-tag">Digital</span>
-        <span class="skill-tag">Print</span>
-        <span class="skill-tag">Luxury</span>
-        <span class="skill-tag">FMCG</span>
-      </div>
-    </div>
-
-    <div>
-      <p class="about-section-title">Selected Clients</p>
-      <p class="clients-list">Heinz · Mastercard · Arla · Havaianas · Nestlé · Fanta · Adidas · Atlantis The Palm · Babyshop · Home Centre · Forbes · Wall Street Journal</p>
-    </div>
-
-    <div>
-      <p class="about-section-title">Contact</p>
-      <p style="font-size:13px; color:rgba(240,237,232,0.5)">
-        <a href="mailto:hello@pauloengler.com" style="color:rgba(240,237,232,0.5); text-decoration:none;">hello@pauloengler.com</a><br>
-        <a href="https://linkedin.com/in/pauloengler" target="_blank" style="color:rgba(240,237,232,0.5); text-decoration:none;">LinkedIn</a>
-        &nbsp;·&nbsp;
-        <a href="https://instagram.com/pauloengler_art" target="_blank" style="color:rgba(240,237,232,0.5); text-decoration:none;">Instagram</a>
-      </p>
-    </div>
-  </div>
+<div id="about-content">
+  <div class="loading">Loading…</div>
 </div>
 
 <footer>
-  <p>© 2026 Paulo Engler</p>
-  <div class="footer-links">
-    <a href="https://linkedin.com/in/pauloengler" target="_blank">LinkedIn</a>
-    <a href="https://instagram.com/pauloengler_art" target="_blank">Instagram</a>
-    <a href="mailto:hello@pauloengler.com">hello@pauloengler.com</a>
+  <div class="footer-left">
+    <a href="mailto:pauloengler@gmail.com">pauloengler@gmail.com</a>
+    <a href="tel:+971556690393">+971 55 6690393</a>
+  </div>
+  <div class="footer-right">
+    <a href="index.html">Work</a>
+    <a href="about.html">About</a>
   </div>
 </footer>
 
+</div>
+<script>
+const ABOUT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=1943812170&single=true&output=csv';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
+const METALS = ['gp','gold','silver','bronze','short'];
+const METAL_FULL = { gp:'Grand Prix', gold:'Gold', silver:'Silver', bronze:'Bronze', short:'Shortlist' };
+const DANDAD_FULL = { gp:'Black Pencil', gold:'Yellow Pencil', silver:'Graphite Pencil', bronze:'Wood Pencil', short:'Shortlist' };
+const AWARD_NAMES = {
+  ame:'AME by New York Festivals', archive:"Lürzer's Archive Magazine",
+  cannes:'Cannes Lions', caples:'Caples', clio:'Clio', cliohealth:'Clio Health',
+  dandad:'D&AD', elojo:'El Ojo de Iberoamérica', fiap:'Festival Iberoamericano de la Publicidad',
+  lia:'London International Awards (LIA)', loeries:'Loeries', lynx:'Dubai Lynx',
+  madstars:'Mad Stars', newyork:'New York Festivals', one:'One Show',
+  phnks:'Ad Forum PHNX', wark:'WARK', wave:'Wave Festival in Rio',
+  webby:'Webby Awards', wpp:'WPP Cream'
+};
+
+function parseCSV(text) {
+  const result = [];
+  const normalized = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+  let pos = 0;
+  function parseRow() {
+    const cols = [];
+    while (pos < normalized.length) {
+      if (normalized[pos] === '"') {
+        pos++;
+        let val = '';
+        while (pos < normalized.length) {
+          if (normalized[pos]==='"' && normalized[pos+1]==='"') { val+='"'; pos+=2; }
+          else if (normalized[pos]==='"') { pos++; break; }
+          else { val+=normalized[pos++]; }
+        }
+        cols.push(val);
+        if (normalized[pos]===',') pos++;
+        else break;
+      } else {
+        let val = '';
+        while (pos < normalized.length && normalized[pos]!==',' && normalized[pos]!=='\n') val+=normalized[pos++];
+        cols.push(val.trim());
+        if (normalized[pos]===',') pos++;
+        else break;
+      }
+    }
+    if (normalized[pos]==='\n') pos++;
+    return cols;
+  }
+  const headers = parseRow().map(h=>h.toLowerCase().trim());
+  while (pos < normalized.length) {
+    const cols = parseRow();
+    if (cols.every(c=>!c)) continue;
+    const obj = {};
+    headers.forEach((h,i)=>{ obj[h]=cols[i]||''; });
+    if (obj.block) result.push(obj);
+  }
+  return result;
+}
+
+function slugify(str) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+function metalClass(m) {
+  if (m==='gp') return 'metal-gp';
+  if (m==='gold') return 'metal-gold';
+  if (m==='silver') return 'metal-silver';
+  if (m==='bronze') return 'metal-bronze';
+  return 'metal-other';
+}
+
+function buildAwardsFromProjects(projects) {
+  // Tally all awards across all projects
+  const awardMap = {}; // awardName -> { metals: {gp,gold,silver,bronze,short}, campaigns: [] }
+  const metalMap = { gp:'GP', gold:'G', silver:'S', bronze:'B', short:'Sh' };
+
+  projects.forEach(function(p) {
+    for (let i = 1; i <= 10; i++) {
+      const name = (p['award'+i]||'').trim().toLowerCase();
+      if (!name || name==='na') continue;
+      if (!awardMap[name]) awardMap[name] = { metals:{gp:0,gold:0,silver:0,bronze:0,short:0}, campaigns:[] };
+      METALS.forEach(function(m) {
+        const col = metalMap[m] + i;
+        const v = parseInt(p[col]||p[col.toLowerCase()]||0);
+        if (v>0) awardMap[name].metals[m] += v;
+      });
+      // Add campaign name if not already listed
+      const campName = p.name || '';
+      if (campName && !awardMap[name].campaigns.includes(campName)) {
+        awardMap[name].campaigns.push(campName);
+      }
+    }
+  });
+
+  if (!Object.keys(awardMap).length) return '';
+
+  const itemsHTML = Object.keys(awardMap).map(function(key) {
+    const award = awardMap[key];
+    const displayName = AWARD_NAMES[key] || key;
+    const isDandad = key === 'dandad';
+
+    const metalsHTML = METALS.filter(function(m){ return award.metals[m] > 0; }).map(function(m) {
+      const label = isDandad ? (DANDAD_FULL[m]||m) : (METAL_FULL[m]||m);
+      return '<span class="award-about-pill">'
+        + '<span class="award-about-dot ' + metalClass(m) + '">' + label + '</span>'
+        + ' ' + award.metals[m]
+        + '</span>';
+    }).join('');
+
+    const campaignsHTML = award.campaigns.map(function(c) {
+      return '<a href="project.html?id=' + slugify(c) + '" class="award-campaign-link">' + c + '</a>';
+    }).join('');
+
+    return '<div class="award-about-item">'
+      + '<div class="award-about-header">'
+      + '<div class="award-about-icon"><img src="icons/' + key + '.png" alt="' + displayName + '"></div>'
+      + '<span class="award-about-name">' + displayName + '</span>'
+      + '</div>'
+      + '<div class="award-about-metals">' + metalsHTML + '</div>'
+      + (campaignsHTML ? '<div class="award-about-campaigns">' + campaignsHTML + '</div>' : '')
+      + '</div>';
+  }).join('');
+
+  return '<div class="about-section"><p class="section-label">Awards</p><div class="awards-grid">' + itemsHTML + '</div></div>';
+}
+
+function buildAbout(rows, projects) {
+  let html = '';
+
+  // Header
+  const header = rows.find(r=>r.block==='header');
+  if (header) {
+    html += '<div class="about-header">'
+      + '<p class="about-title">' + (header.col1||'') + '</p>'
+      + '<h1 class="about-name">' + (header.col2||'') + '</h1>'
+      + '</div>';
+  }
+
+  // Photo placeholder — will show if photo column added later
+  const photo = rows.find(r=>r.block==='photo');
+  if (photo && photo.col1) {
+    html += '<div class="about-photo"><img src="' + photo.col1 + '" alt="Paulo Engler"></div>';
+  } else {
+    html += '<div class="about-photo"></div>';
+  }
+
+  // Intro
+  const intros = rows.filter(r=>r.block==='intro');
+  if (intros.length) {
+    html += '<div class="about-section"><p class="section-label">About</p><div class="intro-text">'
+      + intros.map(r=>'<p>'+(r.col1||'')+'</p>').join('')
+      + '</div></div>';
+  }
+
+  // Experience
+  const experiences = rows.filter(r=>r.block==='experience');
+  if (experiences.length) {
+    html += '<div class="about-section"><p class="section-label">Experience</p><div class="experience-list">'
+      + experiences.map(function(r) {
+          const from = r.col2||'';
+          const until = r.col3||'';
+          const years = from && until ? from + ' – ' + until : from || until;
+          return '<div class="experience-row">'
+            + '<span class="exp-company">' + (r.col1||'') + '</span>'
+            + '<span class="exp-years">' + years + '</span>'
+            + '<span class="exp-years">' + (r.col5||'') + '</span>'
+            + '<span class="exp-role">' + (r.col4||'') + '</span>'
+            + '</div>';
+        }).join('')
+      + '</div></div>';
+  }
+
+  // Expertise
+  const expertiseRows = rows.filter(r=>r.block==='expertise');
+  if (expertiseRows.length) {
+    const tags = [];
+    expertiseRows.forEach(function(r) {
+      ['col1','col2','col3','col4','col5','col6','col7','col8','col9','col10'].forEach(function(c) {
+        if (r[c]) tags.push(r[c]);
+      });
+    });
+    html += '<div class="about-section"><p class="section-label">Expertise</p><div class="expertise-list">'
+      + tags.map(t=>'<span class="expertise-tag">'+t+'</span>').join('')
+      + '</div></div>';
+  }
+
+  // Clients
+  const clientRows = rows.filter(r=>r.block==='clients');
+  if (clientRows.length) {
+    const clients = [];
+    clientRows.forEach(function(r) {
+      ['col1','col2','col3','col4','col5','col6','col7','col8','col9','col10'].forEach(function(c) {
+        if (r[c]) clients.push(r[c]);
+      });
+    });
+    html += '<div class="about-section"><p class="section-label">Selected Clients</p><div class="clients-list">'
+      + clients.map(c=>'<span class="client-tag">'+c+'</span>').join('')
+      + '</div></div>';
+  }
+
+  // Awards — built from projects sheet
+  html += buildAwardsFromProjects(projects);
+
+  // Contact
+  const contact = rows.find(r=>r.block==='contact');
+  if (contact) {
+    const resume = rows.find(r=>r.block==='resume');
+    html += '<div class="about-section"><p class="section-label">Contact</p><div class="contact-list">'
+      + (contact.col1 ? '<div class="contact-item"><span class="contact-label">Email</span><a class="contact-value" href="mailto:'+contact.col1+'">'+contact.col1+'</a></div>' : '')
+      + (contact.col2 ? '<div class="contact-item"><span class="contact-label">Phone</span><a class="contact-value" href="tel:'+contact.col2.replace(/\s/g,'')+'">'+contact.col2+'</a></div>' : '')
+      + (contact.col3 ? '<div class="contact-item"><span class="contact-label">LinkedIn</span><a class="contact-value" href="'+contact.col3+'" target="_blank">'+contact.col3.replace('https://','')+'</a></div>' : '')
+      + (contact.col4 ? '<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col4+'" target="_blank">@'+contact.col4+'</a></div>' : '')
+      + (contact.col5 ? '<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col5+'" target="_blank">@'+contact.col5+'</a></div>' : '')
+      + '</div>'
+      + (resume && resume.col1 ? '<a href="'+resume.col1+'" class="resume-btn" download>↓ Download Resume</a>' : '')
+      + '</div>';
+  }
+
+  return html;
+}
+
+async function loadAbout() {
+  try {
+    const CACHE_KEY = 'portfolio_csv_v1';
+    const ABOUT_CACHE = 'about_csv_v1';
+    const CACHE_AGE = 5 * 60 * 1000;
+
+    // Load both sheets in parallel
+    async function fetchCSV(url, cacheKey) {
+      const cached = sessionStorage.getItem(cacheKey);
+      const cachedTime = sessionStorage.getItem(cacheKey+'_time');
+      if (cached && cachedTime && (Date.now()-parseInt(cachedTime))<CACHE_AGE) return cached;
+      const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
+      const text = await res.text();
+      try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
+      return text;
+    }
+
+    const [aboutText, projectsText] = await Promise.all([
+      fetchCSV(ABOUT_URL, ABOUT_CACHE),
+      fetchCSV(SHEET_URL, CACHE_KEY)
+    ]);
+
+    const rows = parseCSV(aboutText);
+    const projects = parseCSV(projectsText).filter(function(p){
+      return (p['full']||'').toString().toUpperCase()==='TRUE';
+    });
+
+    document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
+
+  } catch(err) {
+    document.getElementById('about-content').innerHTML = '<div class="loading">Could not load page.</div>';
+    console.error(err);
+  }
+}
+
+loadAbout();
+</script>
 </body>
 </html>
