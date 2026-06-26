@@ -42,6 +42,11 @@
     .exp-years { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.35); letter-spacing: 0.05em; }
     .exp-role { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); }
 
+    /* ── JURY ── */
+    .jury-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
+    .jury-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
+    .jury-row:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
+
     /* ── EXPERTISE ── */
     .expertise-list { display: flex; flex-wrap: wrap; gap: 8px; }
     .expertise-tag { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(10,10,10,0.6); border: 1px solid rgba(10,10,10,0.2); padding: 8px 14px; border-radius: 2px; }
@@ -293,6 +298,19 @@ function buildAbout(rows, projects) {
       + '</div></div>';
   }
 
+  // Jury
+  const juryRows = rows.filter(r=>r.block==='jury');
+  if (juryRows.length) {
+    html += '<div class="about-section"><p class="section-label">Jury</p><div class="jury-list">'
+      + juryRows.map(function(r) {
+          return '<div class="jury-row">'
+            + '<span class="exp-company">' + (r.col1||'') + '</span>'
+            + '<span class="exp-years">' + (r.col2||'') + '</span>'
+            + '</div>';
+        }).join('')
+      + '</div></div>';
+  }
+
   // Expertise
   const expertiseRows = rows.filter(r=>r.block==='expertise');
   if (expertiseRows.length) {
@@ -365,9 +383,7 @@ async function loadAbout() {
     ]);
 
     const rows = parseCSV(aboutText);
-    const projects = parseCSV(projectsText).filter(function(p){
-      return (p['full']||'').toString().toUpperCase()==='TRUE';
-    });
+    const projects = parseCSV(projectsText);
 
     document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
 
