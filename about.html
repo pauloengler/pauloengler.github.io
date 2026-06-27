@@ -20,6 +20,7 @@
     .about-section { background: #F7F4EE; padding: 60px 40px; }
     .about-section + .about-section { border-top: 2px solid #0A0A0A; }
     .section-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 32px; }
+    .section-label-tight { margin-bottom: 16px; }
 
     /* ── HEADER ── */
     .about-header { background: #F7F4EE; padding: 72px 40px 60px; }
@@ -183,7 +184,11 @@ function parseCSV(text, filterFn, skipFirst) {
     const cols = parseRow();
     if (cols.every(c=>!c)) continue;
     const obj = {};
-    headers.forEach((h,i)=>{ obj[h]=cols[i]||''; });
+    cols.forEach(function(val, i) {
+      // Use defined header if available, otherwise auto-generate col1, col2...
+      const key = (headers[i] && headers[i] !== '') ? headers[i] : 'col' + (i + 1);
+      obj[key] = val || '';
+    });
     if (filterFn ? filterFn(obj) : true) result.push(obj);
   }
   return result;
@@ -357,7 +362,7 @@ function buildAbout(rows, projects) {
         return parseInt(a.slice(3))-parseInt(b.slice(3));
       }).forEach(function(k){ if (r[k]) clients.push(r[k]); });
     });
-    html += '<div class="about-section"><p class="section-label">Selected Clients</p><div class="clients-list">'
+    html += '<div class="about-section"><p class="section-label section-label-tight">Selected Clients</p><div class="clients-list">'
       + clients.map(c=>'<span class="client-tag">'+c+'</span>').join('')
       + '</div></div>';
   }
