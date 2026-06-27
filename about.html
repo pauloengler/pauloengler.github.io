@@ -97,6 +97,11 @@
 
     .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
 
+    /* ── RESUME BUTTON ── */
+    .resume-download-btn { position: fixed; right: 0; top: 50%; transform: translateY(-50%); background: #0A0A0A; color: #F7F4EE; font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; padding: 20px 10px; writing-mode: vertical-rl; text-orientation: mixed; z-index: 200; transition: background 0.2s, opacity 0.2s; border-radius: 4px 0 0 4px; gap: 10px; display: flex; align-items: center; }
+    .resume-download-btn:hover { background: #333; }
+    .resume-download-btn.loading { opacity: 0.5; cursor: wait; }
+
     @media (max-width: 600px) {
       nav, .about-header, .about-section, footer { padding-left: 20px; padding-right: 20px; }
       .experience-row { grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -104,6 +109,7 @@
       .about-name { font-size: clamp(40px, 12vw, 72px); }
     }
   </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="site">
@@ -118,6 +124,8 @@
     <a href="about.html" class="active">About</a>
   </div>
 </nav>
+
+<button class="resume-download-btn" id="resume-btn" onclick="generateResume()">↓ Download Resume</button>
 
 <div id="about-content">
   <div class="loading">Loading…</div>
@@ -460,12 +468,9 @@ async function loadAbout() {
     const rows = parseCSV(aboutText, function(r){ return !!r.block; }, false);
     const projects = parseCSV(projectsText, function(r){ return !!r.name; }, true);
 
-    console.log('[ABOUT] About rows:', rows.length, '| Projects:', projects.length);
-    if (projects.length > 0) {
-      const sampleKeys = Object.keys(projects[0]).filter(k => k.includes('award'));
-      console.log('[ABOUT] Award keys in first project:', sampleKeys.slice(0,10));
-      console.log('[ABOUT] award1 value:', projects[0]['award1'], '| GP1:', projects[0]['GP1'], '| G1:', projects[0]['G1']);
-    }
+    // Store for PDF generation
+    window._aboutRows = rows;
+    window._aboutProjects = projects;
 
     document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
 
@@ -476,6 +481,302 @@ async function loadAbout() {
 }
 
 loadAbout();
+
+// ── PDF RESUME GENERATOR ──────────────────────────────────────
+function generateResume() {
+  const btn = document.getElementById('resume-btn');
+  btn.classList.add('loading');
+  btn.textContent = 'Generating…';
+
+  setTimeout(function() {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      const rows = window._aboutRows || [];
+      const projects = window._aboutProjects || [];
+
+      const W = 210, H = 297;
+      const ML = 18, MR = 18, MT = 18;
+      let y = MT;
+      const contentW = W - ML - MR;
+
+      // Colours
+      const BLACK = [10, 10, 10];
+      const MID   = [120, 120, 110];
+      const LIGHT = [180, 178, 172];
+      const BG    = [247, 244, 238];
+
+      function checkPage(needed) {
+        if (y + needed > H - 16) { doc.addPage(); y = MT; }
+      }
+
+      function rule(col) {
+        doc.setDrawColor(...col);
+        doc.setLineWidth(0.3);
+        doc.line(ML, y, W - MR, y);
+        y += 4;
+      }
+
+      function label(txt) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(6);
+        doc.setTextColor(...LIGHT);
+        doc.text(txt.toUpperCase(), ML, y);
+        y += 5;
+      }
+
+      // ── HEADER ──
+      const header = rows.find(function(r){ return r.block === 'header'; });
+      if (header) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7);
+        doc.setTextColor(...MID);
+        doc.text((header.col1 || '').toUpperCase(), ML, y);
+        y += 7;
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(28);
+        doc.setTextColor(...BLACK);
+        doc.text(header.col2 || '', ML, y);
+        y += 10;
+      }
+
+      // ── SUBLINES ──
+      const sublines = rows.filter(function(r){ return /^subline\d+$/.test(r.block); })
+        .sort(function(a,b){ return a.block.localeCompare(b.block, undefined, {numeric:true}); });
+
+      // Compute award totals for tokens
+      const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+      let totAwards = 0, totCannes = 0, totGP = 0;
+      projects.forEach(function(p) {
+        AWARD_KEYS.forEach(function(show) {
+          ['gp','g','s','b','sh'].forEach(function(m) {
+            const v = parseInt(p[show+'_'+m]||0);
+            if (v > 0) totAwards += v;
+            if (show==='cannes' && m!=='sh' && v>0) totCannes += v;
+          });
+        });
+        const gp = parseInt(p['cannes_gp']||0);
+        if (gp > 0) totGP += gp;
+      });
+
+      function applyTok(s) {
+        return s.replace(/\{\{total\}\}/g, totAwards)
+                .replace(/\{\{cannes\}\}/g, totCannes)
+                .replace(/\{\{gp\}\}/g, totGP);
+      }
+
+      if (sublines.length) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...MID);
+        sublines.forEach(function(r) {
+          doc.text(applyTok(r.col1 || ''), ML, y);
+          y += 5;
+        });
+      }
+      y += 4;
+      rule(BLACK);
+
+      // ── INTRO ──
+      const intros = rows.filter(function(r){ return r.block === 'intro'; });
+      if (intros.length) {
+        label('About');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...BLACK);
+        intros.forEach(function(r) {
+          const lines = doc.splitTextToSize(r.col1 || '', contentW);
+          checkPage(lines.length * 4.5 + 4);
+          doc.text(lines, ML, y);
+          y += lines.length * 4.5 + 3;
+        });
+        y += 2;
+        rule(LIGHT);
+      }
+
+      // ── EXPERIENCE ──
+      const exps = rows.filter(function(r){ return r.block === 'experience'; });
+      if (exps.length) {
+        label('Experience');
+        exps.forEach(function(r) {
+          checkPage(8);
+          const from = r.col2 || '', until = r.col3 || '';
+          const years = from && until ? from + ' – ' + until : from || until;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(8);
+          doc.setTextColor(...BLACK);
+          doc.text((r.col1 || '').toUpperCase(), ML, y);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...MID);
+          doc.text(years, ML + 60, y);
+          doc.text(r.col4 || '', ML + 90, y);
+          doc.setTextColor(...LIGHT);
+          doc.text(r.col5 || '', ML + 150, y);
+          y += 6;
+        });
+        y += 2;
+        rule(LIGHT);
+      }
+
+      // ── JURY ──
+      const jury = rows.filter(function(r){ return r.block === 'jury'; });
+      if (jury.length) {
+        label('Jury');
+        jury.forEach(function(r) {
+          checkPage(6);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(...BLACK);
+          doc.text(r.col1 || '', ML, y);
+          doc.setTextColor(...MID);
+          doc.text(r.col2 || '', ML + 100, y);
+          y += 5.5;
+        });
+        y += 2;
+        rule(LIGHT);
+      }
+
+      // ── AWARDS ──
+      const AWARD_NAMES_PDF = { ame:'AME', archive:"Lürzer's Archive", cannes:'Cannes Lions', caples:'Caples', clio:'Clio', cliohealth:'Clio Health', dandad:'D&AD', elojo:'El Ojo', fiap:'FIAP', lia:'LIA', loeries:'Loeries', lynx:'Dubai Lynx', madstars:'Mad Stars', newyork:'New York Festivals', one:'One Show', phnks:'PHNX', wark:'WARK', wave:'Wave Festival', webby:'Webby', wpp:'WPP Cream' };
+      const awardMap = {};
+      projects.forEach(function(p) {
+        AWARD_KEYS.forEach(function(show) {
+          ['gp','g','s','b','sh'].forEach(function(m) {
+            const v = parseInt(p[show+'_'+m]||0);
+            if (v > 0) {
+              if (!awardMap[show]) awardMap[show] = {gp:0,g:0,s:0,b:0,sh:0,total:0};
+              awardMap[show][m] += v;
+              awardMap[show].total += v;
+            }
+          });
+        });
+      });
+      const awardKeys = Object.keys(awardMap).sort(function(a,b){ return awardMap[b].total - awardMap[a].total; });
+      if (awardKeys.length) {
+        checkPage(20);
+        label('Awards');
+        awardKeys.forEach(function(show) {
+          checkPage(7);
+          const aw = awardMap[show];
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...BLACK);
+          doc.text((AWARD_NAMES_PDF[show] || show).toUpperCase(), ML, y);
+          // Pills
+          let px = ML + 55;
+          [['gp','GP'],['g','G'],['s','S'],['b','B'],['sh','Sh']].forEach(function(pair) {
+            const m = pair[0], lbl = pair[1];
+            if (aw[m] > 0) {
+              doc.setFont('helvetica', 'bold');
+              doc.setFontSize(6);
+              doc.setTextColor(247,244,238);
+              const colors = { gp:[26,26,26], g:[168,135,74], s:[154,175,168], b:[146,102,80], sh:[200,195,184] };
+              doc.setFillColor(...(colors[m]||[180,178,172]));
+              const pillW = 7 + (aw[m] > 9 ? 2 : 0);
+              doc.roundedRect(px, y-3.5, pillW, 4.5, 0.8, 0.8, 'F');
+              doc.text(lbl, px + 1.5, y);
+              px += pillW + 1.5;
+              doc.setFont('helvetica', 'normal');
+              doc.setFontSize(7);
+              doc.setTextColor(...MID);
+              doc.text(String(aw[m]), px, y);
+              px += 5;
+            }
+          });
+          y += 6;
+        });
+        y += 2;
+        rule(LIGHT);
+      }
+
+      // ── EXPERTISE ──
+      const expertRows = rows.filter(function(r){ return r.block === 'expertise'; });
+      if (expertRows.length) {
+        checkPage(12);
+        label('Expertise');
+        const tags = [];
+        expertRows.forEach(function(r) {
+          Object.keys(r).filter(function(k){ return k.match(/^col\d+$/); }).sort().forEach(function(k){ if(r[k]) tags.push(r[k]); });
+        });
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...MID);
+        const tagLine = tags.join('  ·  ');
+        const tagLines = doc.splitTextToSize(tagLine, contentW);
+        doc.text(tagLines, ML, y);
+        y += tagLines.length * 4.5 + 4;
+        rule(LIGHT);
+      }
+
+      // ── CLIENTS ──
+      const clientRows = rows.filter(function(r){ return r.block === 'clients'; });
+      if (clientRows.length) {
+        checkPage(12);
+        label('Selected Clients');
+        const clients = [];
+        clientRows.forEach(function(r) {
+          Object.keys(r).filter(function(k){ return k.match(/^col\d+$/); }).sort().forEach(function(k){ if(r[k]) clients.push(r[k]); });
+        });
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...MID);
+        const clientLine = clients.join('  ·  ');
+        const clientLines = doc.splitTextToSize(clientLine, contentW);
+        doc.text(clientLines, ML, y);
+        y += clientLines.length * 4.5 + 4;
+        rule(LIGHT);
+      }
+
+      // ── CONTACT ──
+      const contact = rows.find(function(r){ return r.block === 'contact'; });
+      if (contact) {
+        checkPage(20);
+        label('Contact');
+        const pairs = [['Email', contact.col1], ['Phone', contact.col2], ['LinkedIn', contact.col3], ['Instagram', contact.col4 ? '@'+contact.col4 : '']];
+        pairs.forEach(function(p) {
+          if (!p[1]) return;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.setTextColor(...LIGHT);
+          doc.text(p[0].toUpperCase(), ML, y);
+          doc.setFont('helvetica', 'normal');
+          doc.setTextColor(...BLACK);
+          doc.text(p[1], ML + 28, y);
+          y += 5.5;
+        });
+      }
+
+      // ── FOOTER: timestamp ──
+      const now = new Date();
+      const stamp = 'Generated ' + now.toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'}) + ' ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+      const pageCount = doc.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(6);
+        doc.setTextColor(...LIGHT);
+        doc.text(stamp, ML, H - 8);
+        doc.text('pauloengler.com', W - MR, H - 8, { align: 'right' });
+      }
+
+      // Save
+      const fname = 'PauloEngler_Resume_' + now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '.pdf';
+      doc.save(fname);
+
+    } catch(err) {
+      console.error('PDF error:', err);
+      alert('Could not generate PDF. Please try again.');
+    }
+
+    btn.classList.remove('loading');
+    btn.textContent = '↓ Download Resume';
+  }, 50);
+}
+// ─────────────────────────────────────────────────────────────
+
 </script>
 </body>
 </html>
