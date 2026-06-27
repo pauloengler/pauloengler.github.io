@@ -466,15 +466,19 @@ function quickView(e, btn) {
   const title = document.getElementById('qv-title');
   const overlay = document.getElementById('qv-overlay');
 
-  const ytId = getYouTubeId(media);
-  if (ytId) {
-    box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0" allow="autoplay; fullscreen" allowfullscreen></iframe>';
-  } else {
-    box.innerHTML = '<img src="' + media + '" alt="' + name + '">';
-  }
   title.textContent = name;
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  const ytId = getYouTubeId(media);
+  if (ytId) {
+    // Inject iframe after overlay is visible so browser honours autoplay on user gesture
+    requestAnimationFrame(function() {
+      box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&mute=0&rel=0&modestbranding=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+    });
+  } else {
+    box.innerHTML = '<img src="' + media + '" alt="' + name + '">';
+  }
 }
 
 function closeQuickView(e) {
