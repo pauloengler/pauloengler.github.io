@@ -295,15 +295,15 @@ function buildAbout(rows, projects) {
     const AWARD_KEYS2 = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
     projects.forEach(function(p) {
       AWARD_KEYS2.forEach(function(show) {
-        ['gp','g','s','b'].forEach(function(m) {
+        ['gp','g','s','b','sh'].forEach(function(m) {
           const v = parseInt(p[show + '_' + m] || 0);
-          if (v > 0) {
-            totalAwards += v;
-            if (show === 'cannes') totalCannes += v;
-            if (m === 'gp') totalGP += v;
-          }
+          if (v > 0) totalAwards += v;                              // all metals + shortlists
+          if (show === 'cannes' && m !== 'sh' && v > 0) totalCannes += v; // Lions excl. shortlists
         });
       });
+      // GP: only Cannes Grand Prix
+      const gp = parseInt(p['cannes_gp'] || 0);
+      if (gp > 0) totalGP += gp;
     });
   }
 
