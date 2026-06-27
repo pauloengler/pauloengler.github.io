@@ -16,7 +16,9 @@
     .hero { padding: 72px 40px 60px; text-align: center; background: #F7F4EE; }
     .hero h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(24px, 3.5vw, 40px); color: #0A0A0A; line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
     .hero h1 em { display: block; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 80px); letter-spacing: -0.02em; text-transform: none; line-height: 0.9; }
-    .hero-sub { margin-top: 24px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); }
+    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); line-height: 1.6; }
+    .hero-sub:first-of-type { margin-top: 24px; }
+    .hero-sub:empty { display: none; }
     .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
     .search-bar { background: #F7F4EE; padding: 16px 40px; border-top: 2px solid #0A0A0A; }
     .search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(10,10,10,0.2); padding: 8px 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A; outline: none; }
@@ -85,7 +87,8 @@
 
 <section class="hero">
   <h1>Senior Creative<em>Director</em>& Head of Art</h1>
-  <p class="hero-sub" id="hero-subline">20+ years &nbsp;·&nbsp; Brazil - Dubai &nbsp;·&nbsp; 1 Grand Prix, 20+ Lions, D&AD &nbsp;·&nbsp; One Show &nbsp;·&nbsp; Clio</p>
+  <p class="hero-sub" id="hero-subline1"></p>
+  <p class="hero-sub" id="hero-subline2"></p>
 </section>
 
 <div class="view-toggle" id="view-toggle">
@@ -115,10 +118,10 @@
 </div>
 <script>
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
-const SETTINGS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=843736092&single=true&output=csv';
+const ABOUT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=1943812170&single=true&output=csv';
 const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
 
-function parseCSV(text, filterKey) {
+function parseCSV(text, filterKey, skipFirst) {
   const result = [];
   const normalized = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
   let pos = 0;
@@ -155,27 +158,54 @@ function parseCSV(text, filterKey) {
     return cols;
   }
 
-  parseRow(); // skip decorative label row
+  if (skipFirst !== false) parseRow(); // skip decorative label row (projects sheet)
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
     if (cols.every(c => !c)) continue;
     const obj = {};
-    headers.forEach((h, i) => { obj[h] = cols[i] || ''; });
+    cols.forEach(function(val, i) {
+      const key = (headers[i] && headers[i] !== '') ? headers[i] : 'col' + (i + 1);
+      obj[key] = val || '';
+    });
     if (filterKey ? obj[filterKey] : Object.values(obj).some(v => v)) result.push(obj);
   }
   return result;
 }
 
-async function loadSettings() {
-  if (!SETTINGS_URL) return;
+async function loadSettings(projects) {
   try {
-    const res = await fetch(SETTINGS_URL);
+    const res = await fetch(ABOUT_URL, { mode:'cors', credentials:'omit', redirect:'follow' });
     const text = await res.text();
-    const rows = parseCSV(text, 'key');
-    const settings = {};
-    rows.forEach(r => { if (r.key) settings[r.key.trim()] = r.value; });
-    if (settings.subline) document.getElementById('hero-subline').textContent = settings.subline;
+    const rows = parseCSV(text, null, false);
+
+    // Compute dynamic totals from projects (no shortlists)
+    let totalAwards = 0, totalCannes = 0, totalGP = 0;
+    const AWARD_KEYS2 = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+    (projects||[]).forEach(function(p) {
+      AWARD_KEYS2.forEach(function(show) {
+        ['gp','g','s','b'].forEach(function(m) {
+          const v = parseInt(p[show + '_' + m] || 0);
+          if (v > 0) {
+            totalAwards += v;
+            if (show === 'cannes') totalCannes += v;
+            if (m === 'gp') totalGP += v;
+          }
+        });
+      });
+    });
+
+    function applyTokens(str) {
+      return str
+        .replace(/\{\{total\}\}/g, totalAwards)
+        .replace(/\{\{cannes\}\}/g, totalCannes)
+        .replace(/\{\{gp\}\}/g, totalGP);
+    }
+
+    const sub1 = rows.find(r=>r.block==='subline1');
+    const sub2 = rows.find(r=>r.block==='subline2');
+    if (sub1 && sub1.col1) document.getElementById('hero-subline1').textContent = applyTokens(sub1.col1);
+    if (sub2 && sub2.col1) document.getElementById('hero-subline2').textContent = applyTokens(sub2.col1);
   } catch (err) {
     console.error('Settings load error:', err);
   }
@@ -195,8 +225,9 @@ async function loadProjects() {
       text = await res.text();
       try { sessionStorage.setItem(CACHE_KEY, text); sessionStorage.setItem(CACHE_KEY + '_time', Date.now()); } catch(e) {}
     }
-    const projects = parseCSV(text, 'name');
+    const projects = parseCSV(text, 'name', true);
     renderProjects(projects);
+    loadSettings(projects);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
   }
@@ -395,7 +426,6 @@ document.getElementById('search-input').addEventListener('input', function() {
   doSearch(this.value);
 });
 
-loadSettings();
 loadProjects();
 </script>
 </body>

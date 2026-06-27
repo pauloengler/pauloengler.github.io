@@ -26,6 +26,8 @@
     .about-header { background: #F7F4EE; padding: 72px 40px 60px; }
     .about-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(10px, 1.8vw, 18px); color: rgba(10,10,10,0.35); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
     .about-name { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(52px, 8vw, 100px); color: #0A0A0A; line-height: 0.95; letter-spacing: -0.02em; }
+    .about-sublines { margin-top: 24px; display: flex; flex-direction: column; gap: 6px; }
+    .about-subline { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: clamp(8px, 1vw, 11px); color: rgba(10,10,10,0.45); letter-spacing: 0.04em; line-height: 1.6; }
 
     /* ── PHOTO ── */
     .about-photo { width: 100%; aspect-ratio: 16/7; background: #DDD9D0; overflow: hidden; }
@@ -285,10 +287,44 @@ function buildAbout(rows, projects) {
 
   // Header
   const header = rows.find(r=>r.block==='header');
+
+  // Compute dynamic award totals for subline tokens
+  const metalColMap2 = { gp:'gp', gold:'g', silver:'s', bronze:'b' };
+  let totalAwards = 0, totalCannes = 0, totalGP = 0;
+  if (projects && projects.length) {
+    const AWARD_KEYS2 = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+    projects.forEach(function(p) {
+      AWARD_KEYS2.forEach(function(show) {
+        ['gp','g','s','b'].forEach(function(m) {
+          const v = parseInt(p[show + '_' + m] || 0);
+          if (v > 0) {
+            totalAwards += v;
+            if (show === 'cannes') totalCannes += v;
+            if (m === 'gp') totalGP += v;
+          }
+        });
+      });
+    });
+  }
+
+  function applyTokens(str) {
+    return str
+      .replace(/\{\{total\}\}/g, totalAwards)
+      .replace(/\{\{cannes\}\}/g, totalCannes)
+      .replace(/\{\{gp\}\}/g, totalGP);
+  }
+
   if (header) {
+    const sublines = rows.filter(r=>r.block==='subline1'||r.block==='subline2');
+    const sublinesHTML = sublines.length
+      ? '<div class="about-sublines">'
+        + sublines.map(function(r){ return '<p class="about-subline">' + applyTokens(r.col1||'') + '</p>'; }).join('')
+        + '</div>'
+      : '';
     html += '<div class="about-header">'
       + '<p class="about-title">' + (header.col1||'') + '</p>'
       + '<h1 class="about-name">' + (header.col2||'') + '</h1>'
+      + sublinesHTML
       + '</div>';
   }
 
