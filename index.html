@@ -87,8 +87,7 @@
 
 <section class="hero">
   <h1>Senior Creative<em>Director</em>& Head of Art</h1>
-  <p class="hero-sub" id="hero-subline1"></p>
-  <p class="hero-sub" id="hero-subline2"></p>
+  <div id="hero-sublines"></div>
 </section>
 
 <div class="view-toggle" id="view-toggle">
@@ -202,10 +201,11 @@ async function loadSettings(projects) {
         .replace(/\{\{gp\}\}/g, totalGP);
     }
 
-    const sub1 = rows.find(r=>r.block==='subline1');
-    const sub2 = rows.find(r=>r.block==='subline2');
-    if (sub1 && sub1.col1) document.getElementById('hero-subline1').textContent = applyTokens(sub1.col1);
-    if (sub2 && sub2.col1) document.getElementById('hero-subline2').textContent = applyTokens(sub2.col1);
+    const sublines = rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block, undefined, {numeric:true}));
+    const sublinesEl = document.getElementById('hero-sublines');
+    if (sublinesEl) sublinesEl.innerHTML = sublines.map(function(r){
+      return '<p class="hero-sub">' + applyTokens(r.col1||'') + '</p>';
+    }).join('');
   } catch (err) {
     console.error('Settings load error:', err);
   }

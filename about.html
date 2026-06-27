@@ -315,7 +315,7 @@ function buildAbout(rows, projects) {
   }
 
   if (header) {
-    const sublines = rows.filter(r=>r.block==='subline1'||r.block==='subline2');
+    const sublines = rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block, undefined, {numeric:true}));
     const sublinesHTML = sublines.length
       ? '<div class="about-sublines">'
         + sublines.map(function(r){ return '<p class="about-subline">' + applyTokens(r.col1||'') + '</p>'; }).join('')
