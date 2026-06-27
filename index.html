@@ -401,7 +401,7 @@ function setView(view) {
   currentSearch = '';
   const cached = sessionStorage.getItem('portfolio_csv_v1');
   if (cached) {
-    const projects = parseCSV(cached, 'name');
+    const projects = parseCSV(cached, 'name', true);
     renderProjects(projects);
   }
 }
@@ -413,7 +413,7 @@ function doSearch(query) {
   document.getElementById('btn-select').classList.toggle('active', !currentSearch && currentView === 'select');
   const cached = sessionStorage.getItem('portfolio_csv_v1');
   if (cached) {
-    const projects = parseCSV(cached, 'name');
+    const projects = parseCSV(cached, 'name', true);
     renderProjects(projects);
   }
 }
