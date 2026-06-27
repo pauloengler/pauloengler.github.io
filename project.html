@@ -172,6 +172,7 @@ function parseCSV(text) {
     return cols;
   }
 
+  parseRow(); // skip decorative label row
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -213,19 +214,18 @@ function metalLabel(awardName, metal) {
 }
 
 function buildAwards(p) {
+  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
   const cols = [];
-  for (let i = 1; i <= 10; i++) {
-    const name = (p['award'+i]||'').trim();
-    if (!name || name.toUpperCase()==='NA') continue;
+  AWARD_KEYS.forEach(function(show) {
     const metals = [];
-    const metalMap = { gp: 'Gp', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
-      const col = metalMap[m] + i;
-      const v = parseInt(p[col] || p[col.toLowerCase()] || 0);
+      const col = show + '_' + metalColMap[m];
+      const v = parseInt(p[col] || 0);
       if (v > 0) metals.push({metal:m, count:v});
     });
-    if (metals.length) cols.push({name:name, metals:metals});
-  }
+    if (metals.length) cols.push({name:show, metals:metals});
+  });
   if (!cols.length) return '';
 
   const AWARD_NAMES = {

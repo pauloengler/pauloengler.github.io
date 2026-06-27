@@ -176,6 +176,7 @@ function parseCSV(text, filterFn) {
     if (normalized[pos]==='\n') pos++;
     return cols;
   }
+  parseRow(); // skip decorative label row
   const headers = parseRow().map(h=>h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -204,24 +205,27 @@ function buildAwardsFromProjects(projects) {
 
   // Tally all awards across all projects
   const awardMap = {}; // awardName -> { metals: {gp,gold,silver,bronze,short}, campaigns: [] }
-  // Column names after CSV header lowercasing: gp1, g1, s1, b1, sh1
+  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
   const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
 
   projects.forEach(function(p) {
-    for (let i = 1; i <= 10; i++) {
-      const name = (p['award'+i]||'').trim().toLowerCase();
-      if (!name || name==='na') continue;
-      if (!awardMap[name]) awardMap[name] = { metals:{gp:0,gold:0,silver:0,bronze:0,short:0}, campaigns:[] };
+    AWARD_KEYS.forEach(function(show) {
+      // Check if this project has any metals for this show
+      const hasAny = METALS.some(function(m) {
+        return parseInt(p[show + '_' + metalColMap[m]] || 0) > 0;
+      });
+      if (!hasAny) return;
+      if (!awardMap[show]) awardMap[show] = { metals:{gp:0,gold:0,silver:0,bronze:0,short:0}, campaigns:[] };
       METALS.forEach(function(m) {
-        const col = metalColMap[m] + i;          // e.g. 'gp1', 'g1', 's1', 'b1', 'sh1'
+        const col = show + '_' + metalColMap[m];
         const v = parseInt(p[col] || 0);
-        if (v > 0) awardMap[name].metals[m] += v;
+        if (v > 0) awardMap[show].metals[m] += v;
       });
       const campName = p.name || '';
-      if (campName && !awardMap[name].campaigns.includes(campName)) {
-        awardMap[name].campaigns.push(campName);
+      if (campName && !awardMap[show].campaigns.includes(campName)) {
+        awardMap[show].campaigns.push(campName);
       }
-    }
+    });
   });
 
   function totalMetals(k) {

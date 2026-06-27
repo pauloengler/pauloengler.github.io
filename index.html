@@ -155,6 +155,7 @@ function parseCSV(text, filterKey) {
     return cols;
   }
 
+  parseRow(); // skip decorative label row
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -291,19 +292,18 @@ function buildCard(p) {
     return map[metal.toLowerCase()] || metal.toUpperCase();
   }
 
+  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
   const awardCols = [];
-  for (let i = 1; i <= 10; i++) {
-    const name = (p['award' + i] || '').trim();
-    if (!name || name.toUpperCase() === 'NA') continue;
+  AWARD_KEYS.forEach(function(show) {
     const metals = [];
-    const metalMap = { gp: 'Gp', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
-      const col = metalMap[m] + i;
-      const val = parseInt(p[col] || p[col.toLowerCase()] || 0);
+      const col = show + '_' + metalColMap[m];
+      const val = parseInt(p[col] || 0);
       if (val > 0) metals.push({ metal: m, count: val });
     });
-    if (metals.length) awardCols.push({ name: name, metals: metals });
-  }
+    if (metals.length) awardCols.push({ name: show, metals: metals });
+  });
 
   let iconsHTML;
   if (awardCols.length) {
