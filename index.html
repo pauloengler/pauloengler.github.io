@@ -33,7 +33,6 @@
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A; border-top: 2px solid #0A0A0A; border-bottom: 2px solid #0A0A0A; }
     .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #EEEAE2; }
-    .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
     .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 4px; border: none; margin-left: 1px; }
     .award-col:first-child { margin-left: 0; }
@@ -56,6 +55,19 @@
     .project-client { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-bottom: 5px; }
     .project-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; line-height: 1.15; text-transform: uppercase; letter-spacing: -0.01em; }
     .btn-view { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.45); border: 1px solid rgba(10,10,10,0.2); padding: 0 12px; height: 44px; white-space: nowrap; display: flex; align-items: center; border-radius: 4px; transition: color 0.2s, border-color 0.2s; align-self: flex-start; }
+    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; }
+    .btn-quick { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); border: 1px solid rgba(10,10,10,0.12); padding: 0 10px; height: 18px; white-space: nowrap; display: flex; align-items: center; border-radius: 3px; transition: color 0.2s, border-color 0.2s; cursor: pointer; background: none; }
+    .btn-quick:hover { color: #0A0A0A; border-color: rgba(10,10,10,0.4); }
+    .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
+    /* Modal */
+    .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; }
+    .qv-overlay.open { display: flex; }
+    .qv-box { position: relative; width: min(860px, 92vw); background: #0A0A0A; border-radius: 4px; overflow: hidden; }
+    .qv-media { position: relative; width: 100%; padding-top: 56.25%; }
+    .qv-media iframe, .qv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border: none; }
+    .qv-close { position: absolute; top: 12px; right: 14px; font-family: 'Unbounded', sans-serif; font-size: 10px; color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; z-index: 10; }
+    .qv-close:hover { color: #fff; }
+    .qv-title { padding: 14px 16px; font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
     .project-desc { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; color: rgba(10,10,10,0.6); line-height: 1.75; }
     .loading { padding: 60px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; grid-column: 1 / -1; }
     footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
@@ -369,6 +381,15 @@ function buildCard(p) {
 
   const descHTML = (p['description thumb'] || p['descriptionthumb'] || p.description || '') ? '<p class="project-desc">' + (p['description thumb'] || p['descriptionthumb'] || p.description || '') + '</p>' : '';
 
+  // Parse first media item for quick view
+  const mediaStr = (p.media || '').trim();
+  let firstMedia = '';
+  if (mediaStr) {
+    const firstItem = mediaStr.split('|')[0].trim();
+    if (firstItem.startsWith('vid:')) firstMedia = firstItem.slice(4).trim();
+    else if (firstItem.startsWith('img:')) firstMedia = 'media/' + firstItem.slice(4).trim();
+  }
+
   a.innerHTML = iconsHTML +
     '<div class="project-thumb">' + thumbInner + '</div>' +
     '<div class="project-info">' +
@@ -377,7 +398,10 @@ function buildCard(p) {
           '<p class="project-client">' + (p.client || '') + '</p>' +
           '<p class="project-name">' + p.name + '</p>' +
         '</div>' +
-        '<span class="btn-view">View Project</span>' +
+        '<div class="card-btns">' +
+          '<span class="btn-view">View Project →</span>' +
+          (firstMedia ? '<button class="btn-quick" data-media=\''+firstMedia+'\'  data-name=\''+p.name+'\' onclick="quickView(event,this)">Quick View</button>' : '') +
+        '</div>' +
       '</div>' +
       descHTML +
     '</div>';
@@ -427,6 +451,51 @@ document.getElementById('search-input').addEventListener('input', function() {
 });
 
 loadProjects();
+
+function getYouTubeId(url) {
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/))([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+function quickView(e, btn) {
+  e.preventDefault();
+  e.stopPropagation();
+  const media = btn.getAttribute('data-media');
+  const name = btn.getAttribute('data-name');
+  const box = document.getElementById('qv-media');
+  const title = document.getElementById('qv-title');
+  const overlay = document.getElementById('qv-overlay');
+
+  const ytId = getYouTubeId(media);
+  if (ytId) {
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+  } else {
+    box.innerHTML = '<img src="' + media + '" alt="' + name + '">';
+  }
+  title.textContent = name;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeQuickView(e) {
+  if (e && e.target !== document.getElementById('qv-overlay') && !e.target.classList.contains('qv-close')) return;
+  const overlay = document.getElementById('qv-overlay');
+  overlay.classList.remove('open');
+  document.getElementById('qv-media').innerHTML = ''; // stop video
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeQuickView({ target: document.getElementById('qv-overlay') });
+});
 </script>
+<!-- Quick View Modal -->
+<div class="qv-overlay" id="qv-overlay" onclick="closeQuickView(event)">
+  <div class="qv-box">
+    <button class="qv-close" onclick="closeQuickView()">✕ Close</button>
+    <div class="qv-media" id="qv-media"></div>
+    <div class="qv-title" id="qv-title"></div>
+  </div>
+</div>
 </body>
 </html>
