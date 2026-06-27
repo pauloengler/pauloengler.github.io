@@ -147,7 +147,7 @@ const AWARD_NAMES = {
   webby:'Webby Awards', wpp:'WPP Cream'
 };
 
-function parseCSV(text, filterFn) {
+function parseCSV(text, filterFn, skipFirst) {
   const result = [];
   const normalized = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
   let pos = 0;
@@ -176,7 +176,7 @@ function parseCSV(text, filterFn) {
     if (normalized[pos]==='\n') pos++;
     return cols;
   }
-  parseRow(); // skip decorative label row
+  if (skipFirst) parseRow(); // skip decorative label row (projects sheet only)
   const headers = parseRow().map(h=>h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -415,8 +415,8 @@ async function loadAbout() {
       console.log('[ABOUT] Projects text length:', projectsText.length, '| First 100 chars:', projectsText.slice(0,100));
     } catch(e) { console.error('[ABOUT] Projects sheet failed:', e); projectsText = ''; }
 
-    const rows = parseCSV(aboutText, function(r){ return !!r.block; });
-    const projects = parseCSV(projectsText, function(r){ return !!r.name; });
+    const rows = parseCSV(aboutText, function(r){ return !!r.block; }, false);
+    const projects = parseCSV(projectsText, function(r){ return !!r.name; }, true);
 
     console.log('[ABOUT] About rows:', rows.length, '| Projects:', projects.length);
     if (projects.length > 0) {
