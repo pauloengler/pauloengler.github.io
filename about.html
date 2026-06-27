@@ -23,7 +23,10 @@
     .section-label-tight { margin-bottom: 16px; }
 
     /* ── HEADER ── */
-    .about-header { background: #F7F4EE; padding: 72px 40px 60px; }
+    .about-header { background: #F7F4EE; padding: 72px 40px 60px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+    .about-header-left { flex: 1; min-width: 0; }
+    .btn-resume { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; border: none; cursor: pointer; padding: 18px 28px; border-radius: 4px; transition: background 0.2s; align-self: flex-end; margin-bottom: 8px; }
+    .btn-resume:hover { background: #333; }
     .about-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(10px, 1.8vw, 18px); color: rgba(10,10,10,0.35); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
     .about-name { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(52px, 8vw, 100px); color: #0A0A0A; line-height: 0.95; letter-spacing: -0.02em; }
     .about-sublines { margin-top: 24px; display: flex; flex-direction: column; gap: 6px; }
@@ -97,10 +100,7 @@
 
     .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
 
-    /* ── RESUME BUTTON ── */
-    .resume-download-btn { position: fixed; right: 0; top: 50%; transform: translateY(-50%); background: #0A0A0A; color: #F7F4EE; font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; border: none; cursor: pointer; padding: 20px 10px; writing-mode: vertical-rl; text-orientation: mixed; z-index: 200; transition: background 0.2s, opacity 0.2s; border-radius: 4px 0 0 4px; gap: 10px; display: flex; align-items: center; }
-    .resume-download-btn:hover { background: #333; }
-    .resume-download-btn.loading { opacity: 0.5; cursor: wait; }
+
 
     @media (max-width: 600px) {
       nav, .about-header, .about-section, footer { padding-left: 20px; padding-right: 20px; }
@@ -124,8 +124,6 @@
     <a href="about.html" class="active">About</a>
   </div>
 </nav>
-
-<button class="resume-download-btn" id="resume-btn" onclick="generateResume()">↓ Download Resume</button>
 
 <div id="about-content">
   <div class="loading">Loading…</div>
@@ -330,9 +328,12 @@ function buildAbout(rows, projects) {
         + '</div>'
       : '';
     html += '<div class="about-header">'
+      + '<div class="about-header-left">'
       + '<p class="about-title">' + (header.col1||'') + '</p>'
       + '<h1 class="about-name">' + (header.col2||'') + '</h1>'
       + sublinesHTML
+      + '</div>'
+      + '<button class="btn-resume" onclick="generateResume()">↓ Download Resume</button>'
       + '</div>';
   }
 
@@ -484,9 +485,8 @@ loadAbout();
 
 // ── PDF RESUME GENERATOR ──────────────────────────────────────
 function generateResume() {
-  const btn = document.getElementById('resume-btn');
-  btn.classList.add('loading');
-  btn.textContent = 'Generating…';
+  const btn = event ? event.currentTarget : null;
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
 
   setTimeout(function() {
     try {
@@ -771,8 +771,7 @@ function generateResume() {
       alert('Could not generate PDF. Please try again.');
     }
 
-    btn.classList.remove('loading');
-    btn.textContent = '↓ Download Resume';
+    if (btn) { btn.disabled = false; btn.textContent = '↓ Download Resume'; }
   }, 50);
 }
 // ─────────────────────────────────────────────────────────────
