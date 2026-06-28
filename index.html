@@ -46,6 +46,7 @@
     .award-cell.metal-other  { background: #C8C3B8; color: #555; }
     .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #E8E3DA; padding: 3px; }
     .award-icon-cell img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .award-overflow-box { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; color: rgba(10,10,10,0.35); background: #E8E3DA; letter-spacing: 0; }
     .award-spacer { margin-bottom: 8px; }
     .project-thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #DDD9D0; border-radius: 10px; }
     .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -342,7 +343,6 @@ function buildCard(p) {
   const awardCols = [];
   AWARD_KEYS.forEach(function(show) {
     if (ICON_ONLY_SHOWS.includes(show)) {
-      // Single column: field name is exactly the show key (e.g. "archive")
       const val = (p[show] || '').toString().trim();
       if (val && val !== '0' && val.toUpperCase() !== 'FALSE') {
         awardCols.push({ name: show, metals: [], iconOnly: true });
@@ -358,9 +358,24 @@ function buildCard(p) {
     if (metals.length) awardCols.push({ name: show, metals: metals, iconOnly: false });
   });
 
+  // If more than 10 award columns, hide low-priority shows and add overflow box
+  const OVERFLOW_THRESHOLD = 10;
+  const OVERFLOW_HIDDEN = ['archive', 'caples', 'phnks'];
+  let overflowCount = 0;
+  let visibleCols = awardCols;
+  if (awardCols.length > OVERFLOW_THRESHOLD) {
+    visibleCols = awardCols.filter(function(col) {
+      if (OVERFLOW_HIDDEN.includes(col.name)) {
+        overflowCount++;
+        return false;
+      }
+      return true;
+    });
+  }
+
   let iconsHTML;
-  if (awardCols.length) {
-    const colsHTML = awardCols.map(function(col) {
+  if (visibleCols.length) {
+    let colsHTML = visibleCols.map(function(col) {
       const cells = col.iconOnly ? '' : col.metals.map(function(m) {
         const label = metalLabel(col.name, m.metal);
         const countHTML = '<span class="cell-count">' + m.count + '</span>';
@@ -372,6 +387,12 @@ function buildCard(p) {
         + '</div>';
       return '<div class="award-col">' + cells + iconCell + '</div>';
     }).join('');
+
+    if (overflowCount > 0) {
+      colsHTML += '<div class="award-col award-col--overflow">'
+        + '<div class="award-icon-cell award-overflow-box">+' + overflowCount + '</div>'
+        + '</div>';
+    }
 
     iconsHTML = '<div class="award-icons">' + colsHTML + '</div>';
   } else {
