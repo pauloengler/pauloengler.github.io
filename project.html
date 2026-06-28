@@ -43,21 +43,24 @@
     /* ── AWARDS ── */
     .awards-section { background: #F7F4EE; padding: 40px; }
     .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 24px; }
-    .award-list { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
+    .award-list { display: flex; flex-direction: column; gap: 16px; max-width: 520px; }
     .award-item { display: flex; flex-direction: column; gap: 6px; }
-    .award-item-header { display: flex; align-items: center; gap: 10px; }
-    .award-item-icon { width: 28px; height: 28px; background: #E8E3DA; border-radius: 4px; padding: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    /* Header pill: background extends behind icon + name + total */
+    .award-item-header { display: flex; align-items: center; background: #E8E3DA; border-radius: 6px; padding: 6px 10px 6px 6px; gap: 10px; }
+    .award-item-icon { width: 28px; height: 28px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
-    .award-metals { display: flex; flex-direction: column; gap: 3px; padding-left: 38px; }
-    .award-metal-row { display: flex; align-items: center; gap: 8px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); }
-    .award-metal-dot { display: inline-flex; align-items: center; justify-content: center; padding: 0 8px; height: 22px; border-radius: 3px; flex-shrink: 0; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; gap: 5px; }
+    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; flex: 1; }
+    .award-item-total { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; color: rgba(10,10,10,0.45); flex-shrink: 0; min-width: 16px; text-align: right; }
+    /* Metal chips — all same width, count right-aligned */
+    .award-metals { display: flex; flex-direction: column; gap: 4px; padding-left: 12px; }
+    .award-metal-row { display: flex; }
+    .award-metal-dot { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 8px; height: 26px; border-radius: 4px; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.03em; }
     .award-metal-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
     .award-metal-dot.metal-gold   { background: #A8874A; color: #fff; }
     .award-metal-dot.metal-silver { background: #9AAFA8; color: #fff; }
     .award-metal-dot.metal-bronze { background: #926650; color: #fff; }
     .award-metal-dot.metal-other  { background: #C8C3B8; color: #555; }
-    .award-metal-count-inline { font-weight: 700; opacity: 0.75; }
+    .award-metal-count-inline { font-weight: 700; opacity: 0.8; }
 
     /* ── GALLERY ── */
     .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
@@ -268,16 +271,24 @@ function buildAwards(p) {
     const isDandad = col.name.toLowerCase() === 'dandad';
     const displayName = AWARD_NAMES[col.name.toLowerCase()] || col.name;
 
+    // Total metals excluding shortlist (for display in header)
+    const total = col.iconOnly ? 0 : col.metals.reduce(function(sum, m) {
+      return m.metal === 'short' ? sum : sum + m.count;
+    }, 0);
+
+    const totalHTML = (!col.iconOnly && total > 0)
+      ? '<span class="award-item-total">' + total + '</span>'
+      : '';
+
     let metalsHTML = '';
-    if (col.iconOnly) {
-      // Archive — just show the icon, no metal rows
-      metalsHTML = '';
-    } else {
+    if (!col.iconOnly) {
       metalsHTML = '<div class="award-metals">' + col.metals.map(function(m) {
         const label = isDandad ? (DANDAD_FULL[m.metal] || m.metal) : (METAL_FULL[m.metal] || m.metal);
-        const countHTML = m.count > 1 ? '<span class="award-metal-count-inline">×' + m.count + '</span>' : '';
         return '<div class="award-metal-row">'
-          + '<span class="award-metal-dot ' + metalClass(m.metal) + '">' + label + countHTML + '</span>'
+          + '<span class="award-metal-dot ' + metalClass(m.metal) + '">'
+          + '<span>' + label + '</span>'
+          + '<span class="award-metal-count-inline">' + m.count + '</span>'
+          + '</span>'
           + '</div>';
       }).join('') + '</div>';
     }
@@ -286,6 +297,7 @@ function buildAwards(p) {
       + '<div class="award-item-header">'
       + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + displayName + '"></div>'
       + '<span class="award-item-name">' + displayName + '</span>'
+      + totalHTML
       + '</div>'
       + metalsHTML
       + '</div>';
