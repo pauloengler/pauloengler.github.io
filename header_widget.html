@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Header Widget · Test</title>
+<link rel="stylesheet" href="header.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a1a1a;padding:20px;font-family:sans-serif;}
+.outer{width:100%;aspect-ratio:16/5;background:#F7F4EE;border-radius:10px;overflow:hidden;position:relative;}
+.outer svg{position:absolute;inset:0;width:100%;height:100%;}
+.bottom{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+.feedback-row{display:flex;gap:8px;align-items:center;}
+.fb-label{font-size:11px;color:#888;letter-spacing:.04em;margin-right:4px;}
+.fb-btn{font-size:12px;padding:6px 20px;border-radius:6px;border:0.5px solid #555;background:#2a2a2a;color:#eee;cursor:pointer;font-weight:600;transition:background .15s,border-color .15s;}
+.fb-btn.yes:hover,.fb-btn.yes.chosen{background:#1a3d1a;border-color:#3a7a3a;color:#7dda7d;}
+.fb-btn.no:hover,.fb-btn.no.chosen{background:#3d1a1a;border-color:#7a3a3a;color:#da7d7d;}
+.notes-box{width:100%;background:#242424;border:0.5px solid #444;border-radius:6px;color:#ccc;font-family:monospace;font-size:11px;padding:8px 10px;resize:none;outline:none;line-height:1.5;}
+.notes-box::placeholder{color:#555;}
+.inf{font-family:monospace;font-size:10px;color:#555;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="outer"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<div class="bottom">
+  <div class="feedback-row">
+    <span class="fb-label">Working?</span>
+    <button class="fb-btn yes" onclick="sendFeedback('yes')">✓ Yes</button>
+    <button class="fb-btn no"  onclick="sendFeedback('no')">✗ No</button>
+    <span class="inf" id="inf"></span>
+  </div>
+  <textarea class="notes-box" id="notes" rows="3" placeholder="Notes (optional) — what could be better, or what's wrong"></textarea>
+</div>
+<script src="header.js"></script>
+<script>
+let lastState={};
+function go(){
+  lastState=renderHeader(document.getElementById('svg'),{debug:true});
+  document.getElementById('inf').textContent='#'+lastState.n;
+  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
+}
+if(typeof sendPrompt==='undefined'){window.sendPrompt=function(msg){console.log('[feedback]',msg);};}
+function sendFeedback(verdict){
+  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
+  document.querySelector('.fb-btn.'+verdict).classList.add('chosen');
+  const notes=document.getElementById('notes').value.trim();
+  const s=lastState;
+  const prefix={yes:'✓ Working',no:'✗ Not working'}[verdict];
+  let msg=`${prefix} — #${s.n}: shape="${s.shape}", font="${s.sfLabel}", palette="${s.palLabel}", &="${s.posLabel}"${s.vAlign?' · '+s.vAlign:''}, base=${s.s23} s1=${s.s1} sA=${s.sA}.`;
+  if(notes) msg+=` Notes: "${notes}"`;
+  sendPrompt(msg);
+  document.getElementById('notes').value='';
+  setTimeout(go,400);
+}
+document.fonts.ready.then(go);
+</script>
+</body>
+</html>

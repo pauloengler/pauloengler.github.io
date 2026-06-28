@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paulo Engler</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="header.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
@@ -13,12 +14,11 @@
     .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
-    .hero { padding: 72px 40px 60px; text-align: center; background: #F7F4EE; }
-    .hero h1 { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(24px, 3.5vw, 40px); color: #0A0A0A; line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
-    .hero h1 em { display: block; font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400; font-size: clamp(48px, 7vw, 80px); letter-spacing: -0.02em; text-transform: none; line-height: 0.9; }
-    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); line-height: 1.6; }
-    .hero-sub:first-of-type { margin-top: 24px; }
-    .hero-sub:empty { display: none; }
+    .hero { background: #F7F4EE; }
+    .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
+    @media (max-width: 600px) {
+      .hero svg { aspect-ratio: 4/3; }
+    }
     .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
     .search-bar { background: #F7F4EE; padding: 16px 40px; border-top: 2px solid #0A0A0A; }
     .search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(10,10,10,0.2); padding: 8px 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A; outline: none; }
@@ -98,8 +98,7 @@
 </nav>
 
 <section class="hero">
-  <h1>Senior Creative<em>Director</em>& Head of Art</h1>
-  <div id="hero-sublines"></div>
+  <svg id="hero-svg" xmlns="http://www.w3.org/2000/svg"></svg>
 </section>
 
 <div class="view-toggle" id="view-toggle">
@@ -501,5 +500,7 @@ document.addEventListener('keydown', function(e) {
     <div class="qv-title" id="qv-title"></div>
   </div>
 </div>
+<script src="header.js"></script>
+<script>document.fonts.ready.then(function(){ renderHeader(document.getElementById('hero-svg')); });</script>
 </body>
 </html>
