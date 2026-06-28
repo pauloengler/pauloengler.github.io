@@ -189,10 +189,9 @@ function parseCSV(text, filterKey, skipFirst) {
   return result;
 }
 
-async function loadSettings(projects) {
+async function loadSettings(projects, aboutText) {
   try {
-    const res = await fetch(ABOUT_URL, { mode:'cors', credentials:'omit', redirect:'follow' });
-    const text = await res.text();
+    const text = aboutText || await fetch(ABOUT_URL, { mode:'cors', credentials:'omit', redirect:'follow' }).then(r=>r.text());
     const rows = parseCSV(text, null, false);
 
     // Compute dynamic totals from projects (no shortlists)
@@ -231,20 +230,32 @@ async function loadSettings(projects) {
 async function loadProjects() {
   try {
     const CACHE_KEY = 'portfolio_csv_v1';
+    const ABOUT_KEY = 'portfolio_about_v1';
     const CACHE_AGE = 5 * 60 * 1000; // 5 minutes
-    const cached = sessionStorage.getItem(CACHE_KEY);
-    const cachedTime = sessionStorage.getItem(CACHE_KEY + '_time');
-    let text;
-    if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
-      text = cached;
-    } else {
-      const res = await fetch(SHEET_URL, { mode: 'cors', credentials: 'omit', redirect: 'follow' });
-      text = await res.text();
-      try { sessionStorage.setItem(CACHE_KEY, text); sessionStorage.setItem(CACHE_KEY + '_time', Date.now()); } catch(e) {}
+
+    // Kick off both fetches in parallel
+    function cachedFetch(url, key) {
+      const cached = sessionStorage.getItem(key);
+      const cachedTime = sessionStorage.getItem(key + '_time');
+      if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
+        return Promise.resolve(cached);
+      }
+      return fetch(url, { mode: 'cors', credentials: 'omit', redirect: 'follow' })
+        .then(function(res) { return res.text(); })
+        .then(function(text) {
+          try { sessionStorage.setItem(key, text); sessionStorage.setItem(key + '_time', Date.now()); } catch(e) {}
+          return text;
+        });
     }
-    const projects = parseCSV(text, 'name', true);
+
+    const [projectsText, aboutText] = await Promise.all([
+      cachedFetch(SHEET_URL, CACHE_KEY),
+      cachedFetch(ABOUT_URL, ABOUT_KEY),
+    ]);
+
+    const projects = parseCSV(projectsText, 'name', true);
     renderProjects(projects);
-    loadSettings(projects);
+    loadSettings(projects, aboutText);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
   }
