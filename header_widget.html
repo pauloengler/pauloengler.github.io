@@ -100,6 +100,12 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
@@ -479,7 +485,7 @@ function renderHeader(svgEl,opts){
     inner+=`<text x="${PAD}" y="${VH-8}" font-family="monospace" font-size="9" fill="${debugCol}">#${state.n} · ${state.bgLabel}/${state.texLabel} · Sr:${state.sfLabel} · &:${state.afLabel}</text>`;
   }
   svgEl.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
-  svgEl.setAttribute('preserveAspectRatio','xMidYMid meet');
+  svgEl.setAttribute('preserveAspectRatio','xMidYMid slice');
   svgEl.innerHTML=inner;
   return state;
 }
@@ -487,6 +493,7 @@ function renderHeader(svgEl,opts){
 global.renderHeader=renderHeader;
 global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 })(window);
+
 
 
 
