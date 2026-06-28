@@ -191,7 +191,7 @@ async function loadSettings(projects) {
 
     // Compute dynamic totals from projects (no shortlists)
     let totalAwards = 0, totalCannes = 0, totalGP = 0;
-    const AWARD_KEYS2 = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+    const AWARD_KEYS2 = ['ame','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
     (projects||[]).forEach(function(p) {
       AWARD_KEYS2.forEach(function(show) {
         ['gp','g','s','b','sh'].forEach(function(m) {
@@ -334,23 +334,34 @@ function buildCard(p) {
     return map[metal.toLowerCase()] || metal.toUpperCase();
   }
 
-  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+  const AWARD_KEYS = ['ame','archive','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
   const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
+  // Awards with no metal tiers — just show the icon
+  const ICON_ONLY_SHOWS = ['archive'];
+
   const awardCols = [];
   AWARD_KEYS.forEach(function(show) {
+    if (ICON_ONLY_SHOWS.includes(show)) {
+      // Single column: field name is exactly the show key (e.g. "archive")
+      const val = (p[show] || '').toString().trim();
+      if (val && val !== '0' && val.toUpperCase() !== 'FALSE') {
+        awardCols.push({ name: show, metals: [], iconOnly: true });
+      }
+      return;
+    }
     const metals = [];
     METALS.forEach(function(m) {
       const col = show + '_' + metalColMap[m];
       const val = parseInt(p[col] || 0);
       if (val > 0) metals.push({ metal: m, count: val });
     });
-    if (metals.length) awardCols.push({ name: show, metals: metals });
+    if (metals.length) awardCols.push({ name: show, metals: metals, iconOnly: false });
   });
 
   let iconsHTML;
   if (awardCols.length) {
     const colsHTML = awardCols.map(function(col) {
-      const cells = col.metals.map(function(m) {
+      const cells = col.iconOnly ? '' : col.metals.map(function(m) {
         const label = metalLabel(col.name, m.metal);
         const countHTML = '<span class="cell-count">' + m.count + '</span>';
         const metalHTML = '<span class="cell-metal">' + label + '</span>';
