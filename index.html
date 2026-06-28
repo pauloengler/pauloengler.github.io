@@ -538,6 +538,12 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div>
 <script src="header.js"></script>
-<script>document.fonts.ready.then(function(){ renderHeader(document.getElementById('hero-svg')); });</script>
+<script>
+  // Render immediately — no waiting for fonts, page paints fast
+  var _heroSvg = document.getElementById('hero-svg');
+  renderHeader(_heroSvg);
+  // Re-render once the display fonts have loaded so Senior font is correct
+  document.fonts.ready.then(function(){ renderHeader(_heroSvg); });
+</script>
 </body>
 </html>
