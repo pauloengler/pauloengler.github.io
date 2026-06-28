@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paulo Engler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="header.css">
+  <!-- Single consolidated font request — no @import chains, no render blocking on display fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Core UI fonts — loaded normally (needed for layout) -->
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <!-- Display fonts for Senior header — non-blocking swap -->
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&family=Rubik+Mono+One&family=Rubik+Wet+Paint&family=Rubik+Glitch&family=Rubik+Burned&family=Rubik+Beastly&family=Abril+Fatface&family=Bodoni+Moda:ital,wght@1,900&family=Big+Shoulders+Display:wght@900&family=Yeseva+One&family=Bowlby+One&family=Alfa+Slab+One&family=VT323&family=Major+Mono+Display&family=Share+Tech+Mono&family=Nova+Mono&family=Monoton&family=Faster+One&family=Bagel+Fat+One&family=Codystar&family=Gravitas+One&family=UnifrakturCook:wght@700&family=Pirata+One&family=Caveat+Brush&family=Permanent+Marker&family=Rampart+One&family=Bruno+Ace+SC&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
@@ -19,10 +24,6 @@
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.5); line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
-    @media (max-width: 600px) {
-      .hero-sublines { padding: 12px 20px 20px; }
-      .hero svg { aspect-ratio: unset; width: 100%; height: 48vw; }
-    }
     .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
     .search-bar { background: #F7F4EE; padding: 16px 40px; border-top: 2px solid #0A0A0A; }
     .search-input { width: 100%; background: transparent; border: none; border-bottom: 1px solid rgba(10,10,10,0.2); padding: 8px 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A; outline: none; }
@@ -40,8 +41,8 @@
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
     .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 4px; border: none; margin-left: 1px; }
     .award-col:first-child { margin-left: 0; }
-    .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 1px 4px; height: 15px; font-family: 'Inter', sans-serif; text-transform: uppercase; }
-    .award-cell .cell-metal { font-size: 7px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; }
+    .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 1px 4px; height: 15px; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; }
+    .award-cell .cell-metal { font-size: 7px; font-weight: 500; letter-spacing: 0.02em; line-height: 1; }
     .award-cell .cell-count { font-size: 8px; font-weight: 700; line-height: 1; }
     .award-cell.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
     .award-cell.metal-gold   { background: #A8874A; color: #fff; }
@@ -64,7 +65,6 @@
     .btn-quick { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); border: 1px solid rgba(10,10,10,0.12); padding: 0 10px; height: 18px; white-space: nowrap; display: flex; align-items: center; border-radius: 3px; transition: color 0.2s, border-color 0.2s; cursor: pointer; background: none; }
     .btn-quick:hover { color: #0A0A0A; border-color: rgba(10,10,10,0.4); }
     .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
-    /* Modal */
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; }
     .qv-overlay.open { display: flex; }
     .qv-box { position: relative; width: min(860px, 92vw); background: #0A0A0A; border-radius: 4px; overflow: hidden; }
@@ -81,7 +81,8 @@
     .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
     @media (max-width: 600px) {
       nav { padding: 16px 20px; }
-      .hero { padding: 48px 20px 40px; }
+      .hero-sublines { padding: 12px 20px 20px; }
+      .hero svg { aspect-ratio: unset; width: 100%; height: 48vw; }
       .chapter-header { padding: 16px 20px; }
       .projects-grid { grid-template-columns: 1fr; }
       footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
@@ -136,6 +137,12 @@
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
 const ABOUT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=1943812170&single=true&output=csv';
 const CHAPTER_ORDER = ['Activations', 'Campaigns', 'Print & Design', 'Other'];
+const CACHE_KEY = 'portfolio_csv_v2';
+const ABOUT_KEY = 'portfolio_about_v2';
+const CACHE_AGE = 30 * 60 * 1000; // 30 minutes
+
+// Parsed projects stored in memory — no re-parsing on view/search change
+let _projects = null;
 
 function parseCSV(text, filterKey, skipFirst) {
   const result = [];
@@ -174,7 +181,7 @@ function parseCSV(text, filterKey, skipFirst) {
     return cols;
   }
 
-  if (skipFirst !== false) parseRow(); // skip decorative label row (projects sheet)
+  if (skipFirst !== false) parseRow();
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -189,73 +196,76 @@ function parseCSV(text, filterKey, skipFirst) {
   return result;
 }
 
-async function loadSettings(projects, aboutText) {
-  try {
-    const text = aboutText || await fetch(ABOUT_URL, { mode:'cors', credentials:'omit', redirect:'follow' }).then(r=>r.text());
-    const rows = parseCSV(text, null, false);
+function renderSublines(rows, totalAwards, totalCannes, totalGP) {
+  function applyTokens(str) {
+    return str
+      .replace(/\{\{total\}\}/g, totalAwards)
+      .replace(/\{\{cannes\}\}/g, totalCannes)
+      .replace(/\{\{gp\}\}/g, totalGP);
+  }
+  const sublines = rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block, undefined, {numeric:true}));
+  const sublinesEl = document.getElementById('hero-sublines');
+  if (sublinesEl) sublinesEl.innerHTML = sublines.map(function(r){
+    return '<p class="hero-sub">' + applyTokens(r.col1||'') + '</p>';
+  }).join('');
+}
 
-    // Compute dynamic totals from projects (no shortlists)
+async function loadSettings(projects, aboutRows) {
+  try {
     let totalAwards = 0, totalCannes = 0, totalGP = 0;
     const AWARD_KEYS2 = ['ame','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
     (projects||[]).forEach(function(p) {
       AWARD_KEYS2.forEach(function(show) {
         ['gp','g','s','b','sh'].forEach(function(m) {
           const v = parseInt(p[show + '_' + m] || 0);
-          if (v > 0) totalAwards += v;                              // all metals + shortlists
-          if (show === 'cannes' && m !== 'sh' && v > 0) totalCannes += v; // Lions excl. shortlists
+          if (v > 0) totalAwards += v;
+          if (show === 'cannes' && m !== 'sh' && v > 0) totalCannes += v;
         });
       });
-      // GP: only Cannes Grand Prix
       const gp = parseInt(p['cannes_gp'] || 0);
       if (gp > 0) totalGP += gp;
     });
-
-    function applyTokens(str) {
-      return str
-        .replace(/\{\{total\}\}/g, totalAwards)
-        .replace(/\{\{cannes\}\}/g, totalCannes)
-        .replace(/\{\{gp\}\}/g, totalGP);
-    }
-
-    const sublines = rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block, undefined, {numeric:true}));
-    const sublinesEl = document.getElementById('hero-sublines');
-    if (sublinesEl) sublinesEl.innerHTML = sublines.map(function(r){
-      return '<p class="hero-sub">' + applyTokens(r.col1||'') + '</p>';
-    }).join('');
+    renderSublines(aboutRows, totalAwards, totalCannes, totalGP);
   } catch (err) {
     console.error('Settings load error:', err);
   }
 }
 
+function cachedFetch(url, key) {
+  const cached = sessionStorage.getItem(key);
+  const cachedTime = sessionStorage.getItem(key + '_time');
+  if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
+    return Promise.resolve(cached);
+  }
+  return fetch(url, { mode: 'cors', credentials: 'omit', redirect: 'follow' })
+    .then(function(res) { return res.text(); })
+    .then(function(text) {
+      try { sessionStorage.setItem(key, text); sessionStorage.setItem(key + '_time', Date.now()); } catch(e) {}
+      return text;
+    });
+}
+
 async function loadProjects() {
   try {
-    const CACHE_KEY = 'portfolio_csv_v1';
-    const ABOUT_KEY = 'portfolio_about_v1';
-    const CACHE_AGE = 5 * 60 * 1000; // 5 minutes
+    // Both fetches fire at the same moment
+    const projectsPromise = cachedFetch(SHEET_URL, CACHE_KEY);
+    const aboutPromise = cachedFetch(ABOUT_URL, ABOUT_KEY);
 
-    // Kick off both fetches in parallel
-    function cachedFetch(url, key) {
-      const cached = sessionStorage.getItem(key);
-      const cachedTime = sessionStorage.getItem(key + '_time');
-      if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_AGE) {
-        return Promise.resolve(cached);
-      }
-      return fetch(url, { mode: 'cors', credentials: 'omit', redirect: 'follow' })
-        .then(function(res) { return res.text(); })
-        .then(function(text) {
-          try { sessionStorage.setItem(key, text); sessionStorage.setItem(key + '_time', Date.now()); } catch(e) {}
-          return text;
-        });
-    }
+    // Render sublines as soon as about sheet arrives — don't wait for projects
+    aboutPromise.then(function(aboutText) {
+      const aboutRows = parseCSV(aboutText, null, false);
+      // Render immediately with tokens unresolved (shows text right away)
+      renderSublines(aboutRows, '…', '…', '…');
+      // Once projects also arrive, update with real numbers
+      projectsPromise.then(function() {
+        if (_projects) loadSettings(_projects, aboutRows);
+      });
+    }).catch(function(err) { console.error('About sheet error:', err); });
 
-    const [projectsText, aboutText] = await Promise.all([
-      cachedFetch(SHEET_URL, CACHE_KEY),
-      cachedFetch(ABOUT_URL, ABOUT_KEY),
-    ]);
-
-    const projects = parseCSV(projectsText, 'name', true);
-    renderProjects(projects);
-    loadSettings(projects, aboutText);
+    // Render project grid as soon as projects sheet arrives
+    const projectsText = await projectsPromise;
+    _projects = parseCSV(projectsText, 'name', true);
+    renderProjects(_projects);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
   }
@@ -266,7 +276,6 @@ function renderProjects(projects) {
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
     if (currentSearch) {
-      // Search mode: always search full list
       const fullVal = (p['full'] || '').toString().toUpperCase();
       if (fullVal !== 'TRUE') return;
       const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
@@ -325,7 +334,12 @@ function equaliseAwardHeights() {
   });
 }
 
-window.addEventListener('resize', equaliseAwardHeights);
+// Debounced resize handler — prevents layout thrash on every pixel
+let _resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(equaliseAwardHeights, 150);
+});
 
 function buildCard(p) {
   const a = document.createElement('a');
@@ -353,7 +367,6 @@ function buildCard(p) {
 
   const AWARD_KEYS = ['ame','archive','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
   const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
-  // Awards with no metal tiers — just show the icon
   const ICON_ONLY_SHOWS = ['archive'];
 
   const awardCols = [];
@@ -374,17 +387,13 @@ function buildCard(p) {
     if (metals.length) awardCols.push({ name: show, metals: metals, iconOnly: false });
   });
 
-  // If more than 10 award columns, hide low-priority shows and add overflow box
   const OVERFLOW_THRESHOLD = 10;
   const OVERFLOW_HIDDEN = ['archive', 'caples', 'phnks'];
   let overflowCount = 0;
   let visibleCols = awardCols;
   if (awardCols.length > OVERFLOW_THRESHOLD) {
     visibleCols = awardCols.filter(function(col) {
-      if (OVERFLOW_HIDDEN.includes(col.name)) {
-        overflowCount++;
-        return false;
-      }
+      if (OVERFLOW_HIDDEN.includes(col.name)) { overflowCount++; return false; }
       return true;
     });
   }
@@ -394,22 +403,15 @@ function buildCard(p) {
     let colsHTML = visibleCols.map(function(col) {
       const cells = col.iconOnly ? '' : col.metals.map(function(m) {
         const label = metalLabel(col.name, m.metal);
-        const countHTML = '<span class="cell-count">' + m.count + '</span>';
-        const metalHTML = '<span class="cell-metal">' + label + '</span>';
-        return '<div class="award-cell ' + metalClass(m.metal) + '">' + metalHTML + countHTML + '</div>';
+        return '<div class="award-cell ' + metalClass(m.metal) + '"><span class="cell-metal">' + label + '</span><span class="cell-count">' + m.count + '</span></div>';
       }).join('');
-      const iconCell = '<div class="award-icon-cell">'
-        + '<img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '">'
-        + '</div>';
+      const iconCell = '<div class="award-icon-cell"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '" loading="lazy"></div>';
       return '<div class="award-col">' + cells + iconCell + '</div>';
     }).join('');
 
     if (overflowCount > 0) {
-      colsHTML += '<div class="award-col award-col--overflow">'
-        + '<div class="award-icon-cell award-overflow-box">+' + overflowCount + '</div>'
-        + '</div>';
+      colsHTML += '<div class="award-col award-col--overflow"><div class="award-icon-cell award-overflow-box">+' + overflowCount + '</div></div>';
     }
-
     iconsHTML = '<div class="award-icons">' + colsHTML + '</div>';
   } else {
     iconsHTML = '<div class="award-spacer"></div>';
@@ -419,16 +421,15 @@ function buildCard(p) {
   const thumb = (p.thumbnail || '').trim();
   if (thumb) {
     const isVideo = thumb.toLowerCase().endsWith('.mp4') || thumb.toLowerCase().endsWith('.webm');
-    if (isVideo) {
-      thumbInner = '<video src="thumbnail/' + thumb + '" autoplay loop muted playsinline></video>';
-    } else {
-      thumbInner = '<img src="thumbnail/' + thumb + '" alt="' + p.name + '" loading="lazy">';
-    }
+    thumbInner = isVideo
+      ? '<video src="thumbnail/' + thumb + '" autoplay loop muted playsinline></video>'
+      : '<img src="thumbnail/' + thumb + '" alt="' + p.name + '" loading="lazy">';
   }
 
-  const descHTML = (p['description thumb'] || p['descriptionthumb'] || p.description || '') ? '<p class="project-desc">' + (p['description thumb'] || p['descriptionthumb'] || p.description || '') + '</p>' : '';
+  const descHTML = (p['description thumb'] || p['descriptionthumb'] || p.description || '')
+    ? '<p class="project-desc">' + (p['description thumb'] || p['descriptionthumb'] || p.description || '') + '</p>'
+    : '';
 
-  // Parse first media item for quick view
   const mediaStr = (p.media || '').trim();
   let firstMedia = '';
   if (mediaStr) {
@@ -447,7 +448,7 @@ function buildCard(p) {
         '</div>' +
         '<div class="card-btns">' +
           '<span class="btn-view">View Project →</span>' +
-          (firstMedia ? '<button class="btn-quick" data-media=\''+firstMedia+'\'  data-name=\''+p.name+'\' onclick="quickView(event,this)">Quick View</button>' : '') +
+          (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">Quick View</button>' : '') +
         '</div>' +
       '</div>' +
       descHTML +
@@ -467,35 +468,20 @@ function setView(view) {
   currentView = view;
   document.getElementById('btn-full').classList.toggle('active', view === 'full');
   document.getElementById('btn-select').classList.toggle('active', view === 'select');
-  // Clear search when switching views
   document.getElementById('search-input').value = '';
   currentSearch = '';
-  const cached = sessionStorage.getItem('portfolio_csv_v1');
-  if (cached) {
-    const projects = parseCSV(cached, 'name', true);
-    renderProjects(projects);
-  }
+  if (_projects) renderProjects(_projects);
 }
 
 function doSearch(query) {
   currentSearch = query.toLowerCase().trim();
-  // Deselect both buttons when search is active
   document.getElementById('btn-full').classList.toggle('active', !currentSearch && currentView === 'full');
   document.getElementById('btn-select').classList.toggle('active', !currentSearch && currentView === 'select');
-  const cached = sessionStorage.getItem('portfolio_csv_v1');
-  if (cached) {
-    const projects = parseCSV(cached, 'name', true);
-    renderProjects(projects);
-  }
+  if (_projects) renderProjects(_projects);
 }
 
-// Set default active button
 document.getElementById('btn-full').classList.add('active');
-
-// Search input listener
-document.getElementById('search-input').addEventListener('input', function() {
-  doSearch(this.value);
-});
+document.getElementById('search-input').addEventListener('input', function() { doSearch(this.value); });
 
 loadProjects();
 
@@ -510,16 +496,11 @@ function quickView(e, btn) {
   const media = btn.getAttribute('data-media');
   const name = btn.getAttribute('data-name');
   const box = document.getElementById('qv-media');
-  const title = document.getElementById('qv-title');
-  const overlay = document.getElementById('qv-overlay');
-
-  title.textContent = name;
-  overlay.classList.add('open');
+  document.getElementById('qv-title').textContent = name;
+  document.getElementById('qv-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
-
   const ytId = getYouTubeId(media);
   if (ytId) {
-    // Inject iframe after overlay is visible so browser honours autoplay on user gesture
     requestAnimationFrame(function() {
       box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&mute=0&rel=0&modestbranding=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
     });
@@ -530,9 +511,8 @@ function quickView(e, btn) {
 
 function closeQuickView(e) {
   if (e && e.target !== document.getElementById('qv-overlay') && !e.target.classList.contains('qv-close')) return;
-  const overlay = document.getElementById('qv-overlay');
-  overlay.classList.remove('open');
-  document.getElementById('qv-media').innerHTML = ''; // stop video
+  document.getElementById('qv-overlay').classList.remove('open');
+  document.getElementById('qv-media').innerHTML = '';
   document.body.style.overflow = '';
 }
 
@@ -550,10 +530,8 @@ document.addEventListener('keydown', function(e) {
 </div>
 <script src="header.js"></script>
 <script>
-  // Render immediately — no waiting for fonts, page paints fast
   var _heroSvg = document.getElementById('hero-svg');
   renderHeader(_heroSvg);
-  // Re-render once the display fonts have loaded so Senior font is correct
   document.fonts.ready.then(function(){ renderHeader(_heroSvg); });
 </script>
 </body>
