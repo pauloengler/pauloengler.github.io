@@ -24,14 +24,14 @@
     .hero-header-wrap { position: relative; }
     .hero-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: #926650; width: 0%; z-index: 10; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
-    .hero-vote { display: flex; align-items: center; gap: 16px; padding: 10px 16px; border-top: 1px solid rgba(10,10,10,0.06); }
-    .hero-vote-text { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: #0A0A0A; line-height: 1.6; flex: 1; }
+    .hero-vote { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid rgba(10,10,10,0.06); overflow: hidden; }
+    .hero-vote-text { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
     .hero-vote-btns { display: flex; gap: 10px; flex-shrink: 0; }
     .hero-vote-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform .15s; }
     .hero-vote-btn:hover { transform: scale(1.1); }
     .hero-vote-btn.chosen { box-shadow: 0 0 0 3px #0A0A0A; }
-    .vote-cta { display: flex; align-items: center; flex-shrink: 0; animation: blink-cta 1s ease-in-out infinite; }
-    .vote-cta svg { display: block; width: 88px; height: 36px; flex-shrink: 0; }
+    .vote-cta { display: flex; align-items: center; flex: 0 0 88px; width: 88px; overflow: hidden; animation: blink-cta 1s ease-in-out infinite; }
+    .vote-cta svg { display: block; width: 88px; height: 36px; min-width: 88px; max-width: 88px; }
     @keyframes blink-cta { 0%, 100% { opacity: 1; transform: translateX(0); } 50% { opacity: 0.25; transform: translateX(5px); } }
     .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 16px 40px; text-align: center; background: transparent; }
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.4); line-height: 1.6; }
@@ -103,6 +103,8 @@
       nav { padding: 16px 20px; top: 6px; }
       .hero-sublines { padding: 12px 20px 20px; }
       .hero svg { aspect-ratio: unset; width: 100%; height: 48vw; }
+      .vote-cta { flex: 0 0 60px; width: 60px; }
+      .vote-cta svg { width: 60px; height: 24px; min-width: 60px; max-width: 60px; }
       .view-toggle { padding: 10px 10px 0; }
       .search-bar { padding: 10px 10px 10px; }
       .chapter-header { padding: 12px 20px; }

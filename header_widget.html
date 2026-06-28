@@ -7,28 +7,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&family=Rubik+Mono+One&family=Rubik+Wet+Paint&family=Rubik+Glitch&family=Rubik+Burned&family=Rubik+Beastly&family=Abril+Fatface&family=Bodoni+Moda:ital,wght@1,900&family=Big+Shoulders+Display:wght@900&family=Yeseva+One&family=Bowlby+One&family=Alfa+Slab+One&family=VT323&family=Major+Mono+Display&family=Share+Tech+Mono&family=Nova+Mono&family=Monoton&family=Faster+One&family=Bagel+Fat+One&family=Codystar&family=Gravitas+One&family=UnifrakturCook:wght@700&family=Pirata+One&family=Caveat+Brush&family=Permanent+Marker&family=Rampart+One&family=Bruno+Ace+SC&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
-
-.header-chip{position:relative;width:100%;aspect-ratio:16/5;background:#F7F4EE;border-radius:14px;overflow:hidden;}
+.header-chip{position:relative;width:100%;aspect-ratio:16/5;border-radius:14px;overflow:hidden;}
 .header-chip svg{position:absolute;inset:0;width:100%;height:100%;}
 .progress-bar{position:absolute;bottom:0;left:0;height:3px;background:#926650;width:0%;z-index:10;}
-.refresh-btn{position:absolute;bottom:10px;right:12px;z-index:20;background:rgba(10,10,10,0.5);border:none;color:#F7F4EE;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.refresh-btn:hover{background:rgba(10,10,10,0.85);}
-.refresh-btn svg{width:14px;height:14px;}
-
 .vote-section{margin-top:10px;background:#F7F4EE;border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:16px;}
-.vote-text{font-family:'Unbounded',sans-serif;font-weight:700;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A;line-height:1.7;flex:1;}
-.vote-btns{display:flex;gap:10px;flex-shrink:0;}
+.vote-text{font-family:'Unbounded',sans-serif;font-weight:700;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A;line-height:1.7;flex:1;min-width:0;}
+.vote-btns{display:flex;gap:10px;flex-shrink:0;align-items:center;}
+.vote-cta{flex:0 0 88px;width:88px;overflow:hidden;display:flex;align-items:center;animation:blink-cta 1s ease-in-out infinite;}
+.vote-cta svg{display:block;width:88px;height:36px;min-width:88px;max-width:88px;}
 .vote-btn{width:44px;height:44px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s;}
 .vote-btn:hover{transform:scale(1.1);}
 .vote-btn.chosen{box-shadow:0 0 0 3px #0A0A0A;}
-.vote-cta{display:flex;align-items:center;flex-shrink:0;animation:blink-cta 1s ease-in-out infinite;}
-.vote-cta svg{display:block;width:88px;height:36px;flex-shrink:0;}
 @keyframes blink-cta{0%,100%{opacity:1;transform:translateX(0);}50%{opacity:.25;transform:translateX(5px);}}
-
 .dev-panel{margin-top:8px;background:#1a1a1a;border-radius:14px;padding:14px 16px;}
 .dev-panel summary{font-family:monospace;font-size:10px;color:#555;cursor:pointer;list-style:none;outline:none;}
 .dev-panel summary::-webkit-details-marker{display:none;}
@@ -41,7 +34,7 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
 .fb-btn.yes:hover{background:#1a3d1a;color:#7dda7d;}
 .fb-btn.no:hover{background:#3d1a1a;color:#da7d7d;}
 .notes{width:100%;background:#242424;border:0.5px solid #333;border-radius:6px;color:#aaa;font-family:monospace;font-size:10px;padding:6px 10px;resize:none;outline:none;}
-.inf{font-family:monospace;font-size:9px;color:#444;}
+.inf{font-family:monospace;font-size:9px;color:#444;flex:1;}
 </style>
 </head>
 <body>
@@ -55,26 +48,16 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
   <p class="vote-text">This header is AI-generated.<br>Your reaction helps improve future designs.</p>
   <div class="vote-btns">
     <div class="vote-cta">
-      <svg width="88" height="36" viewBox="0 0 88 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="88" height="36" viewBox="0 0 88 36" fill="none">
         <path d="M6 0 Q0 0 0 6 L0 30 Q0 36 6 36 L58 36 C62 36 66 32 72 28 L84 20 Q88 18 84 16 L72 8 C66 4 62 0 58 0 Z" fill="#0A0A0A"/>
         <text x="31" y="23" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="700" font-size="12" fill="#F7F4EE">CLICK</text>
       </svg>
     </div>
-    <button class="vote-btn" id="btn-like" onclick="castVote('like')" title="I like it">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="22" cy="22" r="22" fill="#4CAF50"/>
-        <circle cx="16" cy="18" r="2" fill="white"/>
-        <circle cx="28" cy="18" r="2" fill="white"/>
-        <path d="M14 26 Q22 34 30 26" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </svg>
+    <button class="vote-btn" id="btn-like" onclick="castVote('like')">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#4CAF50"/><circle cx="16" cy="18" r="2" fill="white"/><circle cx="28" cy="18" r="2" fill="white"/><path d="M14 26 Q22 34 30 26" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
     </button>
-    <button class="vote-btn" id="btn-dislike" onclick="castVote('dislike')" title="Not for me">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="22" cy="22" r="22" fill="#E53935"/>
-        <circle cx="16" cy="18" r="2" fill="white"/>
-        <circle cx="28" cy="18" r="2" fill="white"/>
-        <path d="M14 30 Q22 22 30 30" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      </svg>
+    <button class="vote-btn" id="btn-dislike" onclick="castVote('dislike')">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="22" fill="#E53935"/><circle cx="16" cy="18" r="2" fill="white"/><circle cx="28" cy="18" r="2" fill="white"/><path d="M14 30 Q22 22 30 30" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
     </button>
   </div>
 </div>
@@ -85,7 +68,7 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
     <div class="fb-row">
       <span class="fb-lbl">Verdict:</span>
       <button class="fb-btn yes" onclick="devVote('yes')">✓ Yes</button>
-      <button class="fb-btn no"  onclick="devVote('no')">✗ No</button>
+      <button class="fb-btn no" onclick="devVote('no')">✗ No</button>
       <span class="inf" id="inf"></span>
     </div>
     <textarea class="notes" id="notes" rows="2" placeholder="Notes…"></textarea>
@@ -93,153 +76,299 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
 </details>
 
 <script>
-// ═══════════════════════════════════════════════
-// HEADER GENERATOR (inlined from header.js)
-// ═══════════════════════════════════════════════
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
-const VW=800,VH=250,PAD=32,BG='#F7F4EE';
-const FONT='"Unbounded",sans-serif',FW='700',COL='#0A0A0A';
+
+const VW=800,VH=250,PAD=32;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
 const RATIOS=[1/8,1/6,1/4,1/3,1/2,1,2,3,4];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 const _cv=document.createElement('canvas'),_cx=_cv.getContext('2d');
 function mW(t,sz){_cx.font=`700 ${sz}px Unbounded,sans-serif`;return _cx.measureText(t).width;}
+function mWf(t,sz,f,w,s){_cx.font=`${s==='italic'?'italic ':''}${w} ${sz}px ${f.replace(/"/g,'').split(',')[0]},sans-serif`;return _cx.measureText(t).width;}
 function rndInt(a,b){return Math.floor(a+Math.random()*(b-a+1));}
 function rnd(a,b){return a+Math.random()*(b-a);}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
-function weightedPick(items,key='w'){const total=items.reduce((s,x)=>s+(x[key]||1),0);let r=Math.random()*total;for(const x of items){r-=(x[key]||1);if(r<=0)return x;}return items[0];}
-function mkLayout(anchor,w){if(anchor==='L')return{x:PAD,ta:'start',L:PAD,R:PAD+w};if(anchor==='R')return{x:VW-PAD,ta:'end',L:VW-PAD-w,R:VW-PAD};return{x:VW/2,ta:'middle',L:VW/2-w/2,R:VW/2+w/2};}
-function clamp(l){let{x,ta,L,R}=l;if(L<PAD){const d=PAD-L;x+=d;L+=d;R+=d;}if(R>VW-PAD){const d=R-(VW-PAD);x-=d;L-=d;R-=d;}return{...l,x,L,R};}
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function weightedPick(items,key='w'){
+  const total=items.reduce((s,x)=>s+(x[key]||1),0);
+  let r=Math.random()*total;
+  for(const x of items){r-=(x[key]||1);if(r<=0)return x;}
+  return items[0];
+}
+
+// ─── Background palettes ──────────────────────────────────────────────────────
+const BG_PALETTES=[
+  {bg:'#F7F4EE',label:'cream',       dark:false,w:3},
+  {bg:'#EDE8DF',label:'warm-light',  dark:false,w:2},
+  {bg:'#E8E3DA',label:'stone-light', dark:false,w:2},
+  {bg:'#DDD8CF',label:'stone-mid',   dark:false,w:2},
+  {bg:'#E4E0D8',label:'linen',       dark:false,w:2},
+  {bg:'#DFE4E0',label:'sage-light',  dark:false,w:1},
+  {bg:'#E0E4EA',label:'cool-light',  dark:false,w:1},
+  {bg:'#C8C0B4',label:'warm-mid',    dark:false,w:2},
+  {bg:'#B8B0A4',label:'warm-dark-mid',dark:false,w:2},
+  {bg:'#A89888',label:'brown-mid',   dark:true, w:2},
+  {bg:'#9A9A9A',label:'grey-mid',    dark:true, w:2},
+  {bg:'#8A8078',label:'brown-dark',  dark:true, w:2},
+  {bg:'#7A7A80',label:'slate',       dark:true, w:1},
+  {bg:'#5A4E44',label:'brown-deep',  dark:true, w:2},
+  {bg:'#4A4440',label:'espresso',    dark:true, w:2},
+  {bg:'#3A3530',label:'dark-brown',  dark:true, w:2},
+  {bg:'#484850',label:'charcoal',    dark:true, w:2},
+  {bg:'#2A2A2A',label:'near-black',  dark:true, w:2},
+  {bg:'#1A1A1A',label:'black',       dark:true, w:1},
+  {bg:'#2E2820',label:'ink',         dark:true, w:1},
+];
+
+function bgTextColors(pal){
+  if(pal.dark) return{col:'#F7F4EE',warm:'#D4A882',cold:'#9AAFBE'};
+  return{col:'#0A0A0A',warm:WARM,cold:COLD};
+}
+
+// ─── Textures ─────────────────────────────────────────────────────────────────
+function tc(dark,op){return dark?`rgba(255,255,255,${op})`:`rgba(0,0,0,${op})`;}
+function texStripes(bg,dark){
+  const op=rnd(0.06,0.14).toFixed(2),gap=rndInt(12,28),angle=pick([0,30,45,60,90,135]),sw=rndInt(1,3);
+  return`<defs><pattern id="tex" patternUnits="userSpaceOnUse" width="${gap}" height="${gap}" patternTransform="rotate(${angle})"><line x1="0" y1="0" x2="0" y2="${gap}" stroke="${tc(dark,op)}" stroke-width="${sw}"/></pattern></defs><rect width="${VW}" height="${VH}" fill="${bg}"/><rect width="${VW}" height="${VH}" fill="url(#tex)"/>`;
+}
+function texDots(bg,dark){
+  const op=rnd(0.07,0.16).toFixed(2),gap=rndInt(14,30),r=rndInt(1,4);
+  return`<defs><pattern id="tex" patternUnits="userSpaceOnUse" width="${gap}" height="${gap}"><circle cx="${gap/2}" cy="${gap/2}" r="${r}" fill="${tc(dark,op)}"/></pattern></defs><rect width="${VW}" height="${VH}" fill="${bg}"/><rect width="${VW}" height="${VH}" fill="url(#tex)"/>`;
+}
+function texGrid(bg,dark){
+  const op=rnd(0.06,0.12).toFixed(2),gap=rndInt(20,40);
+  return`<defs><pattern id="tex" patternUnits="userSpaceOnUse" width="${gap}" height="${gap}"><path d="M${gap} 0 L0 0 0 ${gap}" fill="none" stroke="${tc(dark,op)}" stroke-width="1"/></pattern></defs><rect width="${VW}" height="${VH}" fill="${bg}"/><rect width="${VW}" height="${VH}" fill="url(#tex)"/>`;
+}
+function texWaves(bg,dark){
+  const op=rnd(0.08,0.16).toFixed(2),amp=rndInt(4,10),freq=rndInt(24,40);
+  let path='';
+  for(let y=-amp;y<VH+freq;y+=freq){
+    path+=`M0,${y} `;
+    for(let x=0;x<=VW+8;x+=8){path+=`${x},${y+Math.sin(x/freq*Math.PI*2)*amp} `;}
+  }
+  return`<rect width="${VW}" height="${VH}" fill="${bg}"/><path d="${path}" fill="none" stroke="${tc(dark,op)}" stroke-width="1.5"/>`;
+}
+function texBlobs(bg,dark){
+  const op=rnd(0.06,0.13).toFixed(2);
+  let blobs='';
+  for(let i=0;i<rndInt(3,6);i++){
+    const cx=rndInt(40,VW-40),cy=rndInt(30,VH-30),rx=rndInt(50,130),ry=rndInt(30,90),rot=rndInt(0,180);
+    blobs+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${tc(dark,op)}" transform="rotate(${rot},${cx},${cy})"/>`;
+  }
+  return`<rect width="${VW}" height="${VH}" fill="${bg}"/>${blobs}`;
+}
+const TEXTURES=[
+  {id:'stripes',w:3,fn:texStripes},
+  {id:'dots',   w:3,fn:texDots},
+  {id:'grid',   w:2,fn:texGrid},
+  {id:'waves',  w:2,fn:texWaves},
+  {id:'blobs',  w:3,fn:texBlobs},
+  {id:'none',   w:3,fn:(bg)=>`<rect width="${VW}" height="${VH}" fill="${bg}"/>`},
+];
+function makeBackground(){
+  const pal=weightedPick(BG_PALETTES);
+  const tex=weightedPick(TEXTURES);
+  const inner=tex.id==='none'?tex.fn(pal.bg):tex.fn(pal.bg,pal.dark);
+  return{inner,bg:pal.bg,dark:pal.dark,label:pal.label,texLabel:tex.id,textCols:bgTextColors(pal)};
+}
+
+// ─── Font pool — 30 total, 15 picked per session ──────────────────────────────
+const ALL_FONTS=[
+  {f:'"Bungee Shade",sans-serif',         w:'400',s:'normal',label:'Bungee Shade',       gf:'Bungee+Shade'},
+  {f:'"Bungee Inline",sans-serif',        w:'400',s:'normal',label:'Bungee Inline',      gf:'Bungee+Inline'},
+  {f:'"Bungee Outline",sans-serif',       w:'400',s:'normal',label:'Bungee Outline',     gf:'Bungee+Outline'},
+  {f:'"Bungee",sans-serif',               w:'400',s:'normal',label:'Bungee',             gf:'Bungee'},
+  {f:'"Rubik Mono One",sans-serif',       w:'400',s:'normal',label:'Rubik Mono One',     gf:'Rubik+Mono+One'},
+  {f:'"Rubik Wet Paint",sans-serif',      w:'400',s:'normal',label:'Rubik Wet Paint',    gf:'Rubik+Wet+Paint'},
+  {f:'"Rubik Glitch",sans-serif',         w:'400',s:'normal',label:'Rubik Glitch',       gf:'Rubik+Glitch'},
+  {f:'"Rubik Burned",sans-serif',         w:'400',s:'normal',label:'Rubik Burned',       gf:'Rubik+Burned'},
+  {f:'"Rubik Beastly",sans-serif',        w:'400',s:'normal',label:'Rubik Beastly',      gf:'Rubik+Beastly'},
+  {f:'"Abril Fatface",serif',             w:'400',s:'normal',label:'Abril Fatface',      gf:'Abril+Fatface'},
+  {f:'"Bodoni Moda",serif',               w:'900',s:'italic',label:'Bodoni Moda Black',  gf:'Bodoni+Moda:ital,wght@1,900'},
+  {f:'"Big Shoulders Display",sans-serif',w:'900',s:'normal',label:'Big Shoulders Black',gf:'Big+Shoulders+Display:wght@900'},
+  {f:'"Yeseva One",serif',                w:'400',s:'normal',label:'Yeseva One',         gf:'Yeseva+One'},
+  {f:'"Bowlby One",sans-serif',           w:'400',s:'normal',label:'Bowlby One',         gf:'Bowlby+One'},
+  {f:'"Alfa Slab One",serif',             w:'400',s:'normal',label:'Alfa Slab One',      gf:'Alfa+Slab+One'},
+  {f:'"VT323",monospace',                 w:'400',s:'normal',label:'VT323',              gf:'VT323'},
+  {f:'"Major Mono Display",monospace',    w:'400',s:'normal',label:'Major Mono',         gf:'Major+Mono+Display'},
+  {f:'"Share Tech Mono",monospace',       w:'400',s:'normal',label:'Share Tech Mono',    gf:'Share+Tech+Mono'},
+  {f:'"Nova Mono",monospace',             w:'400',s:'normal',label:'Nova Mono',          gf:'Nova+Mono'},
+  {f:'"Monoton",sans-serif',              w:'400',s:'normal',label:'Monoton',            gf:'Monoton'},
+  {f:'"Faster One",sans-serif',           w:'400',s:'normal',label:'Faster One',         gf:'Faster+One'},
+  {f:'"Bagel Fat One",sans-serif',        w:'400',s:'normal',label:'Bagel Fat One',      gf:'Bagel+Fat+One'},
+  {f:'"Codystar",sans-serif',             w:'400',s:'normal',label:'Codystar',           gf:'Codystar'},
+  {f:'"Gravitas One",serif',              w:'400',s:'normal',label:'Gravitas One',       gf:'Gravitas+One'},
+  {f:'"UnifrakturCook",serif',            w:'700',s:'normal',label:'UnifrakturCook',     gf:'UnifrakturCook:wght@700'},
+  {f:'"Pirata One",serif',               w:'400',s:'normal',label:'Pirata One',         gf:'Pirata+One'},
+  {f:'"Caveat Brush",cursive',            w:'400',s:'normal',label:'Caveat Brush',       gf:'Caveat+Brush'},
+  {f:'"Permanent Marker",cursive',        w:'400',s:'normal',label:'Permanent Marker',   gf:'Permanent+Marker'},
+  {f:'"Rampart One",cursive',             w:'400',s:'normal',label:'Rampart One',        gf:'Rampart+One'},
+  {f:'"Bruno Ace SC",sans-serif',         w:'400',s:'normal',label:'Bruno Ace SC',       gf:'Bruno+Ace+SC'},
+];
+
+// Pick 15 random fonts for this session and inject a single Google Fonts link
+const SESSION_FONTS=shuffle(ALL_FONTS).slice(0,15);
+(function(){
+  if(document.querySelector('link[data-header-fonts]')) return;
+  const families=SESSION_FONTS.map(f=>f.gf).join('&family=');
+  const lnk=document.createElement('link');
+  lnk.rel='stylesheet';
+  lnk.setAttribute('data-header-fonts','1');
+  lnk.href=`https://fonts.googleapis.com/css2?family=${families}&display=swap`;
+  document.head.appendChild(lnk);
+})();
+
+// ─── Layout helpers ───────────────────────────────────────────────────────────
+function mkLayout(anchor,w){
+  if(anchor==='L')return{x:PAD,ta:'start',L:PAD,R:PAD+w};
+  if(anchor==='R')return{x:VW-PAD,ta:'end',L:VW-PAD-w,R:VW-PAD};
+  return{x:VW/2,ta:'middle',L:VW/2-w/2,R:VW/2+w/2};
+}
+function clamp(l){
+  let{x,ta,L,R}=l;
+  if(L<PAD){const d=PAD-L;x+=d;L+=d;R+=d;}
+  if(R>VW-PAD){const d=R-(VW-PAD);x-=d;L-=d;R-=d;}
+  return{...l,x,L,R};
+}
 function fitSzW(t,sz){const mxW=VW-PAD*2;while(sz>SZ_FLOOR&&mW(t,sz)>mxW)sz--;return Math.max(SZ_FLOOR,sz);}
-function ampPlace(va,adjB,adjS,sA){const adjTop=adjB-adjS;if(va==='top')return{yA:adjTop+sA};if(va==='bottom')return{yA:adjB};return{yA:adjTop+adjS/2+sA/2};}
-function star(n,outer,inner){let d='';for(let i=0;i<n*2;i++){const a=Math.PI/n*i-Math.PI/2,r=i%2===0?outer:inner;d+=(i?'L':'M')+Math.round(Math.cos(a)*r*100)/100+','+Math.round(Math.sin(a)*r*100)/100;}return d+'Z';}
+function fitSzWf(t,sz,f,w,s){const mxW=VW-PAD*2;while(sz>SZ_FLOOR&&mWf(t,sz,f,w,s)>mxW)sz--;return Math.max(SZ_FLOOR,sz);}
+function ampPlace(va,adjB,adjS,sA){
+  const adjTop=adjB-adjS;
+  if(va==='top')return{yA:adjTop+sA};
+  if(va==='bottom')return{yA:adjB};
+  return{yA:adjTop+adjS/2+sA/2};
+}
+
+// ─── Shape helpers ────────────────────────────────────────────────────────────
+function star(n,outer,inner){
+  let d='';
+  for(let i=0;i<n*2;i++){const a=Math.PI/n*i-Math.PI/2,r=i%2===0?outer:inner;d+=(i?'L':'M')+Math.round(Math.cos(a)*r*100)/100+','+Math.round(Math.sin(a)*r*100)/100;}
+  return d+'Z';
+}
 function tStar(d,cx,cy){return d.replace(/(-?\d+\.?\d*),(-?\d+\.?\d*)/g,(_,x,y)=>`${Math.round((+x+cx)*100)/100},${Math.round((+y+cy)*100)/100}`);}
 function attrs(m,f,s,sw){if(m==='filled')return`fill="${f}" stroke="none"`;return`fill="none" stroke="${s}" stroke-width="${sw}"`;}
 function shapeEl(m,tag,f,s,sw){return`${tag} ${attrs(m,f,s,sw)}/>`;}
+
+// ─── Shapes ───────────────────────────────────────────────────────────────────
 const SHAPES=[
-  {id:'circle',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<circle cx="${cx}" cy="${cy}" r="${r}"`,f,s,sw)},
-  {id:'square',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}"`,f,s,sw)},
-  {id:'squareT',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" transform="rotate(45,${cx},${cy})"`,f,s,sw)},
-  {id:'hexagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<6;i++){const a=Math.PI/3*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>`;}},
-  {id:'octagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<8;i++){const a=Math.PI/4*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>`;}},
-  {id:'triU',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.87},${cy+r*.5} ${cx-r*.87},${cy+r*.5}"`,f,s,sw)},
-  {id:'triD',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy+r} ${cx+r*.87},${cy-r*.5} ${cx-r*.87},${cy-r*.5}"`,f,s,sw)},
-  {id:'diamond',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.7},${cy} ${cx},${cy+r} ${cx-r*.7},${cy}"`,f,s,sw)},
-  {id:'diamondW',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r*.7} ${cx+r},${cy} ${cx},${cy+r*.7} ${cx-r},${cy}"`,f,s,sw)},
-  {id:'ellipseV',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r*.6}" ry="${r}"`,f,s,sw)},
-  {id:'ellipseH',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.6}"`,f,s,sw)},
-  {id:'ellipseT',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.5}" transform="rotate(35,${cx},${cy})"`,f,s,sw)},
-  {id:'heart',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const y=cy+r*.15,A=attrs(m,f,s,sw);return`<path d="M${cx},${y+r*.45} C${cx-r*1.1},${y-.05*r} ${cx-r*1.15},${y-r*.75} ${cx-r*.55},${y-r*.8} C${cx-r*.15},${y-r*.85} ${cx},${y-r*.45} ${cx},${y-r*.45} C${cx},${y-r*.45} ${cx+r*.15},${y-r*.85} ${cx+r*.55},${y-r*.8} C${cx+r*1.15},${y-r*.75} ${cx+r*1.1},${y-.05*r} ${cx},${y+r*.45}Z" ${A}/>`;}},
-  {id:'leaf',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx},${cy-r} Q${cx+r},${cy} ${cx},${cy+r} Q${cx-r},${cy} ${cx},${cy-r}Z" ${A}/>`;}},
-  {id:'cross',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const t=r*.35,A=attrs(m,f,s,sw);return`<path d="M${cx-t},${cy-r} L${cx+t},${cy-r} L${cx+t},${cy-t} L${cx+r},${cy-t} L${cx+r},${cy+t} L${cx+t},${cy+t} L${cx+t},${cy+r} L${cx-t},${cy+r} L${cx-t},${cy+t} L${cx-r},${cy+t} L${cx-r},${cy-t} L${cx-t},${cy-t}Z" ${A}/>`;}},
-  {id:'crossX',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const t=r*.35,A=attrs(m,f,s,sw);return`<path d="M${cx-t},${cy-r} L${cx+t},${cy-r} L${cx+t},${cy-t} L${cx+r},${cy-t} L${cx+r},${cy+t} L${cx+t},${cy+t} L${cx+t},${cy+r} L${cx-t},${cy+r} L${cx-t},${cy+t} L${cx-r},${cy+t} L${cx-r},${cy-t} L${cx-t},${cy-t}Z" ${A} transform="rotate(45,${cx},${cy})"/>`;}},
-  {id:'arrow',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx-r*.3},${cy-r*.28} L${cx+r*.2},${cy-r*.28} L${cx+r*.2},${cy-r*.65} L${cx+r},${cy} L${cx+r*.2},${cy+r*.65} L${cx+r*.2},${cy+r*.28} L${cx-r*.3},${cy+r*.28}Z" ${A}/>`;}},
-  {id:'crescent',cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx},${cy-r} A${r},${r} 0 1,1 ${cx},${cy+r} A${r*.72},${r*.72} 0 1,0 ${cx},${cy-r}Z" ${A}/>`;}},
-  {id:'ring',cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{if(m==='stroke')return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="none" stroke="${s}" stroke-width="${sw}"/>`;return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}" stroke="none"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="${BG}" stroke="none"/>`;}},
-  {id:'star4-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.22),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star5-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star6-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star8-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.28),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star4-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.45),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star5-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.48),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star6-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star8-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star10-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(10,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star5-fat',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.68),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star6-fat',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.7),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star8-fat',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.7),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star12-fat',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(12,r,r*.72),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'burst16',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(16,r,r*.75),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'burst24',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(24,r,r*.78),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'burst-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(20,r,r*.55),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'circle',    cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<circle cx="${cx}" cy="${cy}" r="${r}"`,f,s,sw)},
+  {id:'square',    cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}"`,f,s,sw)},
+  {id:'squareT',   cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" transform="rotate(45,${cx},${cy})"`,f,s,sw)},
+  {id:'hexagon',   cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<6;i++){const a=Math.PI/3*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>"`;}},
+  {id:'octagon',   cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<8;i++){const a=Math.PI/4*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>"`;}},
+  {id:'triU',      cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.87},${cy+r*.5} ${cx-r*.87},${cy+r*.5}"`,f,s,sw)},
+  {id:'triD',      cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy+r} ${cx+r*.87},${cy-r*.5} ${cx-r*.87},${cy-r*.5}"`,f,s,sw)},
+  {id:'diamond',   cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.7},${cy} ${cx},${cy+r} ${cx-r*.7},${cy}"`,f,s,sw)},
+  {id:'diamondW',  cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r*.7} ${cx+r},${cy} ${cx},${cy+r*.7} ${cx-r},${cy}"`,f,s,sw)},
+  {id:'ellipseV',  cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r*.6}" ry="${r}"`,f,s,sw)},
+  {id:'ellipseH',  cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.6}"`,f,s,sw)},
+  {id:'ellipseT',  cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${r*.5}" transform="rotate(35,${cx},${cy})"`,f,s,sw)},
+  {id:'heart',     cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{const y=cy+r*.15,A=attrs(m,f,s,sw);return`<path d="M${cx},${y+r*.45} C${cx-r*1.1},${y-.05*r} ${cx-r*1.15},${y-r*.75} ${cx-r*.55},${y-r*.8} C${cx-r*.15},${y-r*.85} ${cx},${y-r*.45} ${cx},${y-r*.45} C${cx},${y-r*.45} ${cx+r*.15},${y-r*.85} ${cx+r*.55},${y-r*.8} C${cx+r*1.15},${y-r*.75} ${cx+r*1.1},${y-.05*r} ${cx},${y+r*.45}Z" ${A}/>`;}},
+  {id:'leaf',      cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx},${cy-r} Q${cx+r},${cy} ${cx},${cy+r} Q${cx-r},${cy} ${cx},${cy-r}Z" ${A}/>`;}},
+  {id:'cross',     cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{const t=r*.35,A=attrs(m,f,s,sw);return`<path d="M${cx-t},${cy-r} L${cx+t},${cy-r} L${cx+t},${cy-t} L${cx+r},${cy-t} L${cx+r},${cy+t} L${cx+t},${cy+t} L${cx+t},${cy+r} L${cx-t},${cy+r} L${cx-t},${cy+t} L${cx-r},${cy+t} L${cx-r},${cy-t} L${cx-t},${cy-t}Z" ${A}/>`;}},
+  {id:'crossX',    cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{const t=r*.35,A=attrs(m,f,s,sw);return`<path d="M${cx-t},${cy-r} L${cx+t},${cy-r} L${cx+t},${cy-t} L${cx+r},${cy-t} L${cx+r},${cy+t} L${cx+t},${cy+t} L${cx+t},${cy+r} L${cx-t},${cy+r} L${cx-t},${cy+t} L${cx-r},${cy+t} L${cx-r},${cy-t} L${cx-t},${cy-t}Z" ${A} transform="rotate(45,${cx},${cy})"/>`;}},
+  {id:'arrow',     cat:'solid', cf:true, draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx-r*.3},${cy-r*.28} L${cx+r*.2},${cy-r*.28} L${cx+r*.2},${cy-r*.65} L${cx+r},${cy} L${cx+r*.2},${cy+r*.65} L${cx+r*.2},${cy+r*.28} L${cx-r*.3},${cy+r*.28}Z" ${A}/>`;}},
+  {id:'crescent',  cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx},${cy-r} A${r},${r} 0 1,1 ${cx},${cy+r} A${r*.72},${r*.72} 0 1,0 ${cx},${cy-r}Z" ${A}/>`;}},
+  {id:'ring',      cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{if(m==='stroke')return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="none" stroke="${s}" stroke-width="${sw}"/>`;return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}" stroke="none"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="none" stroke="${s}" stroke-width="2"/>"`;}},
+  {id:'star4-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.22),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star5-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star6-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star8-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.28),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star4-med',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.45),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star5-med',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.48),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star6-med',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star8-med',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star10-med',  cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(10,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star5-fat',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.68),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star6-fat',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.7),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star8-fat',   cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.7),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star12-fat',  cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(12,r,r*.72),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'burst16',     cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(16,r,r*.75),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'burst24',     cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(24,r,r*.78),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'burst-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(20,r,r*.55),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
   {id:'star4-needle',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.15),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
   {id:'star6-needle',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.18),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
   {id:'star8-needle',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.2),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'gear8',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.82),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'gear12',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(12,r,r*.82),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star3',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(3,r,r*.35),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star7-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(7,r,r*.3),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star9-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(9,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
-  {id:'star11-med',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(11,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'gear8',       cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(8,r,r*.82),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'gear12',      cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(12,r,r*.82),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star3',       cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(3,r,r*.35),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star7-spike', cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(7,r,r*.3),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
+  {id:'star11-med',  cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(11,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
 ];
 SHAPES.forEach(sh=>{if(sh.cat==='star')sh.w=1;if(sh.cat==='solid')sh.w=2.5;if(sh.cat==='hollow')sh.w=1.5;});
+
 const SHAPE_MODES=[{m:'filled',w:3},{m:'stroke',w:5}];
 function pickMode(){return weightedPick(SHAPE_MODES).m;}
-const SHAPE_COLORS=[WARM,WARM,COLD];
-const SENIOR_FONTS=[
-  {f:'"Bungee Shade",sans-serif',w:'400',s:'normal',label:'Bungee Shade'},
-  {f:'"Bungee Inline",sans-serif',w:'400',s:'normal',label:'Bungee Inline'},
-  {f:'"Bungee Outline",sans-serif',w:'400',s:'normal',label:'Bungee Outline'},
-  {f:'"Bungee",sans-serif',w:'400',s:'normal',label:'Bungee'},
-  {f:'"Rubik Mono One",sans-serif',w:'400',s:'normal',label:'Rubik Mono One'},
-  {f:'"Rubik Wet Paint",sans-serif',w:'400',s:'normal',label:'Rubik Wet Paint'},
-  {f:'"Rubik Glitch",sans-serif',w:'400',s:'normal',label:'Rubik Glitch'},
-  {f:'"Rubik Burned",sans-serif',w:'400',s:'normal',label:'Rubik Burned'},
-  {f:'"Rubik Beastly",sans-serif',w:'400',s:'normal',label:'Rubik Beastly'},
-  {f:'"Abril Fatface",serif',w:'400',s:'normal',label:'Abril Fatface'},
-  {f:'"Big Shoulders Display",sans-serif',w:'900',s:'normal',label:'Big Shoulders Black'},
-  {f:'"Yeseva One",serif',w:'400',s:'normal',label:'Yeseva One'},
-  {f:'"Bowlby One",sans-serif',w:'400',s:'normal',label:'Bowlby One'},
-  {f:'"Alfa Slab One",serif',w:'400',s:'normal',label:'Alfa Slab One'},
-  {f:'"VT323",monospace',w:'400',s:'normal',label:'VT323'},
-  {f:'"Major Mono Display",monospace',w:'400',s:'normal',label:'Major Mono'},
-  {f:'"Share Tech Mono",monospace',w:'400',s:'normal',label:'Share Tech Mono'},
-  {f:'"Nova Mono",monospace',w:'400',s:'normal',label:'Nova Mono'},
-  {f:'"Monoton",sans-serif',w:'400',s:'normal',label:'Monoton'},
-  {f:'"Faster One",sans-serif',w:'400',s:'normal',label:'Faster One'},
-  {f:'"Bagel Fat One",sans-serif',w:'400',s:'normal',label:'Bagel Fat One'},
-  {f:'"Codystar",sans-serif',w:'400',s:'normal',label:'Codystar'},
-  {f:'"Gravitas One",serif',w:'400',s:'normal',label:'Gravitas One'},
-  {f:'"UnifrakturCook",serif',w:'700',s:'normal',label:'UnifrakturCook'},
-  {f:'"Pirata One",serif',w:'400',s:'normal',label:'Pirata One'},
-  {f:'"Caveat Brush",cursive',w:'400',s:'normal',label:'Caveat Brush'},
-  {f:'"Permanent Marker",cursive',w:'400',s:'normal',label:'Permanent Marker'},
-  {f:'"Rampart One",cursive',w:'400',s:'normal',label:'Rampart One'},
-  {f:'"Bruno Ace SC",sans-serif',w:'400',s:'normal',label:'Bruno Ace SC'},
-];
-const D=COL,W=WARM,C=COLD;
-const COLOR_PALETTES=[
-  {c:[D,D,D],label:'All dark',w:1},
-  {c:[W,D,D],label:'Sr warm',w:1},{c:[D,W,D],label:'CD warm',w:1},{c:[D,D,W],label:'HoA warm',w:1},
-  {c:[W,D,W],label:'Sr+HoA warm',w:3},{c:[D,W,W],label:'CD+HoA warm',w:3},
-  {c:[C,D,D],label:'Sr cold',w:1},{c:[D,C,D],label:'CD cold',w:1},{c:[D,D,C],label:'HoA cold',w:1},
-  {c:[C,D,C],label:'Sr+HoA cold',w:3},{c:[D,C,C],label:'CD+HoA cold',w:3},
-  {c:[C,D,W],label:'Sr cold · HoA warm',w:4},{c:[W,D,C],label:'Sr warm · HoA cold',w:4},
-  {c:[C,W,D],label:'Sr cold · CD warm',w:4},{c:[D,C,W],label:'CD cold · HoA warm',w:4},
-  {c:[C,C,D],label:'Sr+CD cold',w:3},{c:[W,W,D],label:'Sr+CD warm',w:3},
-  {c:[D,W,C],label:'CD warm · HoA cold',w:4},
-];
-function pickPalette(){return weightedPick(COLOR_PALETTES);}
-const recentShapes=[],recentFonts=[];
-const RECENT_MEM=3;
-function pickNoRecent(pool,history,key){const fresh=pool.filter(x=>!history.includes(x[key]));const choice=fresh.length?weightedPick(fresh):weightedPick(pool);history.push(choice[key]);if(history.length>RECENT_MEM)history.shift();return choice;}
+
+// ─── No-repeat memory ─────────────────────────────────────────────────────────
+const recentShapes=[],recentFonts=[],recentAmpFonts=[];
+const RECENT_MEM=7;
+function pickNoRecent(pool,history,key){
+  const fresh=pool.filter(x=>!history.includes(x[key]));
+  const choice=fresh.length?weightedPick(fresh):weightedPick(pool);
+  history.push(choice[key]);
+  if(history.length>RECENT_MEM)history.shift();
+  return choice;
+}
+
+// ─── Generator ────────────────────────────────────────────────────────────────
 let _seq=0;
 function generate(){
   _seq++;
   const t1='Senior',t2='Creative Director',t3='Head of Art',tA='&';
-  const sf=pickNoRecent(SENIOR_FONTS,recentFonts,'label');
-  const pal=pickPalette();
+
+  const sf=pickNoRecent(SESSION_FONTS,recentFonts,'label');
+  const afPool=Math.random()<0.5?SESSION_FONTS:SESSION_FONTS.filter(f=>f.label!==sf.label);
+  const af=pickNoRecent(afPool.length?afPool:SESSION_FONTS,recentAmpFonts,'label');
+
+  const bgData=makeBackground();
+  const BG=bgData.bg;
+  const TC=bgData.textCols;
+
+  const SHAPE_COLORS=bgData.dark?[TC.warm,TC.warm,TC.cold]:[WARM,WARM,COLD];
+  const shapecol=pick(SHAPE_COLORS);
+  const strokecol=TC.col;
+
+  const D=TC.col,W=TC.warm,C=TC.cold;
+  const COLOR_PALETTES=[
+    {c:[D,D,D],w:1},{c:[W,D,D],w:1},{c:[D,W,D],w:1},{c:[D,D,W],w:1},
+    {c:[W,D,W],w:3},{c:[D,W,W],w:3},{c:[C,D,D],w:1},{c:[D,C,D],w:1},{c:[D,D,C],w:1},
+    {c:[C,D,C],w:3},{c:[D,C,C],w:3},{c:[C,D,W],w:4},{c:[W,D,C],w:4},
+    {c:[C,W,D],w:4},{c:[D,C,W],w:4},{c:[C,C,D],w:3},{c:[W,W,D],w:3},{c:[D,W,C],w:4},
+  ];
+  const pal=weightedPick(COLOR_PALETTES);
+
   const shapeObj=pickNoRecent(SHAPES,recentShapes,'id');
   let mode=pickMode();
   if(shapeObj.cat==='star'&&mode==='stroke'&&Math.random()<0.7)mode='filled';
-  const shapecol=pick(SHAPE_COLORS);
-  const strokecol=COL;
-  function mW1(t,sz){_cx.font=`${sf.s==='italic'?'italic ':''}${sf.w} ${sz}px ${sf.f.replace(/"/g,'').split(',')[0]},sans-serif`;return _cx.measureText(t).width;}
+
   const maxFitCD=fitSzW(t2,999);
   const base=rndInt(24,Math.min(maxFitCD,100));
   const vR=RATIOS.filter(r=>Math.round(base*r)>=SZ_FLOOR&&Math.round(base*r)<=base*2);
-  let s23=base,s1=fitSzW(t1,Math.round(base*pick(vR))),sA=fitSzW(tA,Math.round(base*pick(vR)));
+  let s23=base;
+  let s1=fitSzWf(t1,Math.round(base*pick(vR)),sf.f,sf.w,sf.s);
+  let sA=fitSzWf(tA,Math.round(base*pick(vR)),af.f,af.w,af.s);
   let g12=rndInt(GAP_MIN,GAP_MAX),g23=rndInt(GAP_MIN,GAP_MAX),gA=rndInt(GAP_MIN,GAP_MAX);
+
   const pairChoices=[[1,2],[1,2],[1,3],[1,3],[2,3]];
   const shared=pick(ANCHORS),pair=pick(pairChoices);
   const anch={1:null,2:null,3:null};
   pair.forEach(i=>anch[i]=shared);
   const third=[1,2,3].find(i=>!pair.includes(i));
   anch[third]=pick(ANCHORS.filter(a=>a!==shared));
+
   const fL2c=clamp(mkLayout(anch[2],mW(t2,s23))),fL3c=clamp(mkLayout(anch[3],mW(t3,s23)));
-  const wAc=mW(tA,sA);
+  const wAc=mWf(tA,sA,af.f,af.w,af.s);
   const valid=[];
   if(fL2c.R+SP+wAc<=VW-PAD)valid.push(1);
   valid.push(2);
@@ -249,76 +378,106 @@ function generate(){
   const pos=pick(weighted);
   const hasOwnRow=pos===2;
   const vAlign=hasOwnRow?'middle':pick(['middle','bottom']);
+
   function stackH(s1,s23,sA,g12,g23,gA){return s1+g12+s23+(hasOwnRow?gA+sA+gA:0)+g23+s23;}
   const maxH=VH-PAD*2;
   if(stackH(s1,s23,sA,g12,g23,gA)>maxH){g12=0;g23=0;gA=0;}
   if(stackH(s1,s23,sA,0,0,0)>maxH){
     const sc=maxH/(s1+s23+s23+(hasOwnRow?sA:0));
-    s23=Math.max(SZ_FLOOR,Math.floor(s23*sc));s1=Math.max(SZ_FLOOR,Math.floor(s1*sc));sA=Math.max(SZ_FLOOR,Math.floor(sA*sc));
-    s1=fitSzW(t1,s1);sA=fitSzW(tA,sA);g12=0;g23=0;gA=0;
+    s23=Math.max(SZ_FLOOR,Math.floor(s23*sc));
+    s1=Math.max(SZ_FLOOR,Math.floor(s1*sc));
+    sA=Math.max(SZ_FLOOR,Math.floor(sA*sc));
+    s1=fitSzWf(t1,s1,sf.f,sf.w,sf.s);
+    sA=fitSzWf(tA,sA,af.f,af.w,af.s);
+    g12=0;g23=0;gA=0;
   }
-  const fw1=mW1(t1,s1),fw2=mW(t2,s23),fw3=mW(t3,s23),fwA=mW(tA,sA);
+
+  const fw1=mWf(t1,s1,sf.f,sf.w,sf.s),fw2=mW(t2,s23),fw3=mW(t3,s23),fwA=mWf(tA,sA,af.f,af.w,af.s);
   const fL1=clamp(mkLayout(anch[1],fw1)),fL2=clamp(mkLayout(anch[2],fw2)),fL3=clamp(mkLayout(anch[3],fw3));
   const finalH=stackH(s1,s23,sA,g12,g23,gA);
   const topY=Math.round((VH-finalH)/2);
   const B1=topY+s1,B2=B1+g12+s23,BA=hasOwnRow?B2+gA+sA:null,B3=hasOwnRow?BA+gA+s23:B2+g23+s23;
+
   let xA,ampY,taA;
   if(pos===1){xA=fL2.R+SP;taA='start';}
   else if(pos===2){const LA=clamp(mkLayout(anch[2],fwA));xA=LA.x;taA=LA.ta;}
   else{xA=fL3.L-SP-fwA;taA='start';}
   if(hasOwnRow){ampY=BA;}
   else{const adjB=pos===1?B2:B3;ampY=ampPlace(vAlign,adjB,s23,sA).yA;}
+
   const ampCX=taA==='start'?xA+fwA/2:taA==='end'?xA-fwA/2:xA;
   const ampCY=ampY-sA*0.35;
   const minRFactor={'arrow':1.3,'ring':1.25,'heart':1.2}[shapeObj.id]||0.95;
   const shapeR=Math.round(sA*rnd(minRFactor,minRFactor+0.25));
   const sw=Math.min(4,Math.max(1.5,shapeR*.04));
   const ampHasFill=mode==='filled'&&shapeObj.cf;
+
   function lineOverlapsShape(lX,lW,lB,lSz,anchor){
     const lL=anchor==='start'?lX:anchor==='end'?lX-lW:lX-lW/2,lR=lL+lW;
     const lTop=lB-lSz,lBot=lB+lSz*0.2;
     const sL=ampCX-shapeR*1.1,sR=ampCX+shapeR*1.1,sTop=ampCY-shapeR*1.1,sBot=ampCY+shapeR*1.1;
     return lR>sL&&lL<sR&&lBot>sTop&&lTop<sBot;
   }
-  function safeColor(col,lX,lW,lB,lSz,anchor){if(col===COL)return col;if(!ampHasFill)return col;return lineOverlapsShape(lX,lW,lB,lSz,anchor)?COL:col;}
+  function safeColor(col,lX,lW,lB,lSz,anchor){
+    if(col===TC.col)return col;
+    if(!ampHasFill)return col;
+    return lineOverlapsShape(lX,lW,lB,lSz,anchor)?TC.col:col;
+  }
+
   const c1=safeColor(pal.c[0],fL1.x,fw1,B1,s1,fL1.ta);
   const c2=safeColor(pal.c[1],fL2.x,fw2,B2,s23,fL2.ta);
   const c3=safeColor(pal.c[2],fL3.x,fw3,B3,s23,fL3.ta);
-  function ampColorNoFill(){let adj=[];if(pos===1)adj=[c2];else if(pos==='3L')adj=[c3];else adj=[c2,c3];if(adj.some(c=>c===COL))return shapecol;return COL;}
+
+  function ampColorNoFill(){
+    let adj=[];
+    if(pos===1)adj=[c2];else if(pos==='3L')adj=[c3];else adj=[c2,c3];
+    if(adj.some(c=>c===TC.col))return shapecol;
+    return TC.col;
+  }
   const ampCol=ampHasFill?BG:ampColorNoFill();
-  const tf=(t,x,y,sz,ta,col,font,weight,fstyle)=>`<text x="${x}" y="${y}" text-anchor="${ta}" font-family=${font||FONT} font-weight="${weight||FW}" font-style="${fstyle||'normal'}" font-size="${sz}" fill="${col||COL}">${t}</text>`;
-  let out=`<rect width="${VW}" height="${VH}" fill="${BG}"/>`;
+
+  const tf=(t,x,y,sz,ta,col,font,weight,fstyle)=>
+    `<text x="${x}" y="${y}" text-anchor="${ta}" font-family=${font||'"Unbounded",sans-serif'} font-weight="${weight||'700'}" font-style="${fstyle||'normal'}" font-size="${sz}" fill="${col||TC.col}">${t}</text>`;
+
+  let out=bgData.inner;
   out+=shapeObj.draw(ampCX,ampCY,shapeR,mode,shapecol,strokecol,sw);
-  out+=`<text x="${xA}" y="${ampY}" text-anchor="${taA}" font-family=${FONT} font-weight="${FW}" font-size="${sA}" fill="${ampCol}">&amp;</text>`;
+  out+=tf(tA,xA,ampY,sA,taA,ampCol,af.f,af.w,af.s);
   out+=tf(t1,fL1.x,B1,s1,fL1.ta,c1,sf.f,sf.w,sf.s);
   out+=tf(t2,fL2.x,B2,s23,fL2.ta,c2);
   out+=tf(t3,fL3.x,B3,s23,fL3.ta,c3);
+
   const posLabel=pos===1?'right of CD':pos===2?'own row':'left of HoA';
-  const shapeLabel=`${shapeObj.id}/${mode}/${shapecol===WARM?'warm':'cold'}`;
-  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,palLabel:pal.label,posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA}};
+  const shapeLabel=`${shapeObj.id}/${mode}/${shapecol===WARM||shapecol===TC.warm?'warm':'cold'}`;
+  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,afLabel:af.label,palLabel:'adapted',posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA,bgLabel:bgData.label,texLabel:bgData.texLabel}};
 }
+
+// ─── Public API ───────────────────────────────────────────────────────────────
 function renderHeader(svgEl,opts){
   opts=opts||{};
   const{svg,state}=generate();
+  let inner=svg;
+  if(opts.debug){
+    const debugCol=inner.includes('near-black')||inner.includes('black')?'rgba(255,255,255,0.3)':'rgba(0,0,0,0.2)';
+    inner+=`<text x="${PAD}" y="${VH-8}" font-family="monospace" font-size="9" fill="${debugCol}">#${state.n} · ${state.bgLabel}/${state.texLabel} · Sr:${state.sfLabel} · &:${state.afLabel}</text>`;
+  }
   svgEl.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
   svgEl.setAttribute('preserveAspectRatio','xMidYMid meet');
-  svgEl.innerHTML=svg;
+  svgEl.innerHTML=inner;
   return state;
 }
+
 global.renderHeader=renderHeader;
+global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 })(window);
 
-// ═══════════════════════════════════════════════
-// WIDGET CONTROLLER
-// ═══════════════════════════════════════════════
+
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
 const TIMER_MS=10000;
 let lastState={},timer=null,prog=null,startTime=null,lastVote=null;
 
 function render(){
-  lastState=renderHeader(document.getElementById('svg'));
-  document.getElementById('inf').textContent='#'+lastState.n;
-  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
+  lastState=renderHeader(document.getElementById('svg'),{debug:true});
+  document.getElementById('inf').textContent='#'+lastState.n+' · '+lastState.bgLabel+'/'+lastState.texLabel;
   lastVote=null;
   document.getElementById('btn-like').classList.remove('chosen');
   document.getElementById('btn-dislike').classList.remove('chosen');
@@ -326,11 +485,9 @@ function render(){
 }
 
 function startProgress(){
-  clearTimeout(timer);
-  clearInterval(prog);
+  clearTimeout(timer);clearInterval(prog);
   startTime=Date.now();
-  const bar=document.getElementById('prog');
-  bar.style.width='0%';
+  const bar=document.getElementById('prog');bar.style.width='0%';
   prog=setInterval(function(){
     const pct=Math.min(100,(Date.now()-startTime)/TIMER_MS*100);
     bar.style.width=pct+'%';
@@ -339,9 +496,10 @@ function startProgress(){
       if(lastVote){
         const s=lastState;
         fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
-            position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
-        }).catch(()=>{});
+          body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',ampFont:s.afLabel||'',
+            bg:s.bgLabel||'',tex:s.texLabel||'',position:s.posLabel||'',vAlign:s.vAlign||'',
+            base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
+        }).catch(function(){});
       }
       timer=setTimeout(render,100);
     }
@@ -355,21 +513,20 @@ function castVote(vote){
 }
 
 function devVote(v){
-  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
+  document.querySelectorAll('.fb-btn').forEach(function(b){b.classList.remove('chosen');});
   document.querySelector('.fb-btn.'+v).classList.add('chosen');
   const notes=document.getElementById('notes').value.trim();
   const s=lastState;
-  console.log(`[dev] ${v} — #${s.n}: shape="${s.shape}", font="${s.sfLabel}", palette="${s.palLabel}", &="${s.posLabel}"${s.vAlign?' · '+s.vAlign:''}, base=${s.s23} s1=${s.s1} sA=${s.sA}${notes?' | '+notes:''}`);
+  const msg=(v==='yes'?'✓ Working':'✗ Not working')+' — #'+s.n+': bg='+s.bgLabel+'/'+s.texLabel+', shape="'+s.shape+'", Sr="'+s.sfLabel+'", &="'+s.afLabel+'"'+(notes?' | '+notes:'');
+  if(typeof sendPrompt!=='undefined') sendPrompt(msg);
+  else console.log('[dev]',msg);
   document.getElementById('notes').value='';
   setTimeout(render,400);
 }
 
-// Boot
 render();
 document.fonts.ready.then(function(){
-  const s=document.getElementById('svg');
-  const state=renderHeader(s);
-  lastState=state;
+  lastState=renderHeader(document.getElementById('svg'),{debug:true});
 });
 </script>
 </body>

@@ -1,10 +1,5 @@
-/* header.css — fonts for header.js
- * Body fonts (Unbounded) load first — used by CD, HoA, and &
- * Display fonts for Senior load with font-display:swap so they never block render
+/* header.css — core font for pauloengler.com
+ * Unbounded is used for Creative Director, Head of Art, and nav.
+ * The 15 display fonts for Senior and & are loaded dynamically by header.js.
  */
-
-/* Core — loads fast, needed for CD + HoA text */
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap');
-
-/* Display fonts for Senior — deferred, swap in when ready */
-@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&family=Rubik+Mono+One&family=Rubik+Wet+Paint&family=Rubik+Glitch&family=Rubik+Burned&family=Rubik+Beastly&family=Abril+Fatface&family=Bodoni+Moda:ital,wght@1,900&family=Big+Shoulders+Display:wght@900&family=Yeseva+One&family=Bowlby+One&family=Alfa+Slab+One&family=VT323&family=Major+Mono+Display&family=Share+Tech+Mono&family=Nova+Mono&family=Monoton&family=Faster+One&family=Bagel+Fat+One&family=Codystar&family=Gravitas+One&family=UnifrakturCook:wght@700&family=Pirata+One&family=Caveat+Brush&family=Permanent+Marker&family=Rampart+One&family=Bruno+Ace+SC&display=swap');
