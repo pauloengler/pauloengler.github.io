@@ -21,10 +21,18 @@
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
     .nav-left a:hover, .nav-right a:hover { color: #F7F4EE; }
     .hero { background: #F7F4EE; border-radius: 16px; overflow: hidden; }
+    .hero-header-wrap { position: relative; }
+    .hero-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: #926650; width: 0%; z-index: 10; }
+    .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
+    .hero-vote { display: flex; align-items: center; gap: 16px; padding: 10px 16px; border-top: 1px solid rgba(10,10,10,0.06); }
+    .hero-vote-text { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(10,10,10,0.4); line-height: 1.6; flex: 1; }
+    .hero-vote-btns { display: flex; gap: 8px; flex-shrink: 0; }
+    .hero-vote-btn { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid rgba(10,10,10,0.12); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(10,10,10,0.4); transition: border-color .2s, color .2s, transform .15s; }
+    .hero-vote-btn:hover { border-color: rgba(10,10,10,0.35); color: #0A0A0A; transform: scale(1.08); }
+    .hero-vote-btn.chosen { border: 2px solid #0A0A0A; color: #0A0A0A; }
     .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 16px 40px; text-align: center; background: transparent; }
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.4); line-height: 1.6; }
     .hero-sub:empty { display: none; }
-    .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
     .filter-chip { border-radius: 16px; overflow: hidden; background: #F7F4EE; }
     .view-toggle { background: #F7F4EE; padding: 12px 12px 0; }
     .toggle-track { display: flex; background: #EEEAE2; padding: 6px; border-radius: 14px; gap: 6px; }
@@ -115,7 +123,31 @@
 </nav>
 
 <section class="hero">
-  <svg id="hero-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="hero-header-wrap">
+    <svg id="hero-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="hero-progress" id="hero-progress"></div>
+  </div>
+  <div class="hero-vote" id="hero-vote">
+    <p class="hero-vote-text">This header is AI-generated. Your reaction helps improve future designs.</p>
+    <div class="hero-vote-btns">
+      <button class="hero-vote-btn" id="hero-btn-like" onclick="heroVote('like')" title="I like it">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+          <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/>
+          <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/>
+        </svg>
+      </button>
+      <button class="hero-vote-btn" id="hero-btn-dislike" onclick="heroVote('dislike')" title="Not for me">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+          <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/>
+          <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 </section>
 
 <div class="hero-sublines" id="hero-sublines"></div>
@@ -557,9 +589,52 @@ document.addEventListener('keydown', function(e) {
 </div>
 <script src="header.js"></script>
 <script>
-  var _heroSvg = document.getElementById('hero-svg');
-  renderHeader(_heroSvg);
-  document.fonts.ready.then(function(){ renderHeader(_heroSvg); });
+(function(){
+  var SHEET_URL='https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
+  var TIMER_MS=10000;
+  var svg=document.getElementById('hero-svg');
+  var bar=document.getElementById('hero-progress');
+  var lastState={}, timer=null, prog=null, startTime=null, voted=false;
+
+  function heroRender(){
+    lastState=renderHeader(svg);
+    voted=false;
+    document.getElementById('hero-btn-like').classList.remove('chosen');
+    document.getElementById('hero-btn-dislike').classList.remove('chosen');
+    startProgress();
+  }
+
+  function startProgress(){
+    clearTimeout(timer);
+    clearInterval(prog);
+    startTime=Date.now();
+    bar.style.width='0%';
+    prog=setInterval(function(){
+      var pct=Math.min(100,(Date.now()-startTime)/TIMER_MS*100);
+      bar.style.width=pct+'%';
+      if(pct>=100){ clearInterval(prog); timer=setTimeout(heroRender,100); }
+    },80);
+  }
+
+  window.heroVote=function(vote){
+    if(voted)return;
+    voted=true;
+    document.getElementById('hero-btn-like').classList.remove('chosen');
+    document.getElementById('hero-btn-dislike').classList.remove('chosen');
+    document.getElementById(vote==='like'?'hero-btn-like':'hero-btn-dislike').classList.add('chosen');
+    var s=lastState;
+    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({vote:vote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
+        position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
+    }).catch(function(){});
+  };
+
+  // Boot — render immediately, re-render on fonts without resetting timer
+  heroRender();
+  document.fonts.ready.then(function(){
+    lastState=renderHeader(svg);
+  });
+})();
 </script>
 </body>
 </html>
