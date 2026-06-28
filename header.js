@@ -52,10 +52,10 @@ function ampPlace(va,adjB,adjS,sA){
 // ─── Shape helpers ──────────────────────────────────────────────────────────
 function star(n,outer,inner){
   let d='';
-  for(let i=0;i<n*2;i++){const a=Math.PI/n*i-Math.PI/2,r=i%2===0?outer:inner;d+=(i?'L':'M')+Math.cos(a)*r+','+Math.sin(a)*r;}
+  for(let i=0;i<n*2;i++){const a=Math.PI/n*i-Math.PI/2,r=i%2===0?outer:inner;d+=(i?'L':'M')+Math.round(Math.cos(a)*r*100)/100+','+Math.round(Math.sin(a)*r*100)/100;}
   return d+'Z';
 }
-function tStar(d,cx,cy){return d.replace(/(-?\d+\.?\d*),(-?\d+\.?\d*)/g,(_,x,y)=>`${+x+cx},${+y+cy}`);}
+function tStar(d,cx,cy){return d.replace(/(-?\d+\.?\d*),(-?\d+\.?\d*)/g,(_,x,y)=>`${Math.round((+x+cx)*100)/100},${Math.round((+y+cy)*100)/100}`);}
 function attrs(m,f,s,sw){
   if(m==='filled') return`fill="${f}" stroke="none"`;
   return`fill="none" stroke="${s}" stroke-width="${sw}"`;
