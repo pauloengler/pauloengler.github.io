@@ -15,7 +15,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
     .site { display: flex; flex-direction: column; gap: 8px; background: #0A0A0A; min-height: 100vh; padding: 8px; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: 8px; z-index: 100; border-radius: 16px; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: 0; z-index: 100; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left { flex-wrap: wrap; row-gap: 4px; }
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
@@ -25,7 +25,8 @@
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.4); line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
-    .view-toggle { background: #F7F4EE; padding: 12px 12px 0; position: relative; z-index: 1; border-radius: 16px 16px 0 0; }
+    .filter-chip { border-radius: 16px; overflow: hidden; background: #F7F4EE; }
+    .view-toggle { background: #F7F4EE; padding: 12px 12px 0; }
     .toggle-track { display: flex; background: #EEEAE2; padding: 6px; border-radius: 14px; gap: 6px; }
     .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 12px 12px; cursor: pointer; gap: 4px; border-radius: 10px; border: none; outline: none; background: transparent; transition: background 0.28s cubic-bezier(.4,0,.2,1); }
     .toggle-option:focus { outline: none; }
@@ -34,7 +35,7 @@
     .toggle-option.active .t-label { color: #F7F4EE; }
     .toggle-option .t-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); text-align: center; line-height: 1.4; transition: color 0.2s; }
     .toggle-option.active .t-sub { color: rgba(247,244,238,0.5); }
-    .search-bar { background: #F7F4EE; padding: 12px 12px 12px; position: relative; z-index: 1; margin-top: 0; border-radius: 0 0 16px 16px; }
+    .search-bar { background: #F7F4EE; padding: 12px; }
     .search-inner { background: #ffffff !important; border-radius: 10px; display: flex; align-items: center; gap: 10px; padding: 10px 16px; color-scheme: light; }
     .search-inner svg { flex-shrink: 0; color: rgba(10,10,10,0.35); }
     .search-input { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A !important; outline: none !important; border: none !important; box-shadow: none !important; background: #ffffff !important; width: 100%; -webkit-appearance: none; appearance: none; color-scheme: light; }
@@ -82,10 +83,10 @@
     .qv-title { padding: 14px 16px; font-family: 'Unbounded', sans-serif; font-size: 9px; font-weight: 300; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
     .project-desc { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; color: rgba(10,10,10,0.6); line-height: 1.75; }
     .loading { padding: 60px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; grid-column: 1 / -1; }
-    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; margin-top: auto; border-radius: 16px; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
-    .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
-    .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
+    .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-left a:hover, .footer-right a:hover { color: #F7F4EE; }
     @media (max-width: 600px) {
       .site { padding: 6px; gap: 6px; }
       nav { padding: 16px 20px; top: 6px; }
@@ -119,24 +120,26 @@
 
 <div class="hero-sublines" id="hero-sublines"></div>
 
-<div class="view-toggle" id="view-toggle">
-  <div class="toggle-track">
-    <button class="toggle-option active" id="btn-full" onclick="setView('full')">
-      <span class="t-label">All</span>
-      <span class="t-sub">Everything in this portfolio</span>
-    </button>
-    <button class="toggle-option" id="btn-select" onclick="setView('select')">
-      <span class="t-label">Selected</span>
-      <span class="t-sub">Work that represents me best</span>
-    </button>
+<div class="filter-chip">
+  <div class="view-toggle" id="view-toggle">
+    <div class="toggle-track">
+      <button class="toggle-option active" id="btn-full" onclick="setView('full')">
+        <span class="t-label">All</span>
+        <span class="t-sub">Everything in this portfolio</span>
+      </button>
+      <button class="toggle-option" id="btn-select" onclick="setView('select')">
+        <span class="t-label">Selected</span>
+        <span class="t-sub">Work that represents me best</span>
+      </button>
+    </div>
   </div>
-</div>
-<div class="search-bar" id="search-bar">
-  <div class="search-inner">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-    </svg>
-    <input class="search-input" id="search-input" type="text" placeholder="Search by project, client, category, tags...">
+  <div class="search-bar" id="search-bar">
+    <div class="search-inner">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input class="search-input" id="search-input" type="text" placeholder="Search by project, client, category, tags...">
+    </div>
   </div>
 </div>
 <main id="main-content">
