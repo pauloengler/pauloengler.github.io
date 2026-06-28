@@ -383,7 +383,7 @@ function renderHeader(svgEl,opts){
     inner+=`<text x="${PAD}" y="${VH-8}" font-family="monospace" font-size="9" fill="${debugCol}">#${state.n} · ${state.bgLabel}/${state.texLabel} · Sr:${state.sfLabel} · &:${state.afLabel}</text>`;
   }
   svgEl.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
-  svgEl.setAttribute('preserveAspectRatio','xMidYMid meet');
+  svgEl.setAttribute('preserveAspectRatio','xMidYMid slice');
   svgEl.innerHTML=inner;
   return state;
 }
