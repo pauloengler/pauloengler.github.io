@@ -7,7 +7,7 @@
 (function(global){
 'use strict';
 
-const VW=800,VH=250,PAD=32;
+const VW=800,VH=320,PAD=36;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
@@ -383,7 +383,7 @@ function renderHeader(svgEl,opts){
     inner+=`<text x="${PAD}" y="${VH-8}" font-family="monospace" font-size="9" fill="${debugCol}">#${state.n} · ${state.bgLabel}/${state.texLabel} · Sr:${state.sfLabel} · &:${state.afLabel}</text>`;
   }
   svgEl.setAttribute('viewBox',`0 0 ${VW} ${VH}`);
-  svgEl.setAttribute('preserveAspectRatio','xMidYMid slice');
+  svgEl.setAttribute('preserveAspectRatio','xMidYMid meet');
   svgEl.innerHTML=inner;
   return state;
 }
