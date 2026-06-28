@@ -2,57 +2,224 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Header Widget · Test</title>
 <link rel="stylesheet" href="header.css">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#1a1a1a;padding:20px;font-family:sans-serif;}
-.outer{width:100%;aspect-ratio:16/5;background:#F7F4EE;border-radius:10px;overflow:hidden;position:relative;}
-.outer svg{position:absolute;inset:0;width:100%;height:100%;}
-.bottom{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
+
+/* ── HEADER CHIP ── */
+.header-chip{position:relative;width:100%;aspect-ratio:16/5;background:#F7F4EE;border-radius:14px;overflow:hidden;}
+.header-chip svg{position:absolute;inset:0;width:100%;height:100%;}
+
+/* Progress bar */
+.progress-bar{position:absolute;bottom:0;left:0;height:3px;background:#926650;width:0%;transition:width .1s linear;z-index:10;border-radius:0 2px 2px 0;}
+
+/* Refresh button */
+.refresh-btn{position:absolute;bottom:10px;right:12px;z-index:20;background:rgba(10,10,10,0.55);border:none;color:#F7F4EE;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;backdrop-filter:blur(4px);}
+.refresh-btn:hover{background:rgba(10,10,10,0.85);}
+.refresh-btn svg{width:14px;height:14px;}
+
+/* ── PUBLIC VOTING SECTION ── */
+.vote-section{margin-top:10px;background:#F7F4EE;border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:16px;}
+.vote-intro-sub{font-family:'Unbounded',sans-serif;font-weight:700;font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:#0A0A0A;line-height:1.7;flex:1;}
+.vote-btns{display:flex;gap:10px;flex-shrink:0;}
+.vote-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(10,10,10,0.15);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,transform .15s;padding:0;}
+.vote-btn:hover{border-color:rgba(10,10,10,0.4);transform:scale(1.08);}
+.vote-btn.chosen{border:2.5px solid #0A0A0A;}
+
+/* ── DEV PANEL ── */
+.dev-panel{margin-top:10px;background:#1a1a1a;border-radius:14px;padding:16px;}
+.dev-panel summary{font-family:monospace;font-size:10px;color:#666;cursor:pointer;letter-spacing:.05em;outline:none;list-style:none;}
+.dev-panel summary::-webkit-details-marker{display:none;}
+.dev-inner{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
 .feedback-row{display:flex;gap:8px;align-items:center;}
-.fb-label{font-size:11px;color:#888;letter-spacing:.04em;margin-right:4px;}
-.fb-btn{font-size:12px;padding:6px 20px;border-radius:6px;border:0.5px solid #555;background:#2a2a2a;color:#eee;cursor:pointer;font-weight:600;transition:background .15s,border-color .15s;}
+.fb-label{font-size:10px;color:#666;letter-spacing:.04em;}
+.fb-btn{font-size:11px;padding:5px 16px;border-radius:6px;border:0.5px solid #444;background:#2a2a2a;color:#ccc;cursor:pointer;font-weight:600;transition:background .15s;}
 .fb-btn.yes:hover,.fb-btn.yes.chosen{background:#1a3d1a;border-color:#3a7a3a;color:#7dda7d;}
 .fb-btn.no:hover,.fb-btn.no.chosen{background:#3d1a1a;border-color:#7a3a3a;color:#da7d7d;}
-.notes-box{width:100%;background:#242424;border:0.5px solid #444;border-radius:6px;color:#ccc;font-family:monospace;font-size:11px;padding:8px 10px;resize:none;outline:none;line-height:1.5;}
-.notes-box::placeholder{color:#555;}
-.inf{font-family:monospace;font-size:10px;color:#555;margin-top:2px;}
+.notes-box{width:100%;background:#242424;border:0.5px solid #333;border-radius:6px;color:#ccc;font-family:monospace;font-size:10px;padding:7px 10px;resize:none;outline:none;line-height:1.5;}
+.notes-box::placeholder{color:#444;}
+.inf{font-family:monospace;font-size:9px;color:#444;}
 </style>
 </head>
 <body>
-<div class="outer"><svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
-<div class="bottom">
-  <div class="feedback-row">
-    <span class="fb-label">Working?</span>
-    <button class="fb-btn yes" onclick="sendFeedback('yes')">✓ Yes</button>
-    <button class="fb-btn no"  onclick="sendFeedback('no')">✗ No</button>
-    <span class="inf" id="inf"></span>
-  </div>
-  <textarea class="notes-box" id="notes" rows="3" placeholder="Notes (optional) — what could be better, or what's wrong"></textarea>
+
+<!-- HEADER CHIP -->
+<div class="header-chip" id="header-chip">
+  <svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="progress-bar" id="progress-bar"></div>
+  <button class="refresh-btn" id="refresh-btn" title="New artwork" onclick="manualRefresh()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+  </button>
 </div>
+
+<!-- PUBLIC VOTING -->
+<div class="vote-section">
+  <p class="vote-intro-sub">This header is AI-generated. Your reaction helps improve future designs.</p>
+  <div class="vote-btns">
+    <button class="vote-btn" id="btn-like" onclick="castVote('like')" title="I like it">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/>
+      </svg>
+    </button>
+    <button class="vote-btn" id="btn-dislike" onclick="castVote('dislike')" title="Not for me">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+        <line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5"/>
+        <line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- DEV PANEL (collapsed) -->
+<details class="dev-panel">
+  <summary>⚙ Dev panel</summary>
+  <div class="dev-inner">
+    <div class="feedback-row">
+      <span class="fb-label">Dev verdict:</span>
+      <button class="fb-btn yes" onclick="sendFeedback('yes')">✓ Yes</button>
+      <button class="fb-btn no"  onclick="sendFeedback('no')">✗ No</button>
+      <span class="inf" id="inf"></span>
+    </div>
+    <textarea class="notes-box" id="notes" rows="2" placeholder="Notes — what's wrong or could be better"></textarea>
+  </div>
+</details>
+
 <script src="header.js"></script>
 <script>
-let lastState={};
-function go(){
-  lastState=renderHeader(document.getElementById('svg'),{debug:true});
-  document.getElementById('inf').textContent='#'+lastState.n;
-  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
+const TIMER_MS = 10000;
+
+let lastState = {};
+let timerInterval = null;
+let progressInterval = null;
+let startTime = null;
+let hasVotedThisRound = false;
+
+// ── Render ──────────────────────────────────────────────
+function go() {
+  lastState = renderHeader(document.getElementById('svg'), {debug: false});
+  document.getElementById('inf').textContent = '#' + lastState.n;
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('chosen'));
+  resetVoteUI();
+  startTimer();
 }
-if(typeof sendPrompt==='undefined'){window.sendPrompt=function(msg){console.log('[feedback]',msg);};}
-function sendFeedback(verdict){
-  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
-  document.querySelector('.fb-btn.'+verdict).classList.add('chosen');
-  const notes=document.getElementById('notes').value.trim();
-  const s=lastState;
-  const prefix={yes:'✓ Working',no:'✗ Not working'}[verdict];
-  let msg=`${prefix} — #${s.n}: shape="${s.shape}", font="${s.sfLabel}", palette="${s.palLabel}", &="${s.posLabel}"${s.vAlign?' · '+s.vAlign:''}, base=${s.s23} s1=${s.s1} sA=${s.sA}.`;
-  if(notes) msg+=` Notes: "${notes}"`;
+
+// ── Auto-timer + progress bar ────────────────────────────
+function startTimer() {
+  clearInterval(timerInterval);
+  clearInterval(progressInterval);
+  startTime = Date.now();
+
+  const bar = document.getElementById('progress-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+
+  // Smooth progress
+  progressInterval = setInterval(function() {
+    const elapsed = Date.now() - startTime;
+    const pct = Math.min(100, (elapsed / TIMER_MS) * 100);
+    bar.style.transition = 'width .1s linear';
+    bar.style.width = pct + '%';
+    if (pct >= 100) clearInterval(progressInterval);
+  }, 100);
+
+  // Fire new render
+  timerInterval = setTimeout(function() {
+    go();
+  }, TIMER_MS);
+}
+
+function manualRefresh() {
+  clearTimeout(timerInterval);
+  clearInterval(progressInterval);
+  const bar = document.getElementById('progress-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '0%';
+  // Spin the refresh icon
+  const btn = document.getElementById('refresh-btn');
+  btn.style.transform = 'rotate(360deg)';
+  btn.style.transition = 'transform .4s ease';
+  setTimeout(() => { btn.style.transform = ''; btn.style.transition = ''; }, 400);
+  go();
+}
+
+// ── Public voting ─────────────────────────────────────────
+function resetVoteUI() {
+  hasVotedThisRound = false;
+  document.getElementById('btn-like').classList.remove('chosen');
+  document.getElementById('btn-dislike').classList.remove('chosen');
+}
+
+function castVote(vote) {
+  if (hasVotedThisRound) return;
+  hasVotedThisRound = true;
+
+  // Highlight chosen button
+  document.getElementById('btn-like').classList.remove('chosen');
+  document.getElementById('btn-dislike').classList.remove('chosen');
+  if (vote === 'like') {
+    document.getElementById('btn-like').classList.add('chosen');
+  } else {
+    document.getElementById('btn-dislike').classList.add('chosen');
+  }
+
+  // Send to Google Sheets
+  const s = lastState;
+  const payload = {
+    vote: vote,
+    shape: s.shape || '',
+    font: s.sfLabel || '',
+    palette: s.palLabel || '',
+    position: s.posLabel || '',
+    vAlign: s.vAlign || '',
+    base: s.s23 || '',
+    s1: s.s1 || '',
+    sA: s.sA || '',
+    notes: ''
+  };
+
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(function(err) {
+    console.warn('Vote log error:', err);
+  });
+}
+
+// ── Dev feedback (sends to Claude chat if available) ──────
+if (typeof sendPrompt === 'undefined') {
+  window.sendPrompt = function(msg) { console.log('[feedback]', msg); };
+}
+
+function sendFeedback(verdict) {
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('chosen'));
+  document.querySelector('.fb-btn.' + verdict).classList.add('chosen');
+  const notes = document.getElementById('notes').value.trim();
+  const s = lastState;
+  const prefix = {yes: '✓ Working', no: '✗ Not working'}[verdict];
+  let msg = `${prefix} — #${s.n}: shape="${s.shape}", font="${s.sfLabel}", palette="${s.palLabel}", &="${s.posLabel}"${s.vAlign ? ' · ' + s.vAlign : ''}, base=${s.s23} s1=${s.s1} sA=${s.sA}.`;
+  if (notes) msg += ` Notes: "${notes}"`;
   sendPrompt(msg);
-  document.getElementById('notes').value='';
-  setTimeout(go,400);
+  document.getElementById('notes').value = '';
+  setTimeout(go, 400);
 }
-go(); document.fonts.ready.then(go);
+
+// ── Boot ──────────────────────────────────────────────────
+go();
+document.fonts.ready.then(go);
 </script>
 </body>
 </html>
