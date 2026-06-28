@@ -17,22 +17,24 @@
     .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
     nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; position: sticky; top: 0; z-index: 100; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
-    .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
+    .nav-left { flex-wrap: wrap; row-gap: 4px; }
+    .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
     .hero { background: #F7F4EE; }
     .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 20px 40px 32px; text-align: center; }
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.5); line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
-    .view-toggle { background: #F7F4EE; padding: 12px 16px 0; }
+    .view-toggle { background: #F7F4EE; padding: 12px 16px 0; position: relative; z-index: 1; }
     .toggle-track { display: flex; background: #EEEAE2; padding: 6px; border-radius: 14px; gap: 6px; }
-    .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 12px 12px; cursor: pointer; gap: 4px; border-radius: 10px; border: none; background: transparent; transition: background 0.28s cubic-bezier(.4,0,.2,1); }
+    .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 12px 12px; cursor: pointer; gap: 4px; border-radius: 10px; border: none; outline: none; background: transparent; transition: background 0.28s cubic-bezier(.4,0,.2,1); }
+    .toggle-option:focus { outline: none; }
     .toggle-option.active { background: #0A0A0A; }
     .toggle-option .t-label { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; line-height: 1; color: rgba(10,10,10,0.25); transition: color 0.2s; }
     .toggle-option.active .t-label { color: #F7F4EE; }
     .toggle-option .t-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); text-align: center; line-height: 1.4; transition: color 0.2s; }
     .toggle-option.active .t-sub { color: rgba(247,244,238,0.5); }
-    .search-bar { background: #F7F4EE; padding: 12px 16px; border-top: 2px solid #0A0A0A; }
+    .search-bar { background: #F7F4EE; padding: 12px 16px; position: relative; z-index: 1; margin-top: -2px; }
     .search-inner { background: #ffffff !important; border-radius: 10px; display: flex; align-items: center; gap: 10px; padding: 10px 16px; color-scheme: light; }
     .search-inner svg { flex-shrink: 0; color: rgba(10,10,10,0.35); }
     .search-input { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A !important; outline: none !important; border: none !important; box-shadow: none !important; background: #ffffff !important; width: 100%; -webkit-appearance: none; appearance: none; color-scheme: light; }
@@ -40,7 +42,7 @@
     .search-input::placeholder { color: rgba(10,10,10,0.35) !important; opacity: 1; }
     .chapter-header { display: flex; justify-content: center; padding: 20px 40px; background: #F7F4EE; }
     .chapter-label { font-family: 'DM Serif Display', serif; font-style: italic; font-size: 32px; color: #0A0A0A; }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A; border-top: 2px solid #0A0A0A; border-bottom: 2px solid #0A0A0A; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A;  }
     .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
     .project-card:hover { background: #EEEAE2; }
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
@@ -65,12 +67,11 @@
     .project-meta { flex: 1; }
     .project-client { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-bottom: 5px; }
     .project-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; line-height: 1.15; text-transform: uppercase; letter-spacing: -0.01em; }
-    .btn-view { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.45); border: 1px solid rgba(10,10,10,0.2); padding: 0 12px 0 10px; height: 44px; white-space: nowrap; display: flex; align-items: center; gap: 7px; border-radius: 22px; transition: color 0.2s, border-color 0.2s; align-self: flex-start; }
-    .btn-view svg { flex-shrink: 0; transition: opacity 0.2s; }
+    .btn-view { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 10px; height: 18px; white-space: nowrap; display: flex; align-items: center; border-radius: 9px; transition: opacity 0.2s; align-self: flex-start; }
+    .btn-view:hover { opacity: 0.75; }
     .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; }
-    .btn-quick { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); border: 1px solid rgba(10,10,10,0.12); padding: 0 10px; height: 18px; white-space: nowrap; display: flex; align-items: center; border-radius: 9px; transition: color 0.2s, border-color 0.2s; cursor: pointer; background: none; }
-    .btn-quick:hover { color: #0A0A0A; border-color: rgba(10,10,10,0.4); }
-    .project-card:hover .btn-view { color: #0A0A0A; border-color: rgba(10,10,10,0.5); }
+    .btn-quick { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.1em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 10px; height: 18px; white-space: nowrap; display: flex; align-items: center; border-radius: 9px; transition: opacity 0.2s; cursor: pointer; }
+    .btn-quick:hover { opacity: 0.75; }
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
     .qv-overlay.open { display: flex; }
     .qv-close { font-family: 'Unbounded', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; border: 1.5px solid rgba(247,244,238,0.25); border-radius: 6px; padding: 12px 28px; cursor: pointer; transition: background 0.2s, border-color 0.2s; order: 2; }
@@ -466,7 +467,7 @@ function buildCard(p) {
           '<p class="project-name">' + p.name + '</p>' +
         '</div>' +
         '<div class="card-btns">' +
-          '<span class="btn-view"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>View Full Project</span>' +
+          '<span class="btn-view">View Full Project</span>' +
           (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">Quick View</button>' : '') +
         '</div>' +
       '</div>' +
