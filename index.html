@@ -15,12 +15,12 @@
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
     .hero { background: #F7F4EE; }
-    .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 32px 40px 0; }
+    .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 20px 40px 32px; text-align: center; }
     .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.35); line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
     @media (max-width: 600px) {
-      .hero-sublines { padding: 20px 20px 0; }
+      .hero-sublines { padding: 16px 20px 24px; }
       .hero svg { aspect-ratio: 4/3; }
     }
     .view-toggle { display: flex; gap: 2px; background: #0A0A0A; }
@@ -103,8 +103,8 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-sublines" id="hero-sublines"></div>
   <svg id="hero-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div class="hero-sublines" id="hero-sublines"></div>
 </section>
 
 <div class="view-toggle" id="view-toggle">
