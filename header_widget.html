@@ -216,8 +216,17 @@ function sendFeedback(verdict) {
 }
 
 // ── Boot ──────────────────────────────────────────────────
+// Render immediately (no font wait) so header appears fast,
+// then re-render once with correct fonts — but only restart
+// the timer on the FIRST call, not the font-swap re-render.
 go();
-document.fonts.ready.then(go);
+document.fonts.ready.then(function() {
+  // Re-render SVG content only, don't restart the timer
+  const svg = document.getElementById('svg');
+  const state = renderHeader(svg, {debug: false});
+  lastState = state;
+  document.getElementById('inf').textContent = '#' + state.n;
+});
 </script>
 </body>
 </html>
