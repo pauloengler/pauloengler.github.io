@@ -94,10 +94,16 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
-const VW=800,VH=320,PAD=36;
+const VW=800,VH=250,PAD=32;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
@@ -460,7 +466,7 @@ function generate(){
 
   const posLabel=pos===1?'right of CD':pos===2?'own row':'left of HoA';
   const shapeLabel=`${shapeObj.id}/${mode}/${shapecol===WARM||shapecol===TC.warm?'warm':'cold'}`;
-  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,afLabel:af.label,palLabel:'adapted',posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA,bgLabel:bgData.label,texLabel:bgData.texLabel}};
+  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,afLabel:af.label,palLabel:'adapted',posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA,bgLabel:bgData.label,texLabel:bgData.texLabel,bgColor:bgData.bg}};
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -481,6 +487,7 @@ function renderHeader(svgEl,opts){
 global.renderHeader=renderHeader;
 global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 })(window);
+
 
 
 

@@ -7,7 +7,7 @@
 (function(global){
 'use strict';
 
-const VW=800,VH=320,PAD=36;
+const VW=800,VH=250,PAD=32;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
@@ -370,7 +370,7 @@ function generate(){
 
   const posLabel=pos===1?'right of CD':pos===2?'own row':'left of HoA';
   const shapeLabel=`${shapeObj.id}/${mode}/${shapecol===WARM||shapecol===TC.warm?'warm':'cold'}`;
-  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,afLabel:af.label,palLabel:'adapted',posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA,bgLabel:bgData.label,texLabel:bgData.texLabel}};
+  return{svg:out,state:{n:_seq,shape:shapeLabel,sfLabel:sf.label,afLabel:af.label,palLabel:'adapted',posLabel,vAlign:hasOwnRow?null:vAlign,s23,s1,sA,bgLabel:bgData.label,texLabel:bgData.texLabel,bgColor:bgData.bg}};
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
