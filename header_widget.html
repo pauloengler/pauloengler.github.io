@@ -117,7 +117,7 @@ function go() {
 
 // ── Auto-timer + progress bar ────────────────────────────
 function startTimer() {
-  clearInterval(timerInterval);
+  clearTimeout(timerInterval);
   clearInterval(progressInterval);
   startTime = Date.now();
 
@@ -125,7 +125,6 @@ function startTimer() {
   bar.style.transition = 'none';
   bar.style.width = '0%';
 
-  // Smooth progress
   progressInterval = setInterval(function() {
     const elapsed = Date.now() - startTime;
     const pct = Math.min(100, (elapsed / TIMER_MS) * 100);
@@ -134,7 +133,6 @@ function startTimer() {
     if (pct >= 100) clearInterval(progressInterval);
   }, 100);
 
-  // Fire new render
   timerInterval = setTimeout(function() {
     go();
   }, TIMER_MS);
