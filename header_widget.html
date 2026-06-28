@@ -24,7 +24,7 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
 .vote-btns{display:flex;gap:10px;flex-shrink:0;}
 .vote-btn{width:44px;height:44px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s;}
 .vote-btn:hover{transform:scale(1.1);}
-.vote-btn.chosen{outline:3px solid #0A0A0A;outline-offset:2px;}
+.vote-btn.chosen{box-shadow:0 0 0 3px #0A0A0A;}
 .vote-cta{display:flex;align-items:center;flex-shrink:0;animation:blink-cta 1s ease-in-out infinite;}
 .vote-cta svg{display:block;width:88px;height:36px;flex-shrink:0;}
 @keyframes blink-cta{0%,100%{opacity:1;transform:translateX(0);}50%{opacity:.25;transform:translateX(5px);}}
@@ -49,12 +49,6 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
 <div class="header-chip">
   <svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
   <div class="progress-bar" id="prog"></div>
-  <button class="refresh-btn" onclick="manualRefresh()" title="New artwork">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/>
-      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-    </svg>
-  </button>
 </div>
 
 <div class="vote-section">
@@ -319,14 +313,13 @@ global.renderHeader=renderHeader;
 // ═══════════════════════════════════════════════
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
 const TIMER_MS=10000;
-let lastState={},timer=null,prog=null,startTime=null,voted=false;
+let lastState={},timer=null,prog=null,startTime=null,lastVote=null;
 
 function render(){
-  console.log('[widget] rendering new artwork');
   lastState=renderHeader(document.getElementById('svg'));
   document.getElementById('inf').textContent='#'+lastState.n;
   document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
-  voted=false;
+  lastVote=null;
   document.getElementById('btn-like').classList.remove('chosen');
   document.getElementById('btn-dislike').classList.remove('chosen');
   startProgress();
@@ -338,35 +331,27 @@ function startProgress(){
   startTime=Date.now();
   const bar=document.getElementById('prog');
   bar.style.width='0%';
-  console.log('[widget] timer started, will fire in '+TIMER_MS+'ms');
   prog=setInterval(function(){
     const pct=Math.min(100,(Date.now()-startTime)/TIMER_MS*100);
     bar.style.width=pct+'%';
     if(pct>=100){
-      console.log('[widget] timer hit 100%, calling render');
       clearInterval(prog);
+      if(lastVote){
+        const s=lastState;
+        fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
+            position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
+        }).catch(()=>{});
+      }
       timer=setTimeout(render,100);
     }
   },80);
 }
 
-function manualRefresh(){
-  clearTimeout(timer);
-  clearInterval(prog);
-  render();
-}
-
 function castVote(vote){
-  if(voted)return;
-  voted=true;
-  document.getElementById('btn-like').classList.remove('chosen');
-  document.getElementById('btn-dislike').classList.remove('chosen');
-  document.getElementById(vote==='like'?'btn-like':'btn-dislike').classList.add('chosen');
-  const s=lastState;
-  fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({vote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
-      position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
-  }).catch(()=>{});
+  lastVote=(lastVote===vote)?null:vote;
+  document.getElementById('btn-like').classList.toggle('chosen',lastVote==='like');
+  document.getElementById('btn-dislike').classList.toggle('chosen',lastVote==='dislike');
 }
 
 function devVote(v){

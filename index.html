@@ -29,6 +29,7 @@
     .hero-vote-btns { display: flex; gap: 10px; flex-shrink: 0; }
     .hero-vote-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform .15s; }
     .hero-vote-btn:hover { transform: scale(1.1); }
+    .hero-vote-btn.chosen { box-shadow: 0 0 0 3px #0A0A0A; }
     .vote-cta { display: flex; align-items: center; flex-shrink: 0; animation: blink-cta 1s ease-in-out infinite; }
     .vote-cta svg { display: block; width: 88px; height: 36px; flex-shrink: 0; }
     @keyframes blink-cta { 0%, 100% { opacity: 1; transform: translateX(0); } 50% { opacity: 0.25; transform: translateX(5px); } }
@@ -602,11 +603,11 @@ document.addEventListener('keydown', function(e) {
   var TIMER_MS=10000;
   var svg=document.getElementById('hero-svg');
   var bar=document.getElementById('hero-progress');
-  var lastState={}, timer=null, prog=null, startTime=null, voted=false;
+  var lastState={}, timer=null, prog=null, startTime=null, lastVote=null;
 
   function heroRender(){
     lastState=renderHeader(svg);
-    voted=false;
+    lastVote=null;
     document.getElementById('hero-btn-like').classList.remove('chosen');
     document.getElementById('hero-btn-dislike').classList.remove('chosen');
     startProgress();
@@ -620,21 +621,27 @@ document.addEventListener('keydown', function(e) {
     prog=setInterval(function(){
       var pct=Math.min(100,(Date.now()-startTime)/TIMER_MS*100);
       bar.style.width=pct+'%';
-      if(pct>=100){ clearInterval(prog); timer=setTimeout(heroRender,100); }
+      if(pct>=100){
+        clearInterval(prog);
+        // Log vote to Sheet only now, with whatever was last selected
+        if(lastVote){
+          var s=lastState;
+          fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
+              position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
+          }).catch(function(){});
+        }
+        timer=setTimeout(heroRender,100);
+      }
     },80);
   }
 
   window.heroVote=function(vote){
-    if(voted)return;
-    voted=true;
-    document.getElementById('hero-btn-like').classList.remove('chosen');
-    document.getElementById('hero-btn-dislike').classList.remove('chosen');
-    document.getElementById(vote==='like'?'hero-btn-like':'hero-btn-dislike').classList.add('chosen');
-    var s=lastState;
-    fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({vote:vote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
-        position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
-    }).catch(function(){});
+    // Toggle: clicking selected button deselects it
+    var current=lastVote;
+    lastVote= (current===vote) ? null : vote;
+    document.getElementById('hero-btn-like').classList.toggle('chosen', lastVote==='like');
+    document.getElementById('hero-btn-dislike').classList.toggle('chosen', lastVote==='dislike');
   };
 
   // Boot — render immediately, re-render on fonts without resetting timer
