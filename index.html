@@ -14,18 +14,18 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
-    .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: 0; z-index: 100; }
+    .site { display: flex; flex-direction: column; gap: 8px; background: #0A0A0A; min-height: 100vh; padding: 8px; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: 8px; z-index: 100; border-radius: 16px; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left { flex-wrap: wrap; row-gap: 4px; }
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
     .nav-left a:hover, .nav-right a:hover { color: #F7F4EE; }
-    .hero { background: #F7F4EE; }
-    .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 20px 40px 32px; text-align: center; background: #0A0A0A; }
-    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.5); line-height: 1.6; }
+    .hero { background: #F7F4EE; border-radius: 16px; overflow: hidden; }
+    .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 16px 40px; text-align: center; background: transparent; }
+    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.4); line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .hero svg { display: block; width: 100%; aspect-ratio: 16/5; }
-    .view-toggle { background: #F7F4EE; padding: 12px 16px 0; position: relative; z-index: 1; }
+    .view-toggle { background: #F7F4EE; padding: 12px 12px 0; position: relative; z-index: 1; border-radius: 16px 16px 0 0; }
     .toggle-track { display: flex; background: #EEEAE2; padding: 6px; border-radius: 14px; gap: 6px; }
     .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 12px 12px; cursor: pointer; gap: 4px; border-radius: 10px; border: none; outline: none; background: transparent; transition: background 0.28s cubic-bezier(.4,0,.2,1); }
     .toggle-option:focus { outline: none; }
@@ -34,16 +34,16 @@
     .toggle-option.active .t-label { color: #F7F4EE; }
     .toggle-option .t-sub { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); text-align: center; line-height: 1.4; transition: color 0.2s; }
     .toggle-option.active .t-sub { color: rgba(247,244,238,0.5); }
-    .search-bar { background: #F7F4EE; padding: 12px 16px; position: relative; z-index: 1; margin-top: -2px; }
+    .search-bar { background: #F7F4EE; padding: 12px 12px 12px; position: relative; z-index: 1; margin-top: 0; border-radius: 0 0 16px 16px; }
     .search-inner { background: #ffffff !important; border-radius: 10px; display: flex; align-items: center; gap: 10px; padding: 10px 16px; color-scheme: light; }
     .search-inner svg { flex-shrink: 0; color: rgba(10,10,10,0.35); }
     .search-input { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; letter-spacing: 0.05em; color: #0A0A0A !important; outline: none !important; border: none !important; box-shadow: none !important; background: #ffffff !important; width: 100%; -webkit-appearance: none; appearance: none; color-scheme: light; }
     .search-input:focus { outline: none !important; border: none !important; box-shadow: none !important; }
     .search-input::placeholder { color: rgba(10,10,10,0.35) !important; opacity: 1; }
-    .chapter-header { display: flex; justify-content: center; padding: 14px 40px; background: #0A0A0A; }
+    .chapter-header { display: flex; justify-content: center; padding: 14px 40px; background: #0A0A0A; border-radius: 16px; }
     .chapter-label { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: -0.02em; text-transform: uppercase; color: #F7F4EE; }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; background: #0A0A0A;  }
-    .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 8px; background: #0A0A0A; border-radius: 16px; overflow: hidden; }
+    .project-card { display: flex; flex-direction: column; background: #F7F4EE; padding: 12px; text-decoration: none; color: inherit; transition: background 0.2s; border-radius: 12px; }
     .project-card:hover { background: #EEEAE2; }
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
     .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 4px; border: none; margin-left: 1px; }
@@ -87,11 +87,14 @@
     .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
     @media (max-width: 600px) {
-      nav { padding: 16px 20px; }
+      .site { padding: 6px; gap: 6px; }
+      nav { padding: 16px 20px; top: 6px; }
       .hero-sublines { padding: 12px 20px 20px; }
       .hero svg { aspect-ratio: unset; width: 100%; height: 48vw; }
-      .chapter-header { padding: 16px 20px; }
-      .projects-grid { grid-template-columns: 1fr; }
+      .view-toggle { padding: 10px 10px 0; }
+      .search-bar { padding: 10px 10px 10px; }
+      .chapter-header { padding: 12px 20px; }
+      .projects-grid { grid-template-columns: 1fr; gap: 6px; }
       footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
@@ -112,8 +115,9 @@
 
 <section class="hero">
   <svg id="hero-svg" xmlns="http://www.w3.org/2000/svg"></svg>
-  <div class="hero-sublines" id="hero-sublines"></div>
 </section>
+
+<div class="hero-sublines" id="hero-sublines"></div>
 
 <div class="view-toggle" id="view-toggle">
   <div class="toggle-track">
