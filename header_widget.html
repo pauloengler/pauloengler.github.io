@@ -119,8 +119,8 @@ const SHAPES=[
   {id:'circle',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<circle cx="${cx}" cy="${cy}" r="${r}"`,f,s,sw)},
   {id:'square',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}"`,f,s,sw)},
   {id:'squareT',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<rect x="${cx-r}" y="${cy-r}" width="${r*2}" height="${r*2}" transform="rotate(45,${cx},${cy})"`,f,s,sw)},
-  {id:'hexagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<6;i++){const a=Math.PI/3*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>"`;}},
-  {id:'octagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<8;i++){const a=Math.PI/4*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>"`;}},
+  {id:'hexagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<6;i++){const a=Math.PI/3*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>`;}},
+  {id:'octagon',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{let d='';for(let i=0;i<8;i++){const a=Math.PI/4*i;d+=(i?'L':'M')+Math.round((cx+Math.cos(a)*r)*100)/100+','+Math.round((cy+Math.sin(a)*r)*100)/100;}return`<path d="${d}Z" ${attrs(m,f,s,sw)}/>`;}},
   {id:'triU',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.87},${cy+r*.5} ${cx-r*.87},${cy+r*.5}"`,f,s,sw)},
   {id:'triD',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy+r} ${cx+r*.87},${cy-r*.5} ${cx-r*.87},${cy-r*.5}"`,f,s,sw)},
   {id:'diamond',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>shapeEl(m,`<polygon points="${cx},${cy-r} ${cx+r*.7},${cy} ${cx},${cy+r} ${cx-r*.7},${cy}"`,f,s,sw)},
@@ -134,7 +134,7 @@ const SHAPES=[
   {id:'crossX',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const t=r*.35,A=attrs(m,f,s,sw);return`<path d="M${cx-t},${cy-r} L${cx+t},${cy-r} L${cx+t},${cy-t} L${cx+r},${cy-t} L${cx+r},${cy+t} L${cx+t},${cy+t} L${cx+t},${cy+r} L${cx-t},${cy+r} L${cx-t},${cy+t} L${cx-r},${cy+t} L${cx-r},${cy-t} L${cx-t},${cy-t}Z" ${A} transform="rotate(45,${cx},${cy})"/>`;}},
   {id:'arrow',cat:'solid',cf:true,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx-r*.3},${cy-r*.28} L${cx+r*.2},${cy-r*.28} L${cx+r*.2},${cy-r*.65} L${cx+r},${cy} L${cx+r*.2},${cy+r*.65} L${cx+r*.2},${cy+r*.28} L${cx-r*.3},${cy+r*.28}Z" ${A}/>`;}},
   {id:'crescent',cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{const A=attrs(m,f,s,sw);return`<path d="M${cx},${cy-r} A${r},${r} 0 1,1 ${cx},${cy+r} A${r*.72},${r*.72} 0 1,0 ${cx},${cy-r}Z" ${A}/>`;}},
-  {id:'ring',cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{if(m==='stroke')return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="none" stroke="${s}" stroke-width="${sw}"/>`;return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}" stroke="none"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="${BG}" stroke="none"/>"`;}},
+  {id:'ring',cat:'hollow',cf:false,draw:(cx,cy,r,m,f,s,sw)=>{if(m==='stroke')return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s}" stroke-width="${sw}"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="none" stroke="${s}" stroke-width="${sw}"/>`;return`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}" stroke="none"/><circle cx="${cx}" cy="${cy}" r="${r*.48}" fill="${BG}" stroke="none"/>`;}},
   {id:'star4-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(4,r,r*.22),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
   {id:'star5-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(5,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
   {id:'star6-spike',cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(6,r,r*.25),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
@@ -313,6 +313,7 @@ const TIMER_MS=10000;
 let lastState={},timer=null,prog=null,startTime=null,voted=false;
 
 function render(){
+  console.log('[widget] rendering new artwork');
   lastState=renderHeader(document.getElementById('svg'));
   document.getElementById('inf').textContent='#'+lastState.n;
   document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('chosen'));
@@ -328,10 +329,15 @@ function startProgress(){
   startTime=Date.now();
   const bar=document.getElementById('prog');
   bar.style.width='0%';
+  console.log('[widget] timer started, will fire in '+TIMER_MS+'ms');
   prog=setInterval(function(){
     const pct=Math.min(100,(Date.now()-startTime)/TIMER_MS*100);
     bar.style.width=pct+'%';
-    if(pct>=100){clearInterval(prog);timer=setTimeout(render,100);}
+    if(pct>=100){
+      console.log('[widget] timer hit 100%, calling render');
+      clearInterval(prog);
+      timer=setTimeout(render,100);
+    }
   },80);
 }
 
@@ -346,7 +352,7 @@ function castVote(vote){
   voted=true;
   document.getElementById('btn-like').classList.remove('chosen');
   document.getElementById('btn-dislike').classList.remove('chosen');
-  document.getElementById('btn-'+vote==='like'?'like':'dislike').classList.add('chosen');
+  document.getElementById(vote==='like'?'btn-like':'btn-dislike').classList.add('chosen');
   const s=lastState;
   fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({vote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
