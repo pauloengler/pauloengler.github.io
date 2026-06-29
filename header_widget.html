@@ -149,19 +149,32 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
-const VW=800,VH=350,PAD=80;
+const VW=800,VH=350,PAD=120;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
 const RATIOS=[1/8,1/6,1/4,1/3,1/2,1,2,3,4];
+const MEASURE_SAFETY=1.08; // 8% buffer — display fonts often wider than canvas measures
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const _cv=document.createElement('canvas'),_cx=_cv.getContext('2d');
-function mW(t,sz){_cx.font=`700 ${sz}px Unbounded,sans-serif`;return _cx.measureText(t).width;}
-function mWf(t,sz,f,w,s){_cx.font=`${s==='italic'?'italic ':''}${w} ${sz}px ${f.replace(/"/g,'').split(',')[0]},sans-serif`;return _cx.measureText(t).width;}
+function mW(t,sz){_cx.font=`700 ${sz}px Unbounded,sans-serif`;return _cx.measureText(t).width*MEASURE_SAFETY;}
+function mWf(t,sz,f,w,s){_cx.font=`${s==='italic'?'italic ':''}${w} ${sz}px ${f.replace(/"/g,'').split(',')[0]},sans-serif`;return _cx.measureText(t).width*MEASURE_SAFETY;}
 function rndInt(a,b){return Math.floor(a+Math.random()*(b-a+1));}
 function rnd(a,b){return a+Math.random()*(b-a);}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
@@ -447,56 +460,37 @@ function generate(){
 
   const fw1=mWf(t1,s1,sf.f,sf.w,sf.s),fw2=mW(t2,s23),fw3=mW(t3,s23),fwA=mWf(tA,sA,af.f,af.w,af.s);
 
-  // Pick anchor type (which edge of the word snaps to the alignment column)
-  // and alignment column X for each line independently
-  // The column X is constrained so the full word stays within [PAD, VW-PAD]
-  function makeWordLayout(fw, anchorType){
-    // anchorType: 'L'=left edge, 'C'=center, 'R'=right edge of word
-    // colX: the canvas X where that edge sits
-    let minColX, maxColX;
-    if(anchorType==='L'){ minColX=PAD;        maxColX=VW-PAD-fw; } // left edge: word goes right
-    if(anchorType==='C'){ minColX=PAD+fw/2;   maxColX=VW-PAD-fw/2; } // center: word spans both
-    if(anchorType==='R'){ minColX=PAD+fw;      maxColX=VW-PAD; } // right edge: word goes left
-    // Safety: if word too wide, force center
-    if(minColX>maxColX){ anchorType='C'; minColX=VW/2; maxColX=VW/2; }
-    const colX=minColX+(maxColX-minColX)*Math.random();
-    const L=anchorType==='L'?colX:anchorType==='C'?colX-fw/2:colX-fw;
-    const R=L+fw;
-    const ta=anchorType==='L'?'start':anchorType==='C'?'middle':'end';
-    return{x:colX,ta,L,R,col:colX,anchorType};
-  }
-
-  // Pick anchor types for each line
+  // Pick anchor types for each line independently
   const a1=pick(ANCHORS),a2=pick(ANCHORS),a3=pick(ANCHORS);
 
-  // Optionally share alignment column between lines (50% chance per pair)
-  function sharedCol(layoutA, layoutB, anchorA, anchorB){
-    // Use layoutA's column as reference, recompute layoutB using same X if it fits
-    const colX=layoutA.col;
-    let fw=layoutB.R-layoutB.L;
-    let L=anchorB==='L'?colX:anchorB==='C'?colX-fw/2:colX-fw;
-    let R=L+fw;
-    if(L>=PAD && R<=VW-PAD){
-      const ta=anchorB==='L'?'start':anchorB==='C'?'middle':'end';
-      return{x:colX,ta,L,R,col:colX,anchorType:anchorB};
-    }
-    return null; // doesn't fit, keep independent
+  // Pick ONE shared alignment column X — constrained so ALL words fit regardless of their anchor
+  // For each word: L-anchored needs colX >= PAD, R-anchored needs colX <= VW-PAD
+  //                C-anchored needs PAD+fw/2 <= colX <= VW-PAD-fw/2
+  function safeRange(fw, anchorType){
+    if(anchorType==='L') return{min:PAD, max:VW-PAD-fw};
+    if(anchorType==='R') return{min:PAD+fw, max:VW-PAD};
+    return{min:PAD+fw/2, max:VW-PAD-fw/2};
+  }
+  // Intersect safe ranges for all three lines
+  const r1=safeRange(fw1,a1), r2=safeRange(fw2,a2), r3=safeRange(fw3,a3);
+  const minCol=Math.max(r1.min,r2.min,r3.min);
+  const maxCol=Math.min(r1.max,r2.max,r3.max);
+  // If no single column works for all three, fall back to center for wide words
+  const colX = minCol<=maxCol
+    ? minCol + (maxCol-minCol)*Math.random()
+    : VW/2; // safe fallback
+
+  function makeLayout(fw, anchorType){
+    const col=colX;
+    const L=anchorType==='L'?col:anchorType==='C'?col-fw/2:col-fw;
+    const R=L+fw;
+    const ta=anchorType==='L'?'start':anchorType==='C'?'middle':'end';
+    return{x:col, ta, L, R, col};
   }
 
-  let fL1=makeWordLayout(fw1,a1);
-  let fL2=makeWordLayout(fw2,a2);
-  let fL3=makeWordLayout(fw3,a3);
-
-  // 60% chance: align Senior's anchor column with CD's
-  if(Math.random()<0.6){
-    const shared=sharedCol(fL2,fL1,a2,a1)||sharedCol(fL1,fL2,a1,a2);
-    if(shared){ if(Math.random()<0.5) fL1=shared; else fL2=sharedCol(fL1,fL2,a1,a2)||fL2; }
-  }
-  // 60% chance: align HoA's anchor column with CD's
-  if(Math.random()<0.6){
-    const shared=sharedCol(fL2,fL3,a2,a3)||sharedCol(fL3,fL2,a3,a2);
-    if(shared){ if(Math.random()<0.5) fL3=shared; else fL2=sharedCol(fL3,fL2,a3,a2)||fL2; }
-  }
+  const fL1=makeLayout(fw1,a1);
+  const fL2=makeLayout(fw2,a2);
+  const fL3=makeLayout(fw3,a3);
 
   const wAc=mWf(tA,sA,af.f,af.w,af.s);
   const valid=[];
@@ -586,6 +580,8 @@ function renderHeader(svgEl,opts){
 global.renderHeader=renderHeader;
 global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 })(window);
+
+
 
 
 
