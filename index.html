@@ -33,9 +33,9 @@
     .hero-vote-btn.chosen { box-shadow: 0 0 0 3px #0A0A0A; }
     .vote-cta { display: flex; align-items: center; flex: 0 0 88px; width: 88px; overflow: hidden; animation: blink-cta 1s ease-in-out infinite; }
     .vote-cta svg { display: block; width: 88px; height: 36px; min-width: 88px; max-width: 88px; }
-    @keyframes blink-cta { 0%, 100% { opacity: 1; transform: translateX(0); } 50% { opacity: 0.25; transform: translateX(5px); } }
+    @keyframes blink-cta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
     .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 16px 40px; text-align: center; background: transparent; }
-    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(247,244,238,0.4); line-height: 1.6; }
+    .hero-sub { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #ffffff; line-height: 1.6; }
     .hero-sub:empty { display: none; }
     .filter-chip { border-radius: 16px; overflow: hidden; background: #F7F4EE; }
     .view-toggle { background: #F7F4EE; padding: 12px 12px 0; }
@@ -603,7 +603,7 @@ document.addEventListener('keydown', function(e) {
 <script>
 (function(){
   var SHEET_URL='https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
-  var TIMER_MS=10000;
+  var TIMER_MS=5000;
   var svg=document.getElementById('hero-svg');
   var bar=document.getElementById('hero-progress');
   var lastState={}, timer=null, prog=null, startTime=null, lastVote=null;
