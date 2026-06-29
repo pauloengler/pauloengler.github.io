@@ -15,7 +15,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
     .site { display: flex; flex-direction: column; gap: 8px; background: #0A0A0A; min-height: 100vh; padding: 8px; }
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: 0; z-index: 100; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; position: sticky; top: -8px; z-index: 100; margin: -8px -8px 0; border-radius: 0; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
     .nav-left { flex-wrap: wrap; row-gap: 4px; }
     .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(247,244,238,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
@@ -101,7 +101,7 @@
     .footer-left a:hover, .footer-right a:hover { color: #F7F4EE; }
     @media (max-width: 600px) {
       .site { padding: 6px; gap: 6px; }
-      nav { padding: 16px 20px; top: 6px; }
+      nav { padding: 16px 20px; top: -6px; margin: -6px -6px 0; }
       .hero-sublines { padding: 12px 20px 20px; }
       .hero-header-wrap { aspect-ratio: unset; height: 60vw; }
       .vote-cta { flex: 0 0 60px; width: 60px; }
