@@ -161,10 +161,64 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
-const VW=800,VH=350,PAD=120;
+const VW=800,VH=350,PAD=140;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
@@ -238,24 +292,48 @@ function texWaves(bg,dark){
   }
   return`<rect width="${VW}" height="${VH}" fill="${bg}"/><path d="${path}" fill="none" stroke="${tc(dark,op)}" stroke-width="1.5"/>`;
 }
-function texBlobs(bg,dark){
-  const op=rnd(0.06,0.13).toFixed(2);
-  let blobs='';
-  for(let i=0;i<rndInt(3,6);i++){
-    const cx=rndInt(40,VW-40),cy=rndInt(30,VH-30),rx=rndInt(50,130),ry=rndInt(30,90),rot=rndInt(0,180);
-    blobs+=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${tc(dark,op)}" transform="rotate(${rot},${cx},${cy})"/>`;
-  }
-  return`<rect width="${VW}" height="${VH}" fill="${bg}"/>${blobs}`;
+// ─── Gradient backgrounds ─────────────────────────────────────────────────────
+// Pairs of BG_PALETTE colors that work together as gradients
+const GRADIENT_PAIRS=[
+  // Light to light
+  ['#F7F4EE','#EDE8DF'],['#F7F4EE','#E4E0D8'],['#EDE8DF','#DDD8CF'],
+  ['#E0E4EA','#DFE4E0'],['#E4E0D8','#DFE4E0'],
+  // Light to mid
+  ['#F7F4EE','#C8C0B4'],['#EDE8DF','#B8B0A4'],['#E4E0D8','#C8C0B4'],
+  ['#E0E4EA','#7A7A80'],
+  // Mid to mid
+  ['#C8C0B4','#9A9A9A'],['#B8B0A4','#8A8078'],['#9A9A9A','#7A7A80'],
+  // Mid to dark
+  ['#C8C0B4','#5A4E44'],['#9A9A9A','#484850'],['#8A8078','#4A4440'],
+  // Dark to dark
+  ['#5A4E44','#2A2A2A'],['#484850','#1A1A1A'],['#4A4440','#2E2820'],
+  ['#3A3530','#1A1A1A'],
+];
+
+function makeGradientBg(){
+  const pair=pick(GRADIENT_PAIRS);
+  const angle=rndInt(0,90); // 0=horizontal→, 90=vertical↓
+  const rad=angle*Math.PI/180;
+  // SVG linearGradient uses x1,y1,x2,y2 in 0-1 space
+  const x1=0.5-Math.cos(rad)*0.5, y1=0.5-Math.sin(rad)*0.5;
+  const x2=0.5+Math.cos(rad)*0.5, y2=0.5+Math.sin(rad)*0.5;
+  const id='grad'+Math.floor(Math.random()*99999);
+  // Determine if overall tone is dark (second stop is dark)
+  const palEntry=BG_PALETTES.find(p=>p.bg===pair[1])||BG_PALETTES.find(p=>p.bg===pair[0])||BG_PALETTES[0];
+  const inner=`<defs><linearGradient id="${id}" x1="${x1.toFixed(3)}" y1="${y1.toFixed(3)}" x2="${x2.toFixed(3)}" y2="${y2.toFixed(3)}" gradientUnits="objectBoundingBox"><stop offset="0%" stop-color="${pair[0]}"/><stop offset="100%" stop-color="${pair[1]}"/></linearGradient></defs><rect width="${VW}" height="${VH}" fill="url(#${id})"/>`;
+  return{inner, bg:pair[0], dark:palEntry.dark, label:`grad-${angle}`, texLabel:'gradient', textCols:bgTextColors(palEntry)};
 }
+
 const TEXTURES=[
   {id:'stripes',w:3,fn:texStripes},
   {id:'dots',   w:3,fn:texDots},
   {id:'grid',   w:2,fn:texGrid},
   {id:'waves',  w:2,fn:texWaves},
-  {id:'blobs',  w:3,fn:texBlobs},
   {id:'none',   w:3,fn:(bg)=>`<rect width="${VW}" height="${VH}" fill="${bg}"/>`},
 ];
 function makeBackground(){
+  // 30% chance of gradient instead of flat+texture
+  if(Math.random()<0.3) return makeGradientBg();
   const pal=weightedPick(BG_PALETTES);
   const tex=weightedPick(TEXTURES);
   const inner=tex.id==='none'?tex.fn(pal.bg):tex.fn(pal.bg,pal.dark);
@@ -545,17 +623,130 @@ function generate(){
     if(adj.some(c=>c===TC.col))return shapecol;
     return TC.col;
   }
-  const ampCol=ampHasFill?BG:ampColorNoFill();
+  // Guarantee & text never matches its shape color
+  let ampCol=ampHasFill?BG:ampColorNoFill();
+  if(ampCol===shapecol){
+    // Pick any palette color that differs from shapecol
+    const opts=[TC.col,TC.warm,TC.cold,BG].filter(c=>c!==shapecol);
+    ampCol=pick(opts.length?opts:[TC.col]);
+  }
 
   const tf=(t,x,y,sz,ta,col,font,weight,fstyle)=>
     `<text x="${x}" y="${y}" text-anchor="${ta}" font-family=${font||'"Unbounded",sans-serif'} font-weight="${weight||'700'}" font-style="${fstyle||'normal'}" font-size="${sz}" fill="${col||TC.col}">${t}</text>`;
 
+  // ── Text background shapes ─────────────────────────────────────────────────
+  // Each line: {x (svg text-anchor x), ta, L, R (pixel bounds), baseline, size}
+  const lines=[
+    {L:fL1.L,R:fL1.R,top:B1-s1,bot:B1*1.12,c:c1},
+    {L:fL2.L,R:fL2.R,top:B2-s23,bot:B2*1.12,c:c2},
+    {L:fL3.L,R:fL3.R,top:B3-s23,bot:B3*1.12,c:c3},
+  ];
+
+  // Pick a text-bg color different from text color
+  function pickTextBgColor(textCol){
+    const opts=[TC.col,TC.warm,TC.cold,shapecol].filter(c=>c!==textCol);
+    return pick(opts.length?opts:[TC.warm]);
+  }
+
+  // Stroke style: solid, dashed, dotted, gapped
+  function strokeStyle(sw){
+    const t=pick(['solid','solid','solid','dashed','dotted','gapped']);
+    if(t==='solid')   return{sa:'none',sw};
+    if(t==='dashed')  return{sa:`${sw*4},${sw*3}`,sw};
+    if(t==='dotted')  return{sa:`${sw},${sw*2}`,sw:sw*1.5};
+    if(t==='gapped')  return{sa:`${sw*6},${sw*4}`,sw};
+    return{sa:'none',sw};
+  }
+
+  // Draw one text bg shape around a pixel rect [x0,y0,x1,y1]
+  function drawTextBgShape(x0,y0,x1,y1,col,fillMode){
+    const PADx=rndInt(8,28), PADy=rndInt(6,18);
+    const rx0=x0-PADx, ry0=y0-PADy, rx1=x1+PADx, ry1=y1+PADy;
+    const w=rx1-rx0, h=ry1-ry0;
+    const cx=(rx0+rx1)/2, cy=(ry0+ry1)/2;
+    const shapeType=pick(['rect-sharp','rect-sharp','rect-round','rect-round','ellipse']);
+    const sw=rndInt(2,5);
+    const {sa,sw:fsw}=strokeStyle(sw);
+    const dashAttr=sa!=='none'?` stroke-dasharray="${sa}"`:'';
+    let shapeOut='';
+    if(fillMode==='filled'){
+      const fillCol=col;
+      if(shapeType==='rect-sharp')
+        shapeOut=`<rect x="${rx0}" y="${ry0}" width="${w}" height="${h}" fill="${fillCol}" stroke="none"/>`;
+      else if(shapeType==='rect-round'){
+        const r=Math.min(h*0.4,24);
+        shapeOut=`<rect x="${rx0}" y="${ry0}" width="${w}" height="${h}" rx="${r}" fill="${fillCol}" stroke="none"/>`;
+      } else {
+        shapeOut=`<ellipse cx="${cx}" cy="${cy}" rx="${w/2}" ry="${h/2}" fill="${fillCol}" stroke="none"/>`;
+      }
+    } else {
+      // stroke only
+      if(shapeType==='rect-sharp')
+        shapeOut=`<rect x="${rx0}" y="${ry0}" width="${w}" height="${h}" fill="none" stroke="${col}" stroke-width="${fsw}"${dashAttr}/>`;
+      else if(shapeType==='rect-round'){
+        const r=Math.min(h*0.4,24);
+        shapeOut=`<rect x="${rx0}" y="${ry0}" width="${w}" height="${h}" rx="${r}" fill="none" stroke="${col}" stroke-width="${fsw}"${dashAttr}/>`;
+      } else {
+        shapeOut=`<ellipse cx="${cx}" cy="${cy}" rx="${w/2}" ry="${h/2}" fill="none" stroke="${col}" stroke-width="${fsw}"${dashAttr}/>`;
+      }
+    }
+    return shapeOut;
+  }
+
+  // shapeCoverages: array of {lineIndex, shapeCol, fillMode} — used to adjust text colors
+  const shapeCoverages=[];
+
+  let textBgShapes='';
+  if(Math.random()<0.7){
+    const fillMode=Math.random()<0.5?'filled':'stroke';
+    const wrapMode=Math.random()<0.5?'individual':'combined';
+    const n=pick([1,1,2,3]);
+    const chosen=shuffle([0,1,2]).slice(0,n);
+
+    if(wrapMode==='individual'){
+      chosen.forEach(i=>{
+        const col=pickTextBgColor(lines[i].c);
+        textBgShapes+=drawTextBgShape(lines[i].L,lines[i].top,lines[i].R,lines[i].bot,col,fillMode);
+        shapeCoverages.push({lineIndex:i,shapeCol:col,fillMode});
+      });
+    } else {
+      const x0=Math.min(...chosen.map(i=>lines[i].L));
+      const x1=Math.max(...chosen.map(i=>lines[i].R));
+      const y0=Math.min(...chosen.map(i=>lines[i].top));
+      const y1=Math.max(...chosen.map(i=>lines[i].bot));
+      // For combined shape, pick color that differs from ALL covered text colors
+      const allTextCols=chosen.map(i=>lines[i].c);
+      const opts=[TC.col,TC.warm,TC.cold,shapecol].filter(c=>!allTextCols.includes(c));
+      const col=pick(opts.length?opts:[TC.warm]);
+      textBgShapes+=drawTextBgShape(x0,y0,x1,y1,col,fillMode);
+      chosen.forEach(i=>shapeCoverages.push({lineIndex:i,shapeCol:col,fillMode}));
+    }
+  }
+
+  // For filled shapes only: enforce text color contrasts against shape fill
+  function contrastColor(textCol, shapeCol, fm){
+    if(fm!=='filled') return textCol;
+    if(textCol===shapeCol){
+      return shapeCol===TC.col ? TC.warm : TC.col;
+    }
+    return textCol;
+  }
+
+  // Apply contrast overrides
+  let fc1=c1, fc2=c2, fc3=c3;
+  shapeCoverages.forEach(({lineIndex,shapeCol,fillMode})=>{
+    if(lineIndex===0) fc1=contrastColor(c1,shapeCol,fillMode);
+    if(lineIndex===1) fc2=contrastColor(c2,shapeCol,fillMode);
+    if(lineIndex===2) fc3=contrastColor(c3,shapeCol,fillMode);
+  });
+
   let out=bgData.inner;
+  out+=textBgShapes;
   out+=shapeObj.draw(ampCX,ampCY,shapeR,mode,shapecol,strokecol,sw);
   out+=tf(tA,xA,ampY,sA,taA,ampCol,af.f,af.w,af.s);
-  out+=tf(t1,fL1.x,B1,s1,fL1.ta,c1,sf.f,sf.w,sf.s);
-  out+=tf(t2,fL2.x,B2,s23,fL2.ta,c2);
-  out+=tf(t3,fL3.x,B3,s23,fL3.ta,c3);
+  out+=tf(t1,fL1.x,B1,s1,fL1.ta,fc1,sf.f,sf.w,sf.s);
+  out+=tf(t2,fL2.x,B2,s23,fL2.ta,fc2);
+  out+=tf(t3,fL3.x,B3,s23,fL3.ta,fc3);
 
   const posLabel=pos===1?'right of CD':pos===2?'own row':'left of HoA';
   const shapeLabel=`${shapeObj.id}/${mode}/${shapecol===WARM||shapecol===TC.warm?'warm':'cold'}`;
@@ -595,8 +786,17 @@ global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 
 
 
+
+
+
+
+
+
+
+
+
 const SHEET_URL='https://script.google.com/macros/s/AKfycbyi4oh8EbDyicDxTQNuVZ43cf5o1D6E75wqpQ5bYaAO8yOwuaKN5aeQCqT9Qk3Vl7Ym/exec';
-const TIMER_MS=10000;
+const TIMER_MS=5000;
 let lastState={},timer=null,prog=null,startTime=null,lastVote=null;
 
 function render(){
