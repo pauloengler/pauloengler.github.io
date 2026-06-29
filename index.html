@@ -25,7 +25,7 @@
     .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #926650; width: 0%; z-index: 10; }
     #hero-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-vote { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px solid rgba(10,10,10,0.06); overflow: hidden; position: relative; z-index: 1; }
-    .hero-vote-text { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
+    .hero-vote-text { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
     .hero-vote-btns { display: flex; gap: 10px; flex-shrink: 0; }
     .hero-vote-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform .15s; flex-shrink: 0; overflow: hidden; }
     .hero-vote-btn svg { width: 44px; height: 44px; min-width: 44px; max-width: 44px; display: block; flex-shrink: 0; overflow: hidden; }
@@ -574,9 +574,7 @@ function quickView(e, btn) {
   document.body.style.overflow = 'hidden';
   const ytId = getYouTubeId(media);
   if (ytId) {
-    requestAnimationFrame(function() {
-      box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&mute=0&rel=0&modestbranding=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
-    });
+    box.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytId + '?autoplay=1&mute=0&rel=0&modestbranding=1&enablejsapi=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
   } else {
     box.innerHTML = '<img src="' + media + '" alt="' + name + '">';
   }
