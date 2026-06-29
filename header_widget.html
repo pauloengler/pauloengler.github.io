@@ -18,7 +18,8 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
 .vote-btns{display:flex;gap:10px;flex-shrink:0;align-items:center;}
 .vote-cta{flex:0 0 88px;width:88px;overflow:hidden;display:flex;align-items:center;animation:blink-cta 1s ease-in-out infinite;}
 .vote-cta svg{display:block;width:88px;height:36px;min-width:88px;max-width:88px;}
-.vote-btn{width:44px;height:44px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s;}
+.vote-btn{width:44px;height:44px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:transform .15s;flex-shrink:0;}
+.vote-btn svg{width:44px;height:44px;min-width:44px;max-width:44px;display:block;flex-shrink:0;}
 .vote-btn:hover{transform:scale(1.1);}
 .vote-btn.chosen{box-shadow:0 0 0 3px #0A0A0A;}
 @keyframes blink-cta{0%,100%{opacity:1;transform:translateX(0);}50%{opacity:.25;transform:translateX(5px);}}
@@ -106,10 +107,46 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
-const VW=800,VH=250,PAD=32;
+const VW=800,VH=250,PAD=80;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
@@ -264,6 +301,7 @@ function clamp(l){
   if(R>VW-PAD){const d=R-(VW-PAD);x-=d;L-=d;R-=d;}
   return{...l,x,L,R};
 }
+// Fit font size so text never exceeds available width for its anchor position
 function fitSzW(t,sz){const mxW=VW-PAD*2;while(sz>SZ_FLOOR&&mW(t,sz)>mxW)sz--;return Math.max(SZ_FLOOR,sz);}
 function fitSzWf(t,sz,f,w,s){const mxW=VW-PAD*2;while(sz>SZ_FLOOR&&mWf(t,sz,f,w,s)>mxW)sz--;return Math.max(SZ_FLOOR,sz);}
 function ampPlace(va,adjB,adjS,sA){
@@ -377,37 +415,22 @@ function generate(){
   if(shapeObj.cat==='star'&&mode==='stroke'&&Math.random()<0.7)mode='filled';
 
   const maxFitCD=fitSzW(t2,999);
-  const base=rndInt(24,Math.min(maxFitCD,100));
+  const base=rndInt(24,Math.min(maxFitCD,72));
   const vR=RATIOS.filter(r=>Math.round(base*r)>=SZ_FLOOR&&Math.round(base*r)<=base*2);
   let s23=base;
   let s1=fitSzWf(t1,Math.round(base*pick(vR)),sf.f,sf.w,sf.s);
   let sA=fitSzWf(tA,Math.round(base*pick(vR)),af.f,af.w,af.s);
   let g12=rndInt(GAP_MIN,GAP_MAX),g23=rndInt(GAP_MIN,GAP_MAX),gA=rndInt(GAP_MIN,GAP_MAX);
 
-  const pairChoices=[[1,2],[1,2],[1,3],[1,3],[2,3]];
-  const shared=pick(ANCHORS),pair=pick(pairChoices);
-  const anch={1:null,2:null,3:null};
-  pair.forEach(i=>anch[i]=shared);
-  const third=[1,2,3].find(i=>!pair.includes(i));
-  anch[third]=pick(ANCHORS.filter(a=>a!==shared));
-
-  const fL2c=clamp(mkLayout(anch[2],mW(t2,s23))),fL3c=clamp(mkLayout(anch[3],mW(t3,s23)));
-  const wAc=mWf(tA,sA,af.f,af.w,af.s);
-  const valid=[];
-  if(fL2c.R+SP+wAc<=VW-PAD)valid.push(1);
-  valid.push(2);
-  if(fL3c.L-SP-wAc>=PAD)valid.push('3L');
-  const weighted=[];
-  valid.forEach(p=>{weighted.push(p);if(p===1||p==='3L')weighted.push(p);});
-  const pos=pick(weighted);
-  const hasOwnRow=pos===2;
-  const vAlign=hasOwnRow?'middle':pick(['middle','bottom']);
-
-  function stackH(s1,s23,sA,g12,g23,gA){return s1+g12+s23+(hasOwnRow?gA+sA+gA:0)+g23+s23;}
+  // Temporarily compute pos to know hasOwnRow for size calculations
+  // (will be recomputed properly after layout)
+  const _posGuess = pick(['own','inline']);
+  const _hasOwnRowGuess = _posGuess==='own';
+  function stackH(s1,s23,sA,g12,g23,gA,hor){return s1+g12+s23+(hor?gA+sA+gA:0)+g23+s23;}
   const maxH=VH-PAD*2;
-  if(stackH(s1,s23,sA,g12,g23,gA)>maxH){g12=0;g23=0;gA=0;}
-  if(stackH(s1,s23,sA,0,0,0)>maxH){
-    const sc=maxH/(s1+s23+s23+(hasOwnRow?sA:0));
+  if(stackH(s1,s23,sA,g12,g23,gA,_hasOwnRowGuess)>maxH){g12=0;g23=0;gA=0;}
+  if(stackH(s1,s23,sA,0,0,0,_hasOwnRowGuess)>maxH){
+    const sc=maxH/(s1+s23+s23+(_hasOwnRowGuess?sA:0));
     s23=Math.max(SZ_FLOOR,Math.floor(s23*sc));
     s1=Math.max(SZ_FLOOR,Math.floor(s1*sc));
     sA=Math.max(SZ_FLOOR,Math.floor(sA*sc));
@@ -417,14 +440,78 @@ function generate(){
   }
 
   const fw1=mWf(t1,s1,sf.f,sf.w,sf.s),fw2=mW(t2,s23),fw3=mW(t3,s23),fwA=mWf(tA,sA,af.f,af.w,af.s);
-  const fL1=clamp(mkLayout(anch[1],fw1)),fL2=clamp(mkLayout(anch[2],fw2)),fL3=clamp(mkLayout(anch[3],fw3));
-  const finalH=stackH(s1,s23,sA,g12,g23,gA);
+
+  // Pick anchor type (which edge of the word snaps to the alignment column)
+  // and alignment column X for each line independently
+  // The column X is constrained so the full word stays within [PAD, VW-PAD]
+  function makeWordLayout(fw, anchorType){
+    // anchorType: 'L'=left edge, 'C'=center, 'R'=right edge of word
+    // colX: the canvas X where that edge sits
+    let minColX, maxColX;
+    if(anchorType==='L'){ minColX=PAD;        maxColX=VW-PAD-fw; } // left edge: word goes right
+    if(anchorType==='C'){ minColX=PAD+fw/2;   maxColX=VW-PAD-fw/2; } // center: word spans both
+    if(anchorType==='R'){ minColX=PAD+fw;      maxColX=VW-PAD; } // right edge: word goes left
+    // Safety: if word too wide, force center
+    if(minColX>maxColX){ anchorType='C'; minColX=VW/2; maxColX=VW/2; }
+    const colX=minColX+(maxColX-minColX)*Math.random();
+    const L=anchorType==='L'?colX:anchorType==='C'?colX-fw/2:colX-fw;
+    const R=L+fw;
+    const ta=anchorType==='L'?'start':anchorType==='C'?'middle':'end';
+    return{x:colX,ta,L,R,col:colX,anchorType};
+  }
+
+  // Pick anchor types for each line
+  const a1=pick(ANCHORS),a2=pick(ANCHORS),a3=pick(ANCHORS);
+
+  // Optionally share alignment column between lines (50% chance per pair)
+  function sharedCol(layoutA, layoutB, anchorA, anchorB){
+    // Use layoutA's column as reference, recompute layoutB using same X if it fits
+    const colX=layoutA.col;
+    let fw=layoutB.R-layoutB.L;
+    let L=anchorB==='L'?colX:anchorB==='C'?colX-fw/2:colX-fw;
+    let R=L+fw;
+    if(L>=PAD && R<=VW-PAD){
+      const ta=anchorB==='L'?'start':anchorB==='C'?'middle':'end';
+      return{x:colX,ta,L,R,col:colX,anchorType:anchorB};
+    }
+    return null; // doesn't fit, keep independent
+  }
+
+  let fL1=makeWordLayout(fw1,a1);
+  let fL2=makeWordLayout(fw2,a2);
+  let fL3=makeWordLayout(fw3,a3);
+
+  // 60% chance: align Senior's anchor column with CD's
+  if(Math.random()<0.6){
+    const shared=sharedCol(fL2,fL1,a2,a1)||sharedCol(fL1,fL2,a1,a2);
+    if(shared){ if(Math.random()<0.5) fL1=shared; else fL2=sharedCol(fL1,fL2,a1,a2)||fL2; }
+  }
+  // 60% chance: align HoA's anchor column with CD's
+  if(Math.random()<0.6){
+    const shared=sharedCol(fL2,fL3,a2,a3)||sharedCol(fL3,fL2,a3,a2);
+    if(shared){ if(Math.random()<0.5) fL3=shared; else fL2=sharedCol(fL3,fL2,a3,a2)||fL2; }
+  }
+
+  const wAc=mWf(tA,sA,af.f,af.w,af.s);
+  const valid=[];
+  if(fL2.R+SP+wAc<=VW-PAD)valid.push(1);
+  valid.push(2);
+  if(fL3.L-SP-wAc>=PAD)valid.push('3L');
+  const weighted=[];
+  valid.forEach(p=>{weighted.push(p);if(p===1||p==='3L')weighted.push(p);});
+  const pos=pick(weighted);
+  const hasOwnRow=pos===2;
+  const vAlign=hasOwnRow?'middle':pick(['middle','bottom']);
+  const finalH=stackH(s1,s23,sA,g12,g23,gA,hasOwnRow);
   const topY=Math.round((VH-finalH)/2);
   const B1=topY+s1,B2=B1+g12+s23,BA=hasOwnRow?B2+gA+sA:null,B3=hasOwnRow?BA+gA+s23:B2+g23+s23;
 
   let xA,ampY,taA;
   if(pos===1){xA=fL2.R+SP;taA='start';}
-  else if(pos===2){const LA=clamp(mkLayout(anch[2],fwA));xA=LA.x;taA=LA.ta;}
+  else if(pos===2){
+    // & on own row — center it at same column as CD
+    xA=fL2.x; taA=fL2.ta;
+  }
   else{xA=fL3.L-SP-fwA;taA='start';}
   if(hasOwnRow){ampY=BA;}
   else{const adjB=pos===1?B2:B3;ampY=ampPlace(vAlign,adjB,s23,sA).yA;}
@@ -493,6 +580,12 @@ function renderHeader(svgEl,opts){
 global.renderHeader=renderHeader;
 global.HeaderConfig={VW,VH,PAD,WARM,COLD};
 })(window);
+
+
+
+
+
+
 
 
 
