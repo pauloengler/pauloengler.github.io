@@ -7,7 +7,7 @@
 (function(global){
 'use strict';
 
-const VW=800,VH=250,PAD=80;
+const VW=800,VH=350,PAD=80;
 const WARM='#926650',COLD='#6B7A8D';
 const ANCHORS=['L','C','R'];
 const SP=14,GAP_MIN=0,GAP_MAX=8,SZ_FLOOR=18;
