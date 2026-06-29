@@ -504,9 +504,11 @@ function buildCard(p) {
   const mediaStr = (p.media || '').trim();
   let firstMedia = '';
   if (mediaStr) {
-    const firstItem = mediaStr.split('|')[0].trim();
-    if (firstItem.startsWith('vid:')) firstMedia = firstItem.slice(4).trim();
-    else if (firstItem.startsWith('img:')) firstMedia = 'media/' + firstItem.slice(4).trim();
+    const items = mediaStr.split('|').map(s => s.trim()).filter(Boolean);
+    for (const item of items) {
+      if (item.startsWith('vid:')) { firstMedia = item.slice(4).trim(); break; }
+      if (item.startsWith('img:')) { firstMedia = 'media/' + item.slice(4).trim(); break; }
+    }
   }
 
   a.innerHTML = iconsHTML +
