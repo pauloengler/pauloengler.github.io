@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- Site UI font: JetBrains Mono — subtle, technical, lets the header artwork be the loud element -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <!-- Display fonts for Senior header — non-blocking swap, untouched -->
   <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Bungee+Inline&family=Bungee+Outline&family=Bungee+Shade&family=Rubik+Mono+One&family=Rubik+Wet+Paint&family=Rubik+Glitch&family=Rubik+Burned&family=Rubik+Beastly&family=Abril+Fatface&family=Bodoni+Moda:ital,wght@1,900&family=Big+Shoulders+Display:wght@900&family=Yeseva+One&family=Bowlby+One&family=Alfa+Slab+One&family=VT323&family=Major+Mono+Display&family=Share+Tech+Mono&family=Nova+Mono&family=Monoton&family=Faster+One&family=Bagel+Fat+One&family=Codystar&family=Gravitas+One&family=UnifrakturCook:wght@700&family=Pirata+One&family=Caveat+Brush&family=Permanent+Marker&family=Rampart+One&family=Bruno+Ace+SC&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <style>
@@ -21,7 +21,7 @@
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
     .hero { background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
     .hero-header-wrap { position: relative; overflow: hidden; background: #F7F4EE; width: 100%; aspect-ratio: 800/350; }
-    .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #926650; width: 0%; z-index: 10; }
+    .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #0A0A0A; width: 0%; z-index: 10; }
     #hero-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-vote { display: flex; align-items: center; gap: 12px; padding: 14px 40px; border-top: 1px solid #E5E5E5; overflow: hidden; position: relative; z-index: 1; }
     .hero-vote-text { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
@@ -55,7 +55,7 @@
     .chapter-header { display: flex; justify-content: flex-start; align-items: center; padding: 16px 40px; background: #0A0A0A; }
     .chapter-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; }
     .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); background: #FFFFFF; }
-    .project-card { display: flex; flex-direction: column; background: #FFFFFF; padding: 16px; text-decoration: none; color: inherit; transition: background 0.15s; border: 0.5px solid #E5E5E5; margin: -0.5px 0 0 -0.5px; }
+    .project-card { display: flex; flex-direction: column; background: #FFFFFF; padding: 16px; text-decoration: none; color: inherit; transition: background 0.15s; border: 1px solid #B5B5B5; margin: -1px 0 0 -1px; }
     .project-card:hover { background: #FAFAFA; }
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
     .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 0; border: none; margin-left: 1px; }
@@ -79,10 +79,10 @@
     .project-meta { flex: 1; }
     .project-client { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 4px; }
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
-    .btn-view { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 10px; height: 22px; white-space: nowrap; display: flex; align-items: center; border-radius: 0; transition: opacity 0.2s; align-self: flex-start; }
+    .btn-view { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 10px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; border-radius: 0; transition: opacity 0.2s; align-self: flex-start; width: 100%; }
     .btn-view:hover { opacity: 0.75; }
-    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; }
-    .btn-quick { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: 1px solid #0A0A0A; padding: 0 10px; height: 22px; white-space: nowrap; display: flex; align-items: center; border-radius: 0; transition: background 0.2s, color 0.2s; cursor: pointer; }
+    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; width: 130px; }
+    .btn-quick { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: 1px solid #0A0A0A; padding: 0 10px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; border-radius: 0; transition: background 0.2s, color 0.2s; cursor: pointer; width: 100%; }
     .btn-quick:hover { background: #0A0A0A; color: #FFFFFF; }
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
     .qv-overlay.open { display: flex; }
@@ -92,7 +92,7 @@
     .qv-media { position: relative; width: 100%; padding-top: 56.25%; }
     .qv-media iframe, .qv-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; border: none; }
     .qv-title { padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
-    .project-desc { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; color: #777777; line-height: 1.65; }
+    .project-desc { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: #666666; line-height: 1.6; }
     .loading { padding: 60px; text-align: center; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; background: #FFFFFF; grid-column: 1 / -1; }
     footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; margin-top: auto; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
@@ -137,7 +137,7 @@
     <div class="hero-vote-btns">
       <div class="vote-cta">
         <svg width="88" height="36" viewBox="0 0 88 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 0 Q0 0 0 6 L0 30 Q0 36 6 36 L58 36 C62 36 66 32 72 28 L84 20 Q88 18 84 16 L72 8 C66 4 62 0 58 0 Z" fill="#0A0A0A"/>
+          <path d="M0 0 L58 0 L88 18 L58 36 L0 36 Z" fill="#0A0A0A"/>
           <text x="31" y="23" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="700" font-size="11" fill="#FFFFFF">CLICK</text>
         </svg>
       </div>
