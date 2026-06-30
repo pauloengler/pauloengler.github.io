@@ -23,33 +23,36 @@
     .hero-header-wrap { position: relative; overflow: hidden; background: #F7F4EE; width: 100%; aspect-ratio: 800/350; }
     .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #FFD400; width: 0%; z-index: 10; }
     #hero-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .hero-vote { display: flex; align-items: center; gap: 12px; padding: 14px 40px; border-top: 1px solid #E5E5E5; overflow: hidden; position: relative; z-index: 1; }
-    .hero-vote-text { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
-    .hero-vote-btns { display: flex; gap: 10px; flex-shrink: 0; }
+    .hero-vote { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 24px 40px; border-top: 1px solid #E5E5E5; overflow: hidden; position: relative; z-index: 1; }
+    .hero-vote-text { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #999999; line-height: 1.5; text-align: center; max-width: 480px; }
+    .hero-vote-btns { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; width: 100%; max-width: 480px; column-gap: 16px; }
+    .vote-cta { grid-column: 1; justify-self: end; display: flex; align-items: center; width: 88px; overflow: hidden; animation: blink-cta 1s ease-in-out infinite; }
+    .vote-smileys { grid-column: 2; display: flex; align-items: center; gap: 10px; }
     .hero-vote-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform .15s; flex-shrink: 0; overflow: hidden; }
     .hero-vote-btn svg { width: 44px; height: 44px; min-width: 44px; max-width: 44px; display: block; flex-shrink: 0; overflow: hidden; }
     .hero-vote-btn:hover { transform: scale(1.1); }
     .hero-vote-btn.chosen { outline: 3px solid #0A0A0A; outline-offset: -1px; }
-    .vote-cta { display: flex; align-items: center; flex: 0 0 88px; width: 88px; overflow: hidden; animation: blink-cta 1s ease-in-out infinite; }
     .vote-cta svg { display: block; width: 88px; height: 36px; min-width: 88px; max-width: 88px; }
     @keyframes blink-cta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
     .hero-sublines { display: flex; flex-direction: column; gap: 4px; padding: 16px 40px; text-align: center; background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
-    .hero-sub { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #999999; line-height: 1.6; }
+    .hero-sub { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; letter-spacing: 0.01em; color: #0A0A0A; line-height: 1.5; }
     .hero-sub:empty { display: none; }
     .filter-chip { background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
-    .view-toggle { background: #FFFFFF; padding: 16px 40px 0; }
-    .toggle-intro { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #999999; text-align: center; margin-bottom: 10px; }
+    .view-toggle { background: #FFFFFF; padding: 48px 40px 0; }
+    .toggle-intro { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; text-align: center; margin-bottom: 14px; }
     .toggle-track { display: flex; align-items: stretch; background: #FFFFFF; padding: 0; border-radius: 0; gap: 0; }
     .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 11px 12px 9px; cursor: pointer; gap: 2px; border-radius: 0; border: 1px solid #D5D5D5; outline: none; background: transparent; transition: background 0.2s, border-color 0.2s; z-index: 1; }
-    .toggle-option.active { border-color: #0A0A0A; }
+    .toggle-option.active { border: 3px solid #0A0A0A; padding: 9px 10px 7px; }
     .toggle-option:focus { outline: none; }
-    .toggle-option.active { background: #0A0A0A; }
+    .toggle-option.active { background: #FFFFFF; }
     .toggle-option .t-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; color: #999999; transition: color 0.2s; }
-    .toggle-option.active .t-label { color: #FFFFFF; }
+    .toggle-option.active .t-label { color: #0A0A0A; }
     .toggle-option .t-sub { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 9px; letter-spacing: 0.02em; color: #B0B0B0; text-align: center; line-height: 1.4; transition: color 0.2s; }
-    .toggle-option.active .t-sub { color: rgba(255,255,255,0.5); }
+    .toggle-option .t-count { font-size: 10px; font-weight: 500; color: #B0B0B0; transition: color 0.2s; }
+    .toggle-option.active .t-count { color: rgba(10,10,10,0.55); }
+    .toggle-option.active .t-sub { color: rgba(10,10,10,0.5); }
     .smiley-divider { width: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #FFFFFF; z-index: 2; }
-    .search-bar { background: #FFFFFF; padding: 16px 40px 24px; }
+    .search-bar { background: #FFFFFF; padding: 16px 40px 48px; }
     .search-inner { background: #FFFFFF !important; border: 1px solid #E5E5E5; border-radius: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; color-scheme: light; }
     .search-inner svg { flex-shrink: 0; color: #999999; }
     .search-input { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 12px; color: #0A0A0A !important; outline: none !important; border: none !important; box-shadow: none !important; background: #FFFFFF !important; width: 100%; -webkit-appearance: none; appearance: none; color-scheme: light; }
@@ -61,17 +64,17 @@
     .project-card { display: flex; flex-direction: column; background: #FFFFFF; padding: 16px; text-decoration: none; color: inherit; transition: background 0.15s; border: 1px solid #B5B5B5; margin: -1px 0 0 -1px; }
     .project-card:hover { background: #FAFAFA; }
     .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 8px; width: 100%; }
-    .award-col { display: flex; flex-direction: column; flex: 0 0 calc((100% - 9px) / 10); width: calc((100% - 9px) / 10); overflow: hidden; border-radius: 0; border: none; margin-left: 1px; }
+    .award-col { display: flex; flex-direction: column; flex: 0 0 calc(100% / 10); width: calc(100% / 10); overflow: hidden; border-radius: 0; border: 1px solid #0A0A0A; margin-left: -1px; }
     .award-col:first-child { margin-left: 0; }
     .award-cell { display: flex; flex-direction: row; align-items: center; justify-content: space-between; padding: 1px 4px; height: 15px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
     .award-cell .cell-metal { font-size: 7px; font-weight: 500; letter-spacing: 0; line-height: 1; }
     .award-cell .cell-count { font-size: 8px; font-weight: 700; line-height: 1; }
-    .award-cell.metal-gp     { background: #1A1A1A; color: #FFFFFF; }
-    .award-cell.metal-gold   { background: #A8874A; color: #fff; }
-    .award-cell.metal-silver { background: #9AAFA8; color: #fff; }
-    .award-cell.metal-bronze { background: #926650; color: #fff; }
-    .award-cell.metal-other  { background: #D5D5D5; color: #555; }
-    .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #F2F2F2; padding: 3px; }
+    .award-cell.metal-gp     { background: #0A0A0A; color: #FFFFFF; }
+    .award-cell.metal-gold   { background: #FFD400; color: #0A0A0A; }
+    .award-cell.metal-silver { background: #808080; color: #FFFFFF; }
+    .award-cell.metal-bronze { background: #FF6B00; color: #FFFFFF; }
+    .award-cell.metal-other  { background: #EFEFEF; color: #777; }
+    .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #FFFFFF; padding: 3px; }
     .award-icon-cell img { width: 100%; height: 100%; object-fit: contain; display: block; }
     .award-overflow-box { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; color: #999999; background: #F2F2F2; letter-spacing: 0; }
     .award-spacer { margin-bottom: 8px; }
@@ -106,10 +109,10 @@
       .hero-sublines { padding: 12px 20px 20px; }
       .hero-header-wrap { aspect-ratio: unset; height: 60vw; }
       .hero-vote { padding: 12px 20px; }
-      .vote-cta { flex: 0 0 60px; width: 60px; }
+      .vote-cta { width: 60px; }
       .vote-cta svg { width: 60px; height: 24px; min-width: 60px; max-width: 60px; }
-      .view-toggle { padding: 12px 20px 0; }
-      .search-bar { padding: 12px 20px 20px; }
+      .view-toggle { padding: 32px 20px 0; }
+      .search-bar { padding: 12px 20px 32px; }
       .chapter-header { padding: 56px 20px 14px; }
       .projects-grid { grid-template-columns: 1fr; }
       footer { padding: 16px 20px; flex-direction: column; gap: 12px; text-align: center; }
@@ -144,22 +147,24 @@
           <text x="31" y="23" text-anchor="middle" font-family="JetBrains Mono,monospace" font-weight="700" font-size="11" fill="#FFFFFF">CLICK</text>
         </svg>
       </div>
-      <button class="hero-vote-btn" id="hero-btn-like" onclick="heroVote('like')" title="I like it">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="20.5" fill="#4CAF50" stroke="#0A0A0A" stroke-width="2"/>
-          <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
-          <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
-          <path d="M14 26 Q22 34 30 26" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        </svg>
-      </button>
-      <button class="hero-vote-btn" id="hero-btn-dislike" onclick="heroVote('dislike')" title="Not for me">
-        <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="20.5" fill="#E53935" stroke="#0A0A0A" stroke-width="2"/>
-          <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
-          <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
-          <path d="M14 30 Q22 22 30 30" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-        </svg>
-      </button>
+      <div class="vote-smileys">
+        <button class="hero-vote-btn" id="hero-btn-like" onclick="heroVote('like')" title="I like it">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="20.5" fill="#4CAF50" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
+            <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
+            <path d="M14 26 Q22 34 30 26" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </button>
+        <button class="hero-vote-btn" id="hero-btn-dislike" onclick="heroVote('dislike')" title="Not for me">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="22" cy="22" r="20.5" fill="#E53935" stroke="#0A0A0A" stroke-width="2"/>
+            <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
+            <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
+            <path d="M14 30 Q22 22 30 30" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 </section>
@@ -171,7 +176,7 @@
     <p class="toggle-intro">Pick a view</p>
     <div class="toggle-track">
       <button class="toggle-option active" id="btn-full" onclick="setView('full')">
-        <span class="t-label">All</span>
+        <span class="t-label">All <span class="t-count" id="count-full"></span></span>
         <span class="t-sub">Everything in this portfolio</span>
       </button>
       <div class="smiley-divider">
@@ -185,7 +190,7 @@
         </svg>
       </div>
       <button class="toggle-option" id="btn-select" onclick="setView('select')">
-        <span class="t-label">Selected</span>
+        <span class="t-label">Selected <span class="t-count" id="count-select"></span></span>
         <span class="t-sub">Work that represents me best</span>
       </button>
     </div>
@@ -376,7 +381,17 @@ async function loadProjects() {
   }
 }
 
+function updateToggleCounts(projects) {
+  const fullCount = projects.filter(p => (p['full'] || '').toString().toUpperCase() === 'TRUE').length;
+  const selectCount = projects.filter(p => (p['select'] || '').toString().toUpperCase() === 'TRUE').length;
+  const elFull = document.getElementById('count-full');
+  const elSelect = document.getElementById('count-select');
+  if (elFull) elFull.textContent = '(' + fullCount + ')';
+  if (elSelect) elSelect.textContent = '(' + selectCount + ')';
+}
+
 function renderProjects(projects) {
+  updateToggleCounts(projects);
   const chapters = {};
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
