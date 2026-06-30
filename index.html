@@ -21,7 +21,7 @@
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
     .hero { background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
     .hero-header-wrap { position: relative; overflow: hidden; background: #F7F4EE; width: 100%; aspect-ratio: 800/350; }
-    .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #0A0A0A; width: 0%; z-index: 10; }
+    .hero-progress { position: absolute; bottom: 0; left: 0; height: 15px; background: #FFD400; width: 0%; z-index: 10; }
     #hero-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
     .hero-vote { display: flex; align-items: center; gap: 12px; padding: 14px 40px; border-top: 1px solid #E5E5E5; overflow: hidden; position: relative; z-index: 1; }
     .hero-vote-text { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #0A0A0A; line-height: 1.6; flex: 1; min-width: 0; }
@@ -29,7 +29,7 @@
     .hero-vote-btn { width: 44px; height: 44px; border-radius: 50%; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: transform .15s; flex-shrink: 0; overflow: hidden; }
     .hero-vote-btn svg { width: 44px; height: 44px; min-width: 44px; max-width: 44px; display: block; flex-shrink: 0; overflow: hidden; }
     .hero-vote-btn:hover { transform: scale(1.1); }
-    .hero-vote-btn.chosen { box-shadow: 0 0 0 3px #0A0A0A; }
+    .hero-vote-btn.chosen { outline: 3px solid #0A0A0A; outline-offset: -1px; }
     .vote-cta { display: flex; align-items: center; flex: 0 0 88px; width: 88px; overflow: hidden; animation: blink-cta 1s ease-in-out infinite; }
     .vote-cta svg { display: block; width: 88px; height: 36px; min-width: 88px; max-width: 88px; }
     @keyframes blink-cta { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
@@ -146,18 +146,18 @@
       </div>
       <button class="hero-vote-btn" id="hero-btn-like" onclick="heroVote('like')" title="I like it">
         <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="22" fill="#4CAF50"/>
-          <circle cx="16" cy="18" r="2" fill="white"/>
-          <circle cx="28" cy="18" r="2" fill="white"/>
-          <path d="M14 26 Q22 34 30 26" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="22" cy="22" r="20.5" fill="#4CAF50" stroke="#0A0A0A" stroke-width="2"/>
+          <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
+          <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
+          <path d="M14 26 Q22 34 30 26" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
       </button>
       <button class="hero-vote-btn" id="hero-btn-dislike" onclick="heroVote('dislike')" title="Not for me">
         <svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="22" fill="#E53935"/>
-          <circle cx="16" cy="18" r="2" fill="white"/>
-          <circle cx="28" cy="18" r="2" fill="white"/>
-          <path d="M14 30 Q22 22 30 30" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="22" cy="22" r="20.5" fill="#E53935" stroke="#0A0A0A" stroke-width="2"/>
+          <circle cx="16" cy="18" r="2" fill="#0A0A0A"/>
+          <circle cx="28" cy="18" r="2" fill="#0A0A0A"/>
+          <path d="M14 30 Q22 22 30 30" stroke="#0A0A0A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
         </svg>
       </button>
     </div>
@@ -176,10 +176,10 @@
       </button>
       <div class="smiley-divider">
         <svg id="smiley" width="40" height="40" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="22" cy="22" r="21" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="2"/>
+          <circle cx="22" cy="22" r="21" fill="#FFD400" stroke="#0A0A0A" stroke-width="2"/>
           <g id="eyes">
-            <ellipse id="eyeL" cx="12" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
-            <ellipse id="eyeR" cx="26" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
+            <ellipse id="eyeL" cx="9.5" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
+            <ellipse id="eyeR" cx="23.5" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
           </g>
           <path d="M14 28 Q22 33 30 28" stroke="#0A0A0A" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>
@@ -335,13 +335,15 @@ async function loadProjects() {
     const projectsPromise = cachedFetch(SHEET_URL, CACHE_KEY);
     const aboutPromise = cachedFetch(ABOUT_URL, ABOUT_KEY);
 
-    // Render sublines as soon as about sheet arrives — don't wait for projects
-    aboutPromise.then(function(aboutText) {
+    // Resolve the default view from the about sheet BEFORE rendering any project grid,
+    // so the very first render already uses the correct view — no flash of the wrong state.
+    let aboutRowsCache = null;
+    const viewReadyPromise = aboutPromise.then(function(aboutText) {
       const aboutRows = parseCSV(aboutText, null, false);
-      // Render immediately with tokens unresolved (shows text right away)
+      aboutRowsCache = aboutRows;
+      // Render sublines immediately with tokens unresolved
       renderSublines(aboutRows, '…', '…', '…');
 
-      // Read default view from the "view" block in the about sheet
       const viewRow = aboutRows.find(function(r) { return (r.block || '').toLowerCase().trim() === 'view'; });
       const viewVal = viewRow ? (viewRow.col1 || '').toLowerCase().trim() : '';
       if (viewVal === 'selected') {
@@ -349,22 +351,25 @@ async function loadProjects() {
         document.getElementById('btn-full').classList.remove('active');
         document.getElementById('btn-select').classList.add('active');
         moveSmileyEyes('select');
+      } else {
+        currentView = 'full';
+        document.getElementById('btn-full').classList.add('active');
+        document.getElementById('btn-select').classList.remove('active');
+        moveSmileyEyes('full');
       }
-      // If view is "all" or unset, the default 'full' state already in place stays
+      return aboutRows;
+    }).catch(function(err) {
+      console.error('About sheet error:', err);
+      return null;
+    });
 
-      // Once projects also arrive, update with real numbers and re-render grid with the right default
-      projectsPromise.then(function() {
-        if (_projects) {
-          loadSettings(_projects, aboutRows);
-          renderProjects(_projects);
-        }
-      });
-    }).catch(function(err) { console.error('About sheet error:', err); });
-
-    // Render project grid as soon as projects sheet arrives (uses currentView as-is so far)
-    const projectsText = await projectsPromise;
+    // Wait for BOTH the projects data and the resolved view before the first render
+    const [projectsText] = await Promise.all([projectsPromise, viewReadyPromise]);
     _projects = parseCSV(projectsText, 'name', true);
     renderProjects(_projects);
+
+    // Update sublines with real numbers now that both are in
+    if (aboutRowsCache) loadSettings(_projects, aboutRowsCache);
   } catch (err) {
     document.getElementById('main-content').innerHTML = '<div class="projects-grid"><p class="loading">Could not load projects.</p></div>';
   }
@@ -569,7 +574,7 @@ function moveSmileyEyes(view) {
   const eyeL = document.getElementById('eyeL');
   const eyeR = document.getElementById('eyeR');
   if (!eyeL || !eyeR) return;
-  const dx = view === 'full' ? -1.5 : 1.5;
+  const dx = view === 'full' ? -4 : 4;
   eyeL.setAttribute('cx', 13.5 + dx);
   eyeL.setAttribute('cy', 20);
   eyeR.setAttribute('cx', 27.5 + dx);
