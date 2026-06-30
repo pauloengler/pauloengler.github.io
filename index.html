@@ -38,14 +38,17 @@
     .hero-sub:empty { display: none; }
     .filter-chip { background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
     .view-toggle { background: #FFFFFF; padding: 16px 40px 0; }
-    .toggle-track { display: flex; background: #F2F2F2; padding: 4px; border-radius: 0; gap: 4px; }
-    .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 12px 10px; cursor: pointer; gap: 2px; border-radius: 0; border: none; outline: none; background: transparent; transition: background 0.2s; }
+    .toggle-intro { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; color: #999999; text-align: center; margin-bottom: 10px; }
+    .toggle-track { display: flex; align-items: stretch; background: #FFFFFF; padding: 0; border-radius: 0; gap: 0; }
+    .toggle-option { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 11px 12px 9px; cursor: pointer; gap: 2px; border-radius: 0; border: 1px solid #D5D5D5; outline: none; background: transparent; transition: background 0.2s, border-color 0.2s; z-index: 1; }
+    .toggle-option.active { border-color: #0A0A0A; }
     .toggle-option:focus { outline: none; }
     .toggle-option.active { background: #0A0A0A; }
     .toggle-option .t-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; line-height: 1; color: #999999; transition: color 0.2s; }
     .toggle-option.active .t-label { color: #FFFFFF; }
     .toggle-option .t-sub { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 9px; letter-spacing: 0.02em; color: #B0B0B0; text-align: center; line-height: 1.4; transition: color 0.2s; }
     .toggle-option.active .t-sub { color: rgba(255,255,255,0.5); }
+    .smiley-divider { width: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #FFFFFF; z-index: 2; }
     .search-bar { background: #FFFFFF; padding: 16px 40px 24px; }
     .search-inner { background: #FFFFFF !important; border: 1px solid #E5E5E5; border-radius: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; color-scheme: light; }
     .search-inner svg { flex-shrink: 0; color: #999999; }
@@ -165,11 +168,22 @@
 
 <div class="filter-chip">
   <div class="view-toggle" id="view-toggle">
+    <p class="toggle-intro">Pick a view</p>
     <div class="toggle-track">
       <button class="toggle-option active" id="btn-full" onclick="setView('full')">
         <span class="t-label">All</span>
         <span class="t-sub">Everything in this portfolio</span>
       </button>
+      <div class="smiley-divider">
+        <svg id="smiley" width="40" height="40" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="22" r="21" fill="#FFFFFF" stroke="#0A0A0A" stroke-width="2"/>
+          <g id="eyes">
+            <ellipse id="eyeL" cx="12" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
+            <ellipse id="eyeR" cx="26" cy="20" rx="2.6" ry="3.2" fill="#0A0A0A"/>
+          </g>
+          <path d="M14 28 Q22 33 30 28" stroke="#0A0A0A" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
       <button class="toggle-option" id="btn-select" onclick="setView('select')">
         <span class="t-label">Selected</span>
         <span class="t-sub">Work that represents me best</span>
@@ -326,13 +340,28 @@ async function loadProjects() {
       const aboutRows = parseCSV(aboutText, null, false);
       // Render immediately with tokens unresolved (shows text right away)
       renderSublines(aboutRows, '…', '…', '…');
-      // Once projects also arrive, update with real numbers
+
+      // Read default view from the "view" block in the about sheet
+      const viewRow = aboutRows.find(function(r) { return (r.block || '').toLowerCase().trim() === 'view'; });
+      const viewVal = viewRow ? (viewRow.col1 || '').toLowerCase().trim() : '';
+      if (viewVal === 'selected') {
+        currentView = 'select';
+        document.getElementById('btn-full').classList.remove('active');
+        document.getElementById('btn-select').classList.add('active');
+        moveSmileyEyes('select');
+      }
+      // If view is "all" or unset, the default 'full' state already in place stays
+
+      // Once projects also arrive, update with real numbers and re-render grid with the right default
       projectsPromise.then(function() {
-        if (_projects) loadSettings(_projects, aboutRows);
+        if (_projects) {
+          loadSettings(_projects, aboutRows);
+          renderProjects(_projects);
+        }
       });
     }).catch(function(err) { console.error('About sheet error:', err); });
 
-    // Render project grid as soon as projects sheet arrives
+    // Render project grid as soon as projects sheet arrives (uses currentView as-is so far)
     const projectsText = await projectsPromise;
     _projects = parseCSV(projectsText, 'name', true);
     renderProjects(_projects);
@@ -536,10 +565,41 @@ function slugify(str) {
 let currentView = 'full';
 let currentSearch = '';
 
+function moveSmileyEyes(view) {
+  const eyeL = document.getElementById('eyeL');
+  const eyeR = document.getElementById('eyeR');
+  if (!eyeL || !eyeR) return;
+  const dx = view === 'full' ? -1.5 : 1.5;
+  eyeL.setAttribute('cx', 13.5 + dx);
+  eyeL.setAttribute('cy', 20);
+  eyeR.setAttribute('cx', 27.5 + dx);
+  eyeR.setAttribute('cy', 20);
+}
+
+function moveSmileyEyesDown() {
+  const eyeL = document.getElementById('eyeL');
+  const eyeR = document.getElementById('eyeR');
+  if (!eyeL || !eyeR) return;
+  eyeL.setAttribute('cx', 13.5);
+  eyeL.setAttribute('cy', 22.5);
+  eyeR.setAttribute('cx', 27.5);
+  eyeR.setAttribute('cy', 22.5);
+}
+
+function blinkSmiley() {
+  const eyes = document.getElementById('eyes');
+  if (!eyes) return;
+  eyes.style.transform = 'scaleY(0.1)';
+  eyes.style.transformOrigin = 'center';
+  setTimeout(function() { eyes.style.transform = 'scaleY(1)'; }, 120);
+}
+setInterval(blinkSmiley, 3200 + Math.random() * 1500);
+
 function setView(view) {
   currentView = view;
   document.getElementById('btn-full').classList.toggle('active', view === 'full');
   document.getElementById('btn-select').classList.toggle('active', view === 'select');
+  moveSmileyEyes(view);
   document.getElementById('search-input').value = '';
   currentSearch = '';
   if (_projects) renderProjects(_projects);
@@ -549,6 +609,11 @@ function doSearch(query) {
   currentSearch = query.toLowerCase().trim();
   document.getElementById('btn-full').classList.toggle('active', !currentSearch && currentView === 'full');
   document.getElementById('btn-select').classList.toggle('active', !currentSearch && currentView === 'select');
+  if (currentSearch) {
+    moveSmileyEyesDown();
+  } else {
+    moveSmileyEyes(currentView);
+  }
   if (_projects) renderProjects(_projects);
 }
 
