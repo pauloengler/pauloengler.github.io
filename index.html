@@ -63,12 +63,12 @@
     .legend-dot { width: 8px; height: 8px; flex-shrink: 0; }
     .chapter-header { display: flex; justify-content: center; align-items: center; padding: 80px 40px 20px; background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
     .chapter-label { font-family: 'Rock Salt', cursive; font-weight: 400; font-size: 39px; letter-spacing: 0.02em; color: #0A0A0A; }
-    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); background: #FFFFFF; gap: 12px; padding: 12px; }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); background: #FFFFFF; gap: 24px; padding: 24px; }
     .project-card { display: flex; flex-direction: column; background: #FFFFFF; padding: 0; text-decoration: none; color: inherit; transition: background 0.15s; border: none; }
     .project-card:hover { background: #FAFAFA; }
     .card-media { display: flex; flex-direction: column; width: 100%; }
-    .award-icons { display: flex; justify-content: flex-end; align-items: flex-end; gap: 0; margin-bottom: 0; width: 100%; }
-    .award-col { display: flex; flex-direction: column; flex: 0 0 calc(100% / 10); width: calc(100% / 10); overflow: hidden; border-radius: 0; border: 1px solid #0A0A0A; margin-left: -1px; }
+    .award-icons { display: flex; justify-content: flex-start; align-items: flex-end; gap: 0; margin-bottom: 0; width: 100%; }
+    .award-col { display: flex; flex-direction: column; flex: 0 0 calc(100% / 10); width: calc(100% / 10); overflow: hidden; border-radius: 0; border: none; margin-left: 0; }
     .award-col:first-child { margin-left: 0; }
     .award-cell { display: flex; align-items: center; justify-content: center; padding: 1px 4px; height: 15px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; }
     .award-cell .cell-metal { font-size: 7px; font-weight: 500; letter-spacing: 0; line-height: 1; }
@@ -92,7 +92,7 @@
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
     .btn-view { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 10px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; border-radius: 0; transition: opacity 0.2s; align-self: flex-start; width: 100%; }
     .btn-view:hover { opacity: 0.75; }
-    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; width: 130px; }
+    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; width: 30%; }
     .btn-quick { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: 1px solid #0A0A0A; padding: 0 10px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: flex-end; border-radius: 0; transition: background 0.2s, color 0.2s; cursor: pointer; width: 100%; }
     .btn-quick:hover { background: #0A0A0A; color: #FFFFFF; }
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
