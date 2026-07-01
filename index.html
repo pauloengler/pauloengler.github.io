@@ -83,18 +83,18 @@
     .award-icon-cell img { width: 75%; height: 75%; object-fit: contain; display: block; opacity: 0.5; }
     .award-overflow-box { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; color: #999999; background: #F2F2F2; letter-spacing: 0; }
     .award-spacer { margin-bottom: 0; }
-    .project-thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #F2F2F2; border-radius: 0; border: 1px solid #0A0A0A; }
+    .project-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #F2F2F2; border-radius: 0; border: 1px solid #0A0A0A; }
 
     .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
     .project-info { padding: 12px 16px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
-    .project-info-top { display: flex; justify-content: space-between; align-items: stretch; gap: 10px; }
+    .project-info-top { display: flex; flex-direction: column; gap: 4px; }
     .project-meta { flex: 1; }
     .project-client { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 4px; }
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
-    .btn-view { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: 1px solid #0A0A0A; padding: 0 8px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: center; border-radius: 0; transition: opacity 0.2s; align-self: flex-start; width: 100%; }
+    .btn-view { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 7px; letter-spacing: 0.04em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: none; padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; cursor: pointer; transition: opacity 0.2s; }
     .btn-view:hover { opacity: 0.75; }
-    .card-btns { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; align-self: flex-start; width: 30%; }
-    .btn-quick { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: 1px solid #0A0A0A; padding: 0 8px; height: 17px; white-space: nowrap; display: flex; align-items: center; justify-content: center; border-radius: 0; transition: background 0.2s, color 0.2s; cursor: pointer; width: 100%; }
+    .card-btns { position: absolute; bottom: -1px; right: -1px; display: flex; flex-direction: row; gap: 0; z-index: 2; }
+    .btn-quick { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 7px; letter-spacing: 0.04em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: 1px solid #0A0A0A; border-right: none; padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; text-align: center; line-height: 1.2; cursor: pointer; transition: background 0.2s, color 0.2s; }
     .btn-quick:hover { background: #0A0A0A; color: #FFFFFF; }
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
     .qv-overlay.open { display: flex; }
@@ -577,17 +577,18 @@ function buildCard(p) {
     }
   }
 
+  const btnsHTML = '<div class="card-btns">' +
+    '<span class="btn-view">View</span>' +
+    (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">Quick</button>' : '') +
+    '</div>';
+
   a.innerHTML = '<div class="card-media">' + iconsHTML +
-    '<div class="project-thumb">' + thumbInner + '</div></div>' +
+    '<div class="project-thumb">' + thumbInner + btnsHTML + '</div></div>' +
     '<div class="project-info">' +
       '<div class="project-info-top">' +
         '<div class="project-meta">' +
           '<p class="project-client">' + (p.client || '') + '</p>' +
           '<p class="project-name">' + p.name + '</p>' +
-        '</div>' +
-        '<div class="card-btns">' +
-          '<span class="btn-view">View Full Project</span>' +
-          (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">Quick View</button>' : '') +
         '</div>' +
       '</div>' +
       descHTML +
