@@ -92,7 +92,7 @@
     .project-client { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 4px; }
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
 
-    .card-btns { position: absolute; bottom: 0; left: 0; right: 0; display: flex; height: 36px; z-index: 2; }
+    .card-btns { display: flex; height: 36px; width: 100%; border-top: 1px solid #0A0A0A; }
     .btn-quick { flex: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: none; border-top: 1px solid #0A0A0A; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background 0.2s; }
     .btn-quick:hover { background: #f0f0f0; }
     .btn-view { flex: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: none; border-top: 1px solid #0A0A0A; border-left: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background 0.2s; }
@@ -604,12 +604,13 @@ function buildCard(p) {
   const eyeIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 
   const btnsHTML = '<div class="card-btns">' +
-    (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">' + eyeIcon + 'Quick</button>' : '') +
-    '<span class="btn-view">' + eyeIcon + 'Full</span>' +
+    (firstMedia ? '<button class="btn-quick" data-media=\'' + firstMedia + '\' data-name=\'' + p.name + '\' onclick="quickView(event,this)">' + eyeIcon + 'Quick View</button>' : '') +
+    '<span class="btn-view">' + eyeIcon + 'View Full Project</span>' +
     '</div>';
 
   a.innerHTML = '<div class="card-media">' + iconsHTML +
-    '<div class="project-thumb">' + thumbInner + btnsHTML + '</div></div>' +
+    '<div class="project-thumb">' + thumbInner + '</div>' +
+    btnsHTML + '</div>' +
     '<div class="project-info">' +
       '<div class="project-info-top">' +
         '<div class="project-meta">' +
