@@ -3,113 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Paulo Engler</title>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400;600&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <title>Paulo Engler — About</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
-    .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
+    body { background: #FFFFFF; color: #0A0A0A; font-family: 'JetBrains Mono', monospace; font-weight: 400; min-height: 100vh; }
+    .site { display: flex; flex-direction: column; background: #FFFFFF; min-height: 100vh; }
 
-    /* ── NAV ── */
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; position: sticky; top: 0; z-index: 100; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #FFFFFF; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #E5E5E5; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
-    .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
-    .nav-left a:hover, .nav-right a:hover, .nav-right a.active { color: #0A0A0A; }
+    .nav-left a, .nav-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; text-decoration: none; transition: color 0.2s; }
+    .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
 
-    /* ── SECTIONS ── */
-    .about-section { background: #F7F4EE; padding: 60px 40px; }
-    .about-section + .about-section { border-top: 2px solid #0A0A0A; }
-    .section-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 32px; }
-    .section-label-tight { margin-bottom: 16px; }
+    .about-hero { padding: 64px 40px 48px; border-bottom: 1px solid #E5E5E5; }
+    .about-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 12px; }
+    .about-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(28px, 4vw, 52px); color: #0A0A0A; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 8px; }
+    .about-role { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px; color: #999999; letter-spacing: 0.02em; }
 
-    /* ── HEADER ── */
-    .about-header { background: #F7F4EE; padding: 72px 40px 60px; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
-    .about-header-left { flex: 1; min-width: 0; }
-    .btn-resume { flex-shrink: 0; font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; border: none; cursor: pointer; padding: 18px 28px; border-radius: 4px; transition: background 0.2s; align-self: flex-end; margin-bottom: 8px; }
-    .btn-resume:hover { background: #333; }
-    .about-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(10px, 1.8vw, 18px); color: rgba(10,10,10,0.35); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
-    .about-name { font-family: 'DM Serif Display', serif; font-style: italic; font-size: clamp(52px, 8vw, 100px); color: #0A0A0A; line-height: 0.95; letter-spacing: -0.02em; }
-    .about-sublines { margin-top: 24px; display: flex; flex-direction: column; gap: 6px; }
-    .about-subline { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: clamp(8px, 1vw, 11px); color: rgba(10,10,10,0.45); letter-spacing: 0.04em; line-height: 1.6; }
+    .about-section { padding: 40px; border-bottom: 1px solid #E5E5E5; }
+    .section-label { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #999999; margin-bottom: 20px; }
+    .about-intro { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 15px; color: #333333; line-height: 1.75; max-width: 720px; }
+    .about-intro p { margin-top: 14px; }
+    .about-intro p:first-child { margin-top: 0; }
 
-    /* ── PHOTO ── */
-    .about-photo { width: 100%; aspect-ratio: 16/7; background: #DDD9D0; overflow: hidden; }
-    .about-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .experience-list { display: flex; flex-direction: column; gap: 0; }
+    .experience-row { display: grid; grid-template-columns: 1fr 120px 180px 200px; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E5E5E5; align-items: baseline; }
+    .experience-row:first-child { border-top: 1px solid #E5E5E5; }
+    .exp-company { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: #0A0A0A; }
+    .exp-years { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; color: #999999; }
+    .exp-role { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; color: #555555; }
+    .exp-location { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; color: #999999; text-align: right; }
 
-    /* ── INTRO ── */
-    .intro-text { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
-    .intro-text p { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); line-height: 1.85; }
+    .jury-list { display: flex; flex-direction: column; gap: 0; }
+    .jury-row { display: grid; grid-template-columns: 1fr 100px; gap: 16px; padding: 14px 0; border-bottom: 1px solid #E5E5E5; align-items: baseline; }
+    .jury-row:first-child { border-top: 1px solid #E5E5E5; }
+    .jury-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; color: #0A0A0A; }
+    .jury-year { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; color: #999999; text-align: right; }
 
-    /* ── EXPERIENCE ── */
-    .experience-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
-    .experience-row { display: grid; grid-template-columns: 2fr 1fr 2fr 1.5fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
-    .experience-row:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
-    .exp-company { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
-    .exp-years { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.35); letter-spacing: 0.05em; }
-    .exp-role { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); }
-    .exp-location { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.3); letter-spacing: 0.03em; }
+    .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; border: 1px solid #0A0A0A; padding: 6px 12px; }
 
-    /* ── JURY ── */
-    .jury-list { display: flex; flex-direction: column; gap: 0; width: 100%; }
-    .jury-row { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid rgba(10,10,10,0.08); align-items: baseline; }
-    .jury-row:first-child { border-top: 1px solid rgba(10,10,10,0.08); }
+    .clients-wrap { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; color: #555555; line-height: 1.8; }
 
-    /* ── EXPERTISE ── */
-    .expertise-list { display: flex; flex-wrap: wrap; gap: 8px; }
-    .expertise-tag { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(10,10,10,0.6); border: 1px solid rgba(10,10,10,0.2); padding: 8px 14px; border-radius: 2px; }
-
-    /* ── CLIENTS ── */
-    .clients-list { display: flex; flex-wrap: wrap; gap: 0; }
-    .client-tag { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: -0.01em; text-transform: uppercase; color: rgba(10,10,10,0.4); line-height: 1.9; }
-    .client-tag:not(:last-child)::after { content: ',\00a0\00a0\00a0\00a0'; font-weight: 300; color: rgba(10,10,10,0.2); }
-
-    /* ── AWARDS ── */
-    .awards-grid { display: flex; flex-direction: column; gap: 24px; }
-    .award-about-item { display: flex; flex-direction: column; gap: 8px; }
-    .award-about-header { display: inline-flex; align-items: center; gap: 0; background: #E8E3DA; border-radius: 3px; overflow: hidden; align-self: flex-start; }
-    .award-about-icon { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-    .award-about-icon img { width: 100%; height: 100%; object-fit: contain; }
-    .award-about-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 8px 0 8px; }
-    .award-about-total { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; color: rgba(10,10,10,0.4); padding: 0 10px 0 0; letter-spacing: 0; }
-    .award-about-metals { display: flex; flex-wrap: wrap; gap: 4px; margin-left: 0; margin-top: 2px; }
-    .award-about-pill { display: inline-flex; align-items: center; gap: 5px; font-family: 'Inter', sans-serif; font-size: 10px; color: rgba(10,10,10,0.55); }
-    .award-about-dot { display: inline-flex; align-items: center; justify-content: center; padding: 2px 6px; border-radius: 3px; font-size: 7px; font-weight: 700; font-family: 'Inter', sans-serif; text-transform: uppercase; }
-    .award-about-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
-    .award-about-dot.metal-gold   { background: #A8874A; color: #fff; }
-    .award-about-dot.metal-silver { background: #9AAFA8; color: #fff; }
-    .award-about-dot.metal-bronze { background: #926650; color: #fff; }
-    .award-about-dot.metal-other  { background: #C8C3B8; color: #555; }
-    .award-about-campaigns { margin-left: 0; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 6px; }
-    .award-campaign-link { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.06em; color: rgba(10,10,10,0.4); text-decoration: none; text-transform: uppercase; border-bottom: 1px solid rgba(10,10,10,0.15); padding-bottom: 1px; transition: color 0.2s, border-color 0.2s; }
-    .award-campaign-link:hover { color: #0A0A0A; border-color: #0A0A0A; }
-
-    /* ── CONTACT ── */
     .contact-list { display: flex; flex-direction: column; gap: 12px; }
-    .contact-item { display: flex; align-items: center; gap: 16px; }
-    .contact-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 7px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.25); width: 80px; flex-shrink: 0; }
-    .contact-value { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 11px; color: rgba(10,10,10,0.6); text-decoration: none; transition: color 0.2s; }
-    .contact-value:hover { color: #0A0A0A; }
-    .resume-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 32px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: #F7F4EE; background: #0A0A0A; padding: 14px 24px; text-decoration: none; border-radius: 4px; transition: background 0.2s; }
-    .resume-btn:hover { background: #333; }
+    .contact-row { display: flex; gap: 16px; align-items: center; }
+    .contact-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; width: 80px; flex-shrink: 0; }
+    .contact-value { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 12px; color: #0A0A0A; text-decoration: none; }
+    .contact-value:hover { color: #999999; }
 
-    /* ── FOOTER ── */
-    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; margin-top: auto; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
-    .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
-    .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
+    .footer-left a, .footer-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .footer-left a:hover, .footer-right a:hover { color: #FFFFFF; }
 
-    .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
-
-
+    .loading { padding: 80px 40px; text-align: center; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; }
 
     @media (max-width: 600px) {
-      nav, .about-header, .about-section, footer { padding-left: 20px; padding-right: 20px; }
-      .experience-row { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .exp-role { grid-column: 1 / -1; }
-      .about-name { font-size: clamp(40px, 12vw, 72px); }
+      nav, .about-hero, .about-section, footer { padding-left: 20px; padding-right: 20px; }
+      .experience-row { grid-template-columns: 1fr 1fr; }
+      .exp-role, .exp-location { display: none; }
     }
   </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="site">
@@ -121,13 +77,11 @@
   </div>
   <div class="nav-right">
     <a href="index.html">Work</a>
-    <a href="about.html" class="active">About</a>
+    <a href="about.html">About</a>
   </div>
 </nav>
 
-<div id="about-content">
-  <div class="loading">Loading…</div>
-</div>
+<div id="about-content"><p class="loading">Loading...</p></div>
 
 <footer>
   <div class="footer-left">
@@ -143,639 +97,136 @@
 </div>
 <script>
 const ABOUT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?gid=1943812170&single=true&output=csv';
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVn3Mw1D4qw9pc_ifibalqvnFv3rEf1xQ8eFNvXNY_t8UyH1c8_MkfTG8KkrczCnsyYaQo4lW2O0E3/pub?output=csv';
-const METALS = ['gp','gold','silver','bronze','short'];
-const METAL_FULL = { gp:'Grand Prix', gold:'Gold', silver:'Silver', bronze:'Bronze', short:'Shortlist' };
-const DANDAD_FULL = { gp:'Black Pencil', gold:'Yellow Pencil', silver:'Graphite Pencil', bronze:'Wood Pencil', short:'Shortlist' };
-const AWARD_NAMES = {
-  ame:'AME by New York Festivals', archive:"Lürzer's Archive Magazine",
-  cannes:'Cannes Lions', caples:'Caples', clio:'Clio', cliohealth:'Clio Health',
-  dandad:'D&AD', elojo:'El Ojo de Iberoamérica', fiap:'Festival Iberoamericano de la Publicidad',
-  lia:'London International Awards (LIA)', loeries:'Loeries', lynx:'Dubai Lynx',
-  madstars:'Mad Stars', newyork:'New York Festivals', one:'One Show',
-  phnks:'Ad Forum PHNX', wark:'WARK', wave:'Wave Festival in Rio',
-  webby:'Webby Awards', wpp:'WPP Cream'
-};
 
-function parseCSV(text, filterFn, skipFirst) {
-  const result = [];
-  const normalized = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n');
-  let pos = 0;
-  function parseRow() {
-    const cols = [];
-    while (pos < normalized.length) {
-      if (normalized[pos] === '"') {
-        pos++;
-        let val = '';
-        while (pos < normalized.length) {
-          if (normalized[pos]==='"' && normalized[pos+1]==='"') { val+='"'; pos+=2; }
-          else if (normalized[pos]==='"') { pos++; break; }
-          else { val+=normalized[pos++]; }
-        }
-        cols.push(val);
-        if (normalized[pos]===',') pos++;
-        else break;
-      } else {
-        let val = '';
-        while (pos < normalized.length && normalized[pos]!==',' && normalized[pos]!=='\n') val+=normalized[pos++];
-        cols.push(val.trim());
-        if (normalized[pos]===',') pos++;
-        else break;
-      }
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+  let headers = null;
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const cells = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
+      else { cur += ch; }
     }
-    if (normalized[pos]==='\n') pos++;
-    return cols;
+    cells.push(cur.trim());
+    if (!headers) { headers = cells.map(h => h.toLowerCase().trim()); continue; }
+    const row = {};
+    headers.forEach((h, i) => { row[h] = (cells[i] || '').replace(/^"|"$/g,'').trim(); });
+    rows.push(row);
   }
-  if (skipFirst) parseRow(); // skip decorative label row (projects sheet only)
-  const headers = parseRow().map(h=>h.toLowerCase().trim());
-  while (pos < normalized.length) {
-    const cols = parseRow();
-    if (cols.every(c=>!c)) continue;
-    const obj = {};
-    cols.forEach(function(val, i) {
-      // Use defined header if available, otherwise auto-generate col1, col2...
-      const key = (headers[i] && headers[i] !== '') ? headers[i] : 'col' + (i + 1);
-      obj[key] = val || '';
-    });
-    if (filterFn ? filterFn(obj) : true) result.push(obj);
-  }
-  return result;
+  return rows;
 }
 
-function slugify(str) {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+function rowsByBlock(rows, block) {
+  return rows.filter(r => (r.block||'').toLowerCase().trim() === block);
+}
+function firstByBlock(rows, block) {
+  return rowsByBlock(rows, block)[0] || {};
 }
 
-function metalClass(m) {
-  if (m==='gp') return 'metal-gp';
-  if (m==='gold') return 'metal-gold';
-  if (m==='silver') return 'metal-silver';
-  if (m==='bronze') return 'metal-bronze';
-  return 'metal-other';
-}
+function render(rows) {
+  const header = firstByBlock(rows, 'header');
+  const intros = rowsByBlock(rows, 'intro');
+  const experiences = rowsByBlock(rows, 'experience');
+  const juries = rowsByBlock(rows, 'jury');
+  const expertise = rowsByBlock(rows, 'expertise');
+  const clients = firstByBlock(rows, 'clients');
+  const contact = firstByBlock(rows, 'contact');
 
-function buildAwardsFromProjects(projects) {
-  if (!projects || !projects.length) return '';
+  const clientList = Object.values(clients).filter((v,i) => i > 0 && v).join(' · ');
 
-  // Tally all awards across all projects
-  const awardMap = {}; // awardName -> { metals: {gp,gold,silver,bronze,short}, campaigns: [] }
-  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
-  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
-
-  projects.forEach(function(p) {
-    AWARD_KEYS.forEach(function(show) {
-      // Check if this project has any metals for this show
-      const hasAny = METALS.some(function(m) {
-        return parseInt(p[show + '_' + metalColMap[m]] || 0) > 0;
-      });
-      if (!hasAny) return;
-      if (!awardMap[show]) awardMap[show] = { metals:{gp:0,gold:0,silver:0,bronze:0,short:0}, campaigns:[] };
-      METALS.forEach(function(m) {
-        const col = show + '_' + metalColMap[m];
-        const v = parseInt(p[col] || 0);
-        if (v > 0) awardMap[show].metals[m] += v;
-      });
-      const campName = p.name || '';
-      if (campName && !awardMap[show].campaigns.includes(campName)) {
-        awardMap[show].campaigns.push(campName);
-      }
-    });
+  const allExpertise = [];
+  expertise.forEach(r => {
+    Object.values(r).slice(1).filter(v=>v).forEach(v => allExpertise.push(v));
   });
 
-  function totalMetals(k) {
-    return METALS.reduce(function(sum, m){ return sum + awardMap[k].metals[m]; }, 0);
-  }
-
-  // Sort by total metal count descending, ties broken alphabetically
-  const keys = Object.keys(awardMap).filter(function(k) {
-    return totalMetals(k) > 0;
-  }).sort(function(a, b) {
-    return totalMetals(b) - totalMetals(a) || a.localeCompare(b);
-  });
-
-  if (!keys.length) return '';
-
-  const itemsHTML = keys.map(function(key) {
-    const award = awardMap[key];
-    const displayName = AWARD_NAMES[key] || key;
-    const isDandad = key === 'dandad';
-
-    const metalsHTML = METALS.filter(function(m){ return award.metals[m] > 0; }).map(function(m) {
-      const label = isDandad ? (DANDAD_FULL[m]||m) : (METAL_FULL[m]||m);
-      return '<span class="award-about-pill">'
-        + '<span class="award-about-dot ' + metalClass(m) + '">' + label + '</span>'
-        + ' ' + award.metals[m]
-        + '</span>';
-    }).join('');
-
-    const campaignsHTML = award.campaigns.map(function(c) {
-      return '<a href="project.html?id=' + slugify(c) + '" class="award-campaign-link">' + c + '</a>';
-    }).join('');
-
-    const metalTotal = ['gp','gold','silver','bronze'].reduce(function(sum, m){ return sum + award.metals[m]; }, 0);
-
-    return '<div class="award-about-item">'
-      + '<div class="award-about-header">'
-      + '<div class="award-about-icon"><img src="icons/' + key + '.png" alt="' + displayName + '"></div>'
-      + '<span class="award-about-name">' + displayName + '</span>'
-      + (metalTotal ? '<span class="award-about-total">' + metalTotal + '</span>' : '')
-      + '</div>'
-      + '<div class="award-about-metals">' + metalsHTML + '</div>'
-      + (campaignsHTML ? '<div class="award-about-campaigns">' + campaignsHTML + '</div>' : '')
-      + '</div>';
-  }).join('');
-
-  return '<div class="about-section"><p class="section-label">Awards</p><div class="awards-grid">' + itemsHTML + '</div></div>';
-}
-
-function buildAbout(rows, projects) {
   let html = '';
 
-  // Header
-  const header = rows.find(r=>r.block==='header');
-
-  // Compute dynamic award totals for subline tokens
-  const metalColMap2 = { gp:'gp', gold:'g', silver:'s', bronze:'b' };
-  let totalAwards = 0, totalCannes = 0, totalGP = 0;
-  if (projects && projects.length) {
-    const AWARD_KEYS2 = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
-    projects.forEach(function(p) {
-      AWARD_KEYS2.forEach(function(show) {
-        ['gp','g','s','b','sh'].forEach(function(m) {
-          const v = parseInt(p[show + '_' + m] || 0);
-          if (v > 0) totalAwards += v;                              // all metals + shortlists
-          if (show === 'cannes' && m !== 'sh' && v > 0) totalCannes += v; // Lions excl. shortlists
-        });
-      });
-      // GP: only Cannes Grand Prix
-      const gp = parseInt(p['cannes_gp'] || 0);
-      if (gp > 0) totalGP += gp;
-    });
-  }
-
-  function applyTokens(str) {
-    return str
-      .replace(/\{\{total\}\}/g, totalAwards)
-      .replace(/\{\{cannes\}\}/g, totalCannes)
-      .replace(/\{\{gp\}\}/g, totalGP);
-  }
-
-  if (header) {
-    const sublines = rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block, undefined, {numeric:true}));
-    const sublinesHTML = sublines.length
-      ? '<div class="about-sublines">'
-        + sublines.map(function(r){ return '<p class="about-subline">' + applyTokens(r.col1||'') + '</p>'; }).join('')
-        + '</div>'
-      : '';
-    html += '<div class="about-header">'
-      + '<div class="about-header-left">'
-      + '<p class="about-title">' + (header.col1||'') + '</p>'
-      + '<h1 class="about-name">' + (header.col2||'') + '</h1>'
-      + sublinesHTML
-      + '</div>'
-      + '<button class="btn-resume" onclick="generateResume()">↓ Download Resume</button>'
-      + '</div>';
-  }
-
-  // Photo placeholder — will show if photo column added later
-  const photo = rows.find(r=>r.block==='photo');
-  if (photo && photo.col1) {
-    html += '<div class="about-photo"><img src="' + photo.col1 + '" alt="Paulo Engler"></div>';
-  } else {
-    html += '<div class="about-photo"></div>';
-  }
+  // Hero
+  html += `<div class="about-hero">
+    <p class="about-label">About</p>
+    <h1 class="about-name">${header.col1 || 'Paulo Engler'}</h1>
+    <p class="about-role">${header.col2 || ''}</p>
+  </div>`;
 
   // Intro
-  const intros = rows.filter(r=>r.block==='intro');
   if (intros.length) {
-    html += '<div class="about-section"><p class="section-label">About</p><div class="intro-text">'
-      + intros.map(r=>'<p>'+(r.col1||'')+'</p>').join('')
-      + '</div></div>';
+    html += `<div class="about-section">
+      <p class="section-label">Introduction</p>
+      <div class="about-intro">${intros.map(r=>`<p>${r.col1||''}</p>`).join('')}</div>
+    </div>`;
   }
 
   // Experience
-  const experiences = rows.filter(r=>r.block==='experience');
   if (experiences.length) {
-    html += '<div class="about-section"><p class="section-label">Experience</p><div class="experience-list">'
-      + experiences.map(function(r) {
-          const from = r.col2||'';
-          const until = r.col3||'';
-          const years = from && until ? from + ' – ' + until : from || until;
-          return '<div class="experience-row">'
-            + '<span class="exp-company">' + (r.col1||'') + '</span>'
-            + '<span class="exp-years">' + years + '</span>'
-            + '<span class="exp-role">' + (r.col4||'') + '</span>'
-            + '<span class="exp-location">' + (r.col5||'') + '</span>'
-            + '</div>';
-        }).join('')
-      + '</div></div>';
+    html += `<div class="about-section">
+      <p class="section-label">Experience</p>
+      <div class="experience-list">
+        ${experiences.map(r => `<div class="experience-row">
+          <span class="exp-company">${r.col1||''}</span>
+          <span class="exp-years">${r.col2||''}${r.col3?' – '+r.col3:''}</span>
+          <span class="exp-role">${r.col4||''}</span>
+          <span class="exp-location">${r.col5||''}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
   }
 
   // Jury
-  const juryRows = rows.filter(r=>r.block==='jury');
-  if (juryRows.length) {
-    html += '<div class="about-section"><p class="section-label">Jury</p><div class="jury-list">'
-      + juryRows.map(function(r) {
-          return '<div class="jury-row">'
-            + '<span class="exp-company">' + (r.col1||'') + '</span>'
-            + '<span class="exp-years">' + (r.col2||'') + '</span>'
-            + '</div>';
-        }).join('')
-      + '</div></div>';
+  if (juries.length) {
+    html += `<div class="about-section">
+      <p class="section-label">Jury</p>
+      <div class="jury-list">
+        ${juries.map(r => `<div class="jury-row">
+          <span class="jury-name">${r.col1||''}</span>
+          <span class="jury-year">${r.col2||''}</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
   }
 
   // Expertise
-  const expertiseRows = rows.filter(r=>r.block==='expertise');
-  if (expertiseRows.length) {
-    const tags = [];
-    expertiseRows.forEach(function(r) {
-      for (var ci = 1; ci <= 30; ci++) {
-        if (r['col'+ci]) tags.push(r['col'+ci]);
-      }
-    });
-    html += '<div class="about-section"><p class="section-label">Expertise</p><div class="expertise-list">'
-      + tags.map(t=>'<span class="expertise-tag">'+t+'</span>').join('')
-      + '</div></div>';
+  if (allExpertise.length) {
+    html += `<div class="about-section">
+      <p class="section-label">Expertise</p>
+      <div class="tags-wrap">${allExpertise.map(e=>`<span class="tag">${e}</span>`).join('')}</div>
+    </div>`;
   }
 
   // Clients
-  const clientRows = rows.filter(r=>r.block==='clients');
-  if (clientRows.length) {
-    const clients = [];
-    clientRows.forEach(function(r) {
-      Object.keys(r).filter(k=>k.match(/^col\d+$/)).sort(function(a,b){
-        return parseInt(a.slice(3))-parseInt(b.slice(3));
-      }).forEach(function(k){ if (r[k]) clients.push(r[k]); });
-    });
-    html += '<div class="about-section"><p class="section-label section-label-tight">Selected Clients</p><div class="clients-list">'
-      + clients.map(c=>'<span class="client-tag">'+c+'</span>').join('')
-      + '</div></div>';
+  if (clientList) {
+    html += `<div class="about-section">
+      <p class="section-label">Clients</p>
+      <p class="clients-wrap">${clientList}</p>
+    </div>`;
   }
-
-  // Awards — built from projects sheet
-  html += buildAwardsFromProjects(projects);
 
   // Contact
-  const contact = rows.find(r=>r.block==='contact');
-  if (contact) {
-    const resume = rows.find(r=>r.block==='resume');
-    html += '<div class="about-section"><p class="section-label">Contact</p><div class="contact-list">'
-      + (contact.col1 ? '<div class="contact-item"><span class="contact-label">Email</span><a class="contact-value" href="mailto:'+contact.col1+'">'+contact.col1+'</a></div>' : '')
-      + (contact.col2 ? '<div class="contact-item"><span class="contact-label">Phone</span><a class="contact-value" href="tel:'+contact.col2.replace(/\s/g,'')+'">'+contact.col2+'</a></div>' : '')
-      + (contact.col3 ? '<div class="contact-item"><span class="contact-label">LinkedIn</span><a class="contact-value" href="'+contact.col3+'" target="_blank">'+contact.col3.replace('https://','')+'</a></div>' : '')
-      + (contact.col4 ? '<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col4+'" target="_blank">@'+contact.col4+'</a></div>' : '')
-      + (contact.col5 ? '<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col5+'" target="_blank">@'+contact.col5+'</a></div>' : '')
-      + '</div>'
-      + (resume && resume.col1 ? '<a href="'+resume.col1+'" class="resume-btn" download>↓ Download Resume</a>' : '')
-      + '</div>';
+  if (contact.col1) {
+    html += `<div class="about-section">
+      <p class="section-label">Contact</p>
+      <div class="contact-list">
+        ${contact.col1 ? `<div class="contact-row"><span class="contact-label">Email</span><a class="contact-value" href="mailto:${contact.col1}">${contact.col1}</a></div>` : ''}
+        ${contact.col2 ? `<div class="contact-row"><span class="contact-label">Phone</span><a class="contact-value" href="tel:${contact.col2}">${contact.col2}</a></div>` : ''}
+        ${contact.col3 ? `<div class="contact-row"><span class="contact-label">LinkedIn</span><a class="contact-value" href="${contact.col3}" target="_blank">${contact.col3.replace('https://','')}</a></div>` : ''}
+        ${contact.col4 ? `<div class="contact-row"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/${contact.col4}" target="_blank">@${contact.col4}</a></div>` : ''}
+      </div>
+    </div>`;
   }
 
-  return html;
+  document.getElementById('about-content').innerHTML = html;
 }
 
-async function loadAbout() {
-  try {
-    const CACHE_KEY = 'portfolio_csv_v1';
-    const ABOUT_CACHE = 'about_csv_v1';
-    const CACHE_AGE = 5 * 60 * 1000;
-
-    // Load both sheets in parallel
-    async function fetchCSV(url, cacheKey) {
-      const CACHE_AGE = 5 * 60 * 1000;
-      const cached = sessionStorage.getItem(cacheKey);
-      const cachedTime = sessionStorage.getItem(cacheKey+'_time');
-      if (cached && cachedTime && (Date.now()-parseInt(cachedTime))<CACHE_AGE) {
-        console.log('[FETCH] Using cache for', cacheKey, 'length:', cached.length);
-        return cached;
-      }
-      console.log('[FETCH] Fetching fresh:', url.slice(0,60));
-      const res = await fetch(url, { mode:'cors', credentials:'omit', redirect:'follow' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const text = await res.text();
-      console.log('[FETCH] Got', text.length, 'chars for', cacheKey);
-      try { sessionStorage.setItem(cacheKey,text); sessionStorage.setItem(cacheKey+'_time',Date.now()); } catch(e){}
-      return text;
-    }
-
-    let aboutText, projectsText;
-    try {
-      aboutText = await fetchCSV(ABOUT_URL, ABOUT_CACHE);
-    } catch(e) { console.error('[ABOUT] About sheet failed:', e); aboutText = ''; }
-    try {
-      projectsText = await fetchCSV(SHEET_URL, CACHE_KEY);
-      console.log('[ABOUT] Projects text length:', projectsText.length, '| First 100 chars:', projectsText.slice(0,100));
-    } catch(e) { console.error('[ABOUT] Projects sheet failed:', e); projectsText = ''; }
-
-    const rows = parseCSV(aboutText, function(r){ return !!r.block; }, false);
-    const projects = parseCSV(projectsText, function(r){ return !!r.name; }, true);
-
-    // Store for PDF generation
-    window._aboutRows = rows;
-    window._aboutProjects = projects;
-
-    document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
-
-  } catch(err) {
-    document.getElementById('about-content').innerHTML = '<div class="loading">Could not load page.</div>';
-    console.error(err);
-  }
-}
-
-loadAbout();
-
-// ── PDF RESUME GENERATOR ──────────────────────────────────────
-function generateResume() {
-  const btn = event ? event.currentTarget : null;
-  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
-
-  setTimeout(function() {
-    try {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
-      const rows = window._aboutRows || [];
-      const projects = window._aboutProjects || [];
-
-      const W = 210, H = 297;
-      const ML = 18, MR = 18, MT = 18;
-      let y = MT;
-      const contentW = W - ML - MR;
-
-      // Colours
-      const BLACK = [10, 10, 10];
-      const MID   = [120, 120, 110];
-      const LIGHT = [180, 178, 172];
-      const BG    = [247, 244, 238];
-
-      function checkPage(needed) {
-        if (y + needed > H - 16) { doc.addPage(); y = MT; }
-      }
-
-      function rule(col) {
-        doc.setDrawColor(...col);
-        doc.setLineWidth(0.3);
-        doc.line(ML, y, W - MR, y);
-        y += 4;
-      }
-
-      function label(txt) {
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(6);
-        doc.setTextColor(...LIGHT);
-        doc.text(txt.toUpperCase(), ML, y);
-        y += 5;
-      }
-
-      // ── HEADER ──
-      const header = rows.find(function(r){ return r.block === 'header'; });
-      if (header) {
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(7);
-        doc.setTextColor(...MID);
-        doc.text((header.col1 || '').toUpperCase(), ML, y);
-        y += 7;
-
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(28);
-        doc.setTextColor(...BLACK);
-        doc.text(header.col2 || '', ML, y);
-        y += 10;
-      }
-
-      // ── SUBLINES ──
-      const sublines = rows.filter(function(r){ return /^subline\d+$/.test(r.block); })
-        .sort(function(a,b){ return a.block.localeCompare(b.block, undefined, {numeric:true}); });
-
-      // Compute award totals for tokens
-      const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
-      let totAwards = 0, totCannes = 0, totGP = 0;
-      projects.forEach(function(p) {
-        AWARD_KEYS.forEach(function(show) {
-          ['gp','g','s','b','sh'].forEach(function(m) {
-            const v = parseInt(p[show+'_'+m]||0);
-            if (v > 0) totAwards += v;
-            if (show==='cannes' && m!=='sh' && v>0) totCannes += v;
-          });
-        });
-        const gp = parseInt(p['cannes_gp']||0);
-        if (gp > 0) totGP += gp;
-      });
-
-      function applyTok(s) {
-        return s.replace(/\{\{total\}\}/g, totAwards)
-                .replace(/\{\{cannes\}\}/g, totCannes)
-                .replace(/\{\{gp\}\}/g, totGP);
-      }
-
-      if (sublines.length) {
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(7.5);
-        doc.setTextColor(...MID);
-        sublines.forEach(function(r) {
-          doc.text(applyTok(r.col1 || ''), ML, y);
-          y += 5;
-        });
-      }
-      y += 4;
-      rule(BLACK);
-
-      // ── INTRO ──
-      const intros = rows.filter(function(r){ return r.block === 'intro'; });
-      if (intros.length) {
-        label('About');
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8.5);
-        doc.setTextColor(...BLACK);
-        intros.forEach(function(r) {
-          const lines = doc.splitTextToSize(r.col1 || '', contentW);
-          checkPage(lines.length * 4.5 + 4);
-          doc.text(lines, ML, y);
-          y += lines.length * 4.5 + 3;
-        });
-        y += 2;
-        rule(LIGHT);
-      }
-
-      // ── EXPERIENCE ──
-      const exps = rows.filter(function(r){ return r.block === 'experience'; });
-      if (exps.length) {
-        label('Experience');
-        exps.forEach(function(r) {
-          checkPage(8);
-          const from = r.col2 || '', until = r.col3 || '';
-          const years = from && until ? from + ' – ' + until : from || until;
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(8);
-          doc.setTextColor(...BLACK);
-          doc.text((r.col1 || '').toUpperCase(), ML, y);
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(7.5);
-          doc.setTextColor(...MID);
-          doc.text(years, ML + 60, y);
-          doc.text(r.col4 || '', ML + 90, y);
-          doc.setTextColor(...LIGHT);
-          doc.text(r.col5 || '', ML + 150, y);
-          y += 6;
-        });
-        y += 2;
-        rule(LIGHT);
-      }
-
-      // ── JURY ──
-      const jury = rows.filter(function(r){ return r.block === 'jury'; });
-      if (jury.length) {
-        label('Jury');
-        jury.forEach(function(r) {
-          checkPage(6);
-          doc.setFont('helvetica', 'normal');
-          doc.setFontSize(8);
-          doc.setTextColor(...BLACK);
-          doc.text(r.col1 || '', ML, y);
-          doc.setTextColor(...MID);
-          doc.text(r.col2 || '', ML + 100, y);
-          y += 5.5;
-        });
-        y += 2;
-        rule(LIGHT);
-      }
-
-      // ── AWARDS ──
-      const AWARD_NAMES_PDF = { ame:'AME', archive:"Lürzer's Archive", cannes:'Cannes Lions', caples:'Caples', clio:'Clio', cliohealth:'Clio Health', dandad:'D&AD', elojo:'El Ojo', fiap:'FIAP', lia:'LIA', loeries:'Loeries', lynx:'Dubai Lynx', madstars:'Mad Stars', newyork:'New York Festivals', one:'One Show', phnks:'PHNX', wark:'WARK', wave:'Wave Festival', webby:'Webby', wpp:'WPP Cream' };
-      const awardMap = {};
-      projects.forEach(function(p) {
-        AWARD_KEYS.forEach(function(show) {
-          ['gp','g','s','b','sh'].forEach(function(m) {
-            const v = parseInt(p[show+'_'+m]||0);
-            if (v > 0) {
-              if (!awardMap[show]) awardMap[show] = {gp:0,g:0,s:0,b:0,sh:0,total:0};
-              awardMap[show][m] += v;
-              awardMap[show].total += v;
-            }
-          });
-        });
-      });
-      const awardKeys = Object.keys(awardMap).sort(function(a,b){ return awardMap[b].total - awardMap[a].total; });
-      if (awardKeys.length) {
-        checkPage(20);
-        label('Awards');
-        awardKeys.forEach(function(show) {
-          checkPage(7);
-          const aw = awardMap[show];
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(7.5);
-          doc.setTextColor(...BLACK);
-          doc.text((AWARD_NAMES_PDF[show] || show).toUpperCase(), ML, y);
-          // Pills
-          let px = ML + 55;
-          [['gp','GP'],['g','G'],['s','S'],['b','B'],['sh','Sh']].forEach(function(pair) {
-            const m = pair[0], lbl = pair[1];
-            if (aw[m] > 0) {
-              doc.setFont('helvetica', 'bold');
-              doc.setFontSize(6);
-              doc.setTextColor(247,244,238);
-              const colors = { gp:[26,26,26], g:[168,135,74], s:[154,175,168], b:[146,102,80], sh:[200,195,184] };
-              doc.setFillColor(...(colors[m]||[180,178,172]));
-              const pillW = 7 + (aw[m] > 9 ? 2 : 0);
-              doc.roundedRect(px, y-3.5, pillW, 4.5, 0.8, 0.8, 'F');
-              doc.text(lbl, px + 1.5, y);
-              px += pillW + 1.5;
-              doc.setFont('helvetica', 'normal');
-              doc.setFontSize(7);
-              doc.setTextColor(...MID);
-              doc.text(String(aw[m]), px, y);
-              px += 5;
-            }
-          });
-          y += 6;
-        });
-        y += 2;
-        rule(LIGHT);
-      }
-
-      // ── EXPERTISE ──
-      const expertRows = rows.filter(function(r){ return r.block === 'expertise'; });
-      if (expertRows.length) {
-        checkPage(12);
-        label('Expertise');
-        const tags = [];
-        expertRows.forEach(function(r) {
-          Object.keys(r).filter(function(k){ return k.match(/^col\d+$/); }).sort().forEach(function(k){ if(r[k]) tags.push(r[k]); });
-        });
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(7.5);
-        doc.setTextColor(...MID);
-        const tagLine = tags.join('  ·  ');
-        const tagLines = doc.splitTextToSize(tagLine, contentW);
-        doc.text(tagLines, ML, y);
-        y += tagLines.length * 4.5 + 4;
-        rule(LIGHT);
-      }
-
-      // ── CLIENTS ──
-      const clientRows = rows.filter(function(r){ return r.block === 'clients'; });
-      if (clientRows.length) {
-        checkPage(12);
-        label('Selected Clients');
-        const clients = [];
-        clientRows.forEach(function(r) {
-          Object.keys(r).filter(function(k){ return k.match(/^col\d+$/); }).sort().forEach(function(k){ if(r[k]) clients.push(r[k]); });
-        });
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(7.5);
-        doc.setTextColor(...MID);
-        const clientLine = clients.join('  ·  ');
-        const clientLines = doc.splitTextToSize(clientLine, contentW);
-        doc.text(clientLines, ML, y);
-        y += clientLines.length * 4.5 + 4;
-        rule(LIGHT);
-      }
-
-      // ── CONTACT ──
-      const contact = rows.find(function(r){ return r.block === 'contact'; });
-      if (contact) {
-        checkPage(20);
-        label('Contact');
-        const pairs = [['Email', contact.col1], ['Phone', contact.col2], ['LinkedIn', contact.col3], ['Instagram', contact.col4 ? '@'+contact.col4 : '']];
-        pairs.forEach(function(p) {
-          if (!p[1]) return;
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(7);
-          doc.setTextColor(...LIGHT);
-          doc.text(p[0].toUpperCase(), ML, y);
-          doc.setFont('helvetica', 'normal');
-          doc.setTextColor(...BLACK);
-          doc.text(p[1], ML + 28, y);
-          y += 5.5;
-        });
-      }
-
-      // ── FOOTER: timestamp ──
-      const now = new Date();
-      const stamp = 'Generated ' + now.toLocaleDateString('en-GB', {day:'2-digit',month:'long',year:'numeric'}) + ' ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
-      const pageCount = doc.getNumberOfPages();
-      for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(6);
-        doc.setTextColor(...LIGHT);
-        doc.text(stamp, ML, H - 8);
-        doc.text('pauloengler.com', W - MR, H - 8, { align: 'right' });
-      }
-
-      // Save
-      const fname = 'PauloEngler_Resume_' + now.getFullYear() + ('0'+(now.getMonth()+1)).slice(-2) + ('0'+now.getDate()).slice(-2) + '.pdf';
-      doc.save(fname);
-
-    } catch(err) {
-      console.error('PDF error:', err);
-      alert('Could not generate PDF. Please try again.');
-    }
-
-    if (btn) { btn.disabled = false; btn.textContent = '↓ Download Resume'; }
-  }, 50);
-}
-// ─────────────────────────────────────────────────────────────
-
+fetch(ABOUT_URL)
+  .then(r => r.text())
+  .then(text => render(parseCSV(text)))
+  .catch(() => {
+    document.getElementById('about-content').innerHTML = '<p class="loading">Could not load content.</p>';
+  });
 </script>
 </body>
 </html>
