@@ -86,17 +86,17 @@
     .project-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #F2F2F2; border-radius: 0; border: 1px solid #0A0A0A; }
 
     .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .project-info { padding: 12px 16px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
-    .project-info-top { display: flex; flex-direction: column; gap: 4px; }
+    .project-info { padding: 12px 0 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .project-info-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
     .project-meta { flex: 1; }
     .project-client { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 4px; }
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
 
-    .card-btns { display: flex; height: 36px; width: 100%; border-top: 1px solid #0A0A0A; }
+    .card-btns { display: flex; flex-direction: column; gap: 0; flex-shrink: 0; align-self: flex-start; }
     .btn-quick { flex: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: none; border-top: 1px solid #0A0A0A; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background 0.2s; }
-    .btn-quick:hover { background: #f0f0f0; }
-    .btn-view { flex: 1; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: none; border-top: 1px solid #0A0A0A; border-left: 1px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: background 0.2s; }
-    .btn-view:hover { background: #333; }
+
+    .btn-view { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: none; padding: 12px 16px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.2s; white-space: nowrap; flex-shrink: 0; }
+    .btn-view:hover { opacity: 0.75; }
     .qv-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.85); z-index: 1000; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
     .qv-overlay.open { display: flex; }
     .qv-close { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 0; padding: 12px 28px; cursor: pointer; transition: background 0.2s, border-color 0.2s; order: 2; }
@@ -609,8 +609,17 @@ function buildCard(p) {
     '</div>';
 
   a.innerHTML = '<div class="card-media">' + iconsHTML +
-    '<div class="project-thumb">' + thumbInner + '</div>' +
-    btnsHTML + '</div>' +
+    '<div class="project-thumb">' + thumbInner + '</div></div>' +
+    '<div class="project-info">' +
+      '<div class="project-info-top">' +
+        '<div class="project-meta">' +
+          '<p class="project-client">' + (p.client || '') + '</p>' +
+          '<p class="project-name">' + p.name + '</p>' +
+        '</div>' +
+        '<div class="card-btns"><span class="btn-view">View Full Project</span></div>' +
+      '</div>' +
+      descHTML +
+    '</div>';
     '<div class="project-info">' +
       '<div class="project-info-top">' +
         '<div class="project-meta">' +
