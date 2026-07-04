@@ -88,6 +88,7 @@
     .project-thumb img, .project-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
     .project-info { padding: 12px 0 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
     .project-info-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .project-info-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
     .project-meta { flex: 1; }
     .project-client { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 4px; }
     .project-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 14px; color: #0A0A0A; line-height: 1.2; letter-spacing: -0.01em; }
@@ -612,22 +613,13 @@ function buildCard(p) {
     '<div class="project-thumb">' + thumbInner + '</div></div>' +
     '<div class="project-info">' +
       '<div class="project-info-top">' +
-        '<div class="project-meta">' +
+        '<div class="project-info-left">' +
           '<p class="project-client">' + (p.client || '') + '</p>' +
           '<p class="project-name">' + p.name + '</p>' +
+          descHTML +
         '</div>' +
         '<div class="card-btns"><span class="btn-view">View Full Project</span></div>' +
       '</div>' +
-      descHTML +
-    '</div>';
-    '<div class="project-info">' +
-      '<div class="project-info-top">' +
-        '<div class="project-meta">' +
-          '<p class="project-client">' + (p.client || '') + '</p>' +
-          '<p class="project-name">' + p.name + '</p>' +
-        '</div>' +
-      '</div>' +
-      descHTML +
     '</div>';
 
   return a;
