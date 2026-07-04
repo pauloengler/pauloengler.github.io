@@ -628,7 +628,7 @@ let currentView = 'full';
 let currentSearch = '';
 const SHARE_PARAM = new URLSearchParams(window.location.search).get('s');
 const SHARE_MODE = !!SHARE_PARAM;
-const SHARE_COL = SHARE_PARAM ? 'S_' + SHARE_PARAM : null;
+const SHARE_COL = SHARE_PARAM ? ('s_' + SHARE_PARAM).toLowerCase() : null;
 
 if (SHARE_MODE) {
   // Hide toggle and search, show share banner
