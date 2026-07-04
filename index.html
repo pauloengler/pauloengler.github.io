@@ -403,8 +403,9 @@ function renderProjects(projects) {
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
     if (currentSearch) {
-      const fullVal = (p['full'] || '').toString().toUpperCase();
-      if (fullVal !== 'TRUE') return;
+      // Search mode: use the 'search' column exclusively — independent of full/select
+      const searchVal = (p['search'] || '').toString().toUpperCase();
+      if (searchVal !== 'TRUE') return;
       const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
         .filter(Boolean).join(' ').toLowerCase();
       if (!searchable.includes(currentSearch)) return;
