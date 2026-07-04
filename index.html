@@ -106,6 +106,11 @@
     .qv-title { padding: 14px 16px; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
     .project-desc { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 12px; color: #666666; line-height: 1.6; }
     .loading { padding: 60px; text-align: center; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; background: #FFFFFF; grid-column: 1 / -1; }
+    .share-banner { background: #0A0A0A; border-bottom: 1px solid #333; }
+    .share-banner-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 40px; gap: 20px; }
+    .share-banner-title { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 0.02em; color: #FFFFFF; }
+    .share-banner-btn { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #0A0A0A; background: #FFFFFF; border: none; padding: 8px 16px; text-decoration: none; white-space: nowrap; flex-shrink: 0; transition: opacity 0.2s; }
+    .share-banner-btn:hover { opacity: 0.75; }
     footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; margin-top: auto; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
     .footer-left a, .footer-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
@@ -209,6 +214,12 @@
       </svg>
       <input class="search-input" id="search-input" type="text" placeholder="Search by project, client, category, tags...">
     </div>
+  </div>
+</div>
+<div class="share-banner" id="share-banner" style="display:none;">
+  <div class="share-banner-inner">
+    <span class="share-banner-title" id="share-banner-title"></span>
+    <a class="share-banner-btn" href="/">Go to normal portfolio</a>
   </div>
 </div>
 <main id="main-content">
@@ -359,16 +370,18 @@ async function loadProjects() {
       // "view" lives in the block/col1 row pair pattern: row where block === 'view', value in col1
       const viewRowEntry = aboutRows.find(function(r) { return (r.block || '').toLowerCase().trim() === 'view'; });
       const viewVal = viewRowEntry ? (viewRowEntry.col1 || '').toLowerCase().trim() : '';
-      if (viewVal === 'selected') {
-        currentView = 'select';
-        document.getElementById('btn-full').classList.remove('active');
-        document.getElementById('btn-select').classList.add('active');
-        moveSmileyEyes('select');
-      } else {
-        currentView = 'full';
-        document.getElementById('btn-full').classList.add('active');
-        document.getElementById('btn-select').classList.remove('active');
-        moveSmileyEyes('full');
+      if (!SHARE_MODE) {
+        if (viewVal === 'selected') {
+          currentView = 'select';
+          document.getElementById('btn-full').classList.remove('active');
+          document.getElementById('btn-select').classList.add('active');
+          moveSmileyEyes('select');
+        } else {
+          currentView = 'full';
+          document.getElementById('btn-full').classList.add('active');
+          document.getElementById('btn-select').classList.remove('active');
+          moveSmileyEyes('full');
+        }
       }
       return aboutRows;
     }).catch(function(err) {
@@ -402,7 +415,16 @@ function renderProjects(projects) {
   const chapters = {};
   CHAPTER_ORDER.forEach(ch => { chapters[ch] = []; });
   projects.forEach(p => {
-    if (currentSearch) {
+    if (SHARE_MODE) {
+      // Share mode: filter by the S_ column, then by search query if present
+      const shareVal = (p[SHARE_COL] || '').toString().toUpperCase();
+      if (shareVal !== 'TRUE') return;
+      if (currentSearch) {
+        const searchable = [p.name, p.client, p['description thumb'], p['descriptionthumb'], p.description, p.tags, p.chapter]
+          .filter(Boolean).join(' ').toLowerCase();
+        if (!searchable.includes(currentSearch)) return;
+      }
+    } else if (currentSearch) {
       // Search mode: use the 'search' column exclusively — independent of full/select
       const searchVal = (p['search'] || '').toString().toUpperCase();
       if (searchVal !== 'TRUE') return;
@@ -604,6 +626,19 @@ function slugify(str) {
 
 let currentView = 'full';
 let currentSearch = '';
+const SHARE_PARAM = new URLSearchParams(window.location.search).get('s');
+const SHARE_MODE = !!SHARE_PARAM;
+const SHARE_COL = SHARE_PARAM ? 'S_' + SHARE_PARAM : null;
+
+if (SHARE_MODE) {
+  // Hide toggle and search, show share banner
+  document.getElementById('view-toggle') && (document.getElementById('view-toggle').style.display = 'none');
+  document.getElementById('search-bar') && (document.getElementById('search-bar').style.display = 'none');
+  const banner = document.getElementById('share-banner');
+  const title = document.getElementById('share-banner-title');
+  if (banner) banner.style.display = 'block';
+  if (title) title.textContent = 'Selected work for ' + SHARE_PARAM;
+}
 
 function moveSmileyEyes(view) {
   const eyeL = document.getElementById('eyeL');
