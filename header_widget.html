@@ -251,10 +251,16 @@ body{background:#0A0A0A;padding:16px;font-family:'Unbounded',sans-serif;}
  * - Background varies: light / mid / dark with optional texture
  * - Text colors adapt automatically to background luminance
  */
+/* header.js — pauloengler.com dynamic header
+ * - Picks 15 random fonts from a pool of 30 on each page load
+ * - Senior and & each get their own font pick
+ * - Background varies: light / mid / dark with optional texture
+ * - Text colors adapt automatically to background luminance
+ */
 (function(global){
 'use strict';
 
-const VW=800,VH=350,PAD=140;
+const VW=800,VH=350,PAD=80;
 // Bright pure accent colors — used rarely as shape/highlight color, never as bulk background
 const ACCENTS=['#E8312A','#1E5FE8','#FFD400','#1AA84B','#FF6B00','#9B27D0','#00B8D4'];
 function pickAccent(){return pick(ACCENTS);}
@@ -621,7 +627,7 @@ function generate(){
   if(shapeObj.cat==='star'&&mode==='stroke'&&Math.random()<0.7)mode='filled';
 
   const maxFitCD=fitSzW(t2,999);
-  const base=rndInt(24,Math.min(maxFitCD,72));
+  const base=rndInt(36,Math.min(maxFitCD,100));
   const vR=RATIOS.filter(r=>Math.round(base*r)>=SZ_FLOOR&&Math.round(base*r)<=base*2);
   const vRBig=RATIOS.filter(r=>Math.round(base*r)>=SZ_FLOOR); // no upper cap — allows much bigger
   let s23=base;
@@ -908,6 +914,7 @@ function renderHeader(svgEl,opts){
 global.renderHeader=renderHeader;
 global.HeaderConfig={VW,VH,PAD,ACCENTS};
 })(window);
+
 
 
 
