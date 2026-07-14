@@ -307,8 +307,17 @@ function buildGallery(p) {
 
   const blocks = items.map(function(item) {
     if (item.startsWith('img:')) {
-      const file = item.slice(4).trim();
-      return '<div class="media-block media-image"><img src="media/' + file + '" alt="" loading="lazy"></div>';
+      const rawImg = item.slice(4).trim();
+      const wMatchI = rawImg.match(/\bw:(\d+)/);
+      const hMatchI = rawImg.match(/\bh:(\d+)/);
+      const imgW = wMatchI ? parseInt(wMatchI[1]) : null;
+      const imgH = hMatchI ? parseInt(hMatchI[1]) : null;
+      const imgFile = rawImg.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').trim();
+      const imgStyle = imgW
+        ? ' style="width:' + imgW + 'px;max-width:100%;' + (imgH ? 'height:' + imgH + 'px;object-fit:cover;' : 'height:auto;') + '"'
+        : '';
+      const wrapStyle = imgW ? ' style="display:inline-block;max-width:100%;"' : '';
+      return '<div class="media-block media-image"' + wrapStyle + '><img src="media/' + imgFile + '" alt="" loading="lazy"' + imgStyle + '></div>';
     } else if (item.startsWith('vid:')) {
       // Parse optional size hints: "vid:https://... w:420 h:315"
       const raw = item.slice(4).trim();
