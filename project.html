@@ -4,91 +4,89 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Paulo Engler</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500&family=Rock+Salt&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=Inter:wght@400&family=Unbounded:wght@300;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #FFFFFF; color: #0A0A0A; font-family: 'JetBrains Mono', monospace; font-weight: 400; min-height: 100vh; }
-    .site { display: flex; flex-direction: column; background: #FFFFFF; min-height: 100vh; }
+    body { background: #0A0A0A; color: #0A0A0A; font-family: 'Unbounded', sans-serif; font-weight: 300; min-height: 100vh; }
+    .site { display: flex; flex-direction: column; gap: 2px; background: #0A0A0A; min-height: 100vh; }
 
     /* ── NAV ── */
-    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #FFFFFF; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #E5E5E5; }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; position: sticky; top: 0; z-index: 100; }
     .nav-left, .nav-right { display: flex; gap: 20px; }
-    .nav-left a, .nav-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; text-decoration: none; transition: color 0.2s; }
+    .nav-left a, .nav-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
     .nav-left a:hover, .nav-right a:hover { color: #0A0A0A; }
 
     /* ── PROJECT NAV (prev/next) ── */
-    .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 40px; background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
-    .project-nav a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; text-decoration: none; color: #999999; transition: color 0.2s; }
+    .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
+    .project-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
+    .project-nav a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; transition: color 0.2s; }
     .project-nav a:hover { color: #0A0A0A; }
-    .nav-prev, .nav-next { display: flex; flex-direction: column; gap: 2px; max-width: 35%; }
+    .nav-prev, .nav-next { display: flex; flex-direction: column; gap: 4px; max-width: 35%; color: rgba(10,10,10,0.35); }
     .nav-next { align-items: flex-end; text-align: right; }
-    .nav-dir { font-size: 9px; letter-spacing: 0.02em; color: #BBBBBB; }
-    .nav-project-name { font-weight: 700; font-size: 11px; color: #0A0A0A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
-    .nav-back { color: #0A0A0A; font-size: 11px; letter-spacing: 0.02em; border: 1px solid #0A0A0A; padding: 8px 16px; white-space: nowrap; }
-    .nav-back:hover { background: #0A0A0A; color: #FFFFFF; }
+    .nav-dir { font-size: 7px; letter-spacing: 0.15em; color: rgba(10,10,10,0.25); }
+    .nav-project-name { font-weight: 700; font-size: 9px; color: rgba(10,10,10,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .nav-back { color: rgba(10,10,10,0.4); font-size: 8px; letter-spacing: 0.1em; border: 1px solid rgba(10,10,10,0.15); padding: 8px 16px; border-radius: 4px; white-space: nowrap; }
+    .nav-back:hover { color: #0A0A0A; border-color: rgba(10,10,10,0.4); }
 
     /* ── PROJECT HEADER ── */
-    .project-header { padding: 48px 40px 40px; background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
-    .project-client-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 6px; }
-    .project-title { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: clamp(22px, 3vw, 40px); color: #0A0A0A; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
-    .project-desc { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 14px; color: #555555; line-height: 1.7; max-width: 760px; }
-    .project-desc p { margin-top: 14px; }
+    .project-header { padding: 48px 40px 40px; background: #F7F4EE; }
+    .project-client-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); margin-bottom: 10px; }
+    .project-title { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: clamp(22px, 3vw, 40px); color: #0A0A0A; line-height: 1.1; text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .project-desc { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.55); line-height: 1.85; max-width: 760px; }
+    .project-desc p { margin-top: 16px; }
     .project-desc p:first-child { margin-top: 0; }
-    .project-meta-block { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 28px; }
+    .project-meta-block { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
     .project-meta-item { display: flex; flex-direction: column; gap: 3px; }
-    .project-meta-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; }
-    .project-meta-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; color: #0A0A0A; }
+    .project-meta-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(10,10,10,0.3); }
+    .project-meta-value { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 11px; color: rgba(10,10,10,0.7); letter-spacing: -0.01em; }
 
     /* ── AWARDS ── */
-    .awards-section { background: #FFFFFF; padding: 40px; border-bottom: 1px solid #E5E5E5; }
-    .awards-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; margin-bottom: 20px; }
-    .award-list { display: flex; flex-direction: column; gap: 16px; max-width: 560px; }
-    .award-item { display: flex; flex-direction: column; gap: 4px; }
-    .award-item-header { display: flex; align-items: center; background: #FFFFFF; border: 1px solid #0A0A0A; padding: 10px 14px 10px 10px; gap: 12px; }
-    .award-item-icon { width: 36px; height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; opacity: 0.5; }
-    .award-item-icon img { width: 75%; height: 75%; object-fit: contain; display: block; }
-    .award-item-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 11px; color: #0A0A0A; text-transform: uppercase; flex: 1; }
-    .award-item-total { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 20px; color: #0A0A0A; flex-shrink: 0; }
-    .award-metals { display: flex; flex-direction: column; gap: 2px; margin-top: 2px; }
-    .award-metal-row { display: flex; }
-    .award-metal-dot { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0 14px; height: 30px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.02em; }
-    .award-metal-dot.metal-gp     { background: #0A0A0A; color: #FFFFFF; }
-    .award-metal-dot.metal-gold   { background: #FFD400; color: #0A0A0A; }
-    .award-metal-dot.metal-silver { background: #808080; color: #FFFFFF; }
-    .award-metal-dot.metal-bronze { background: #FF6B00; color: #FFFFFF; }
-    .award-metal-dot.metal-other  { background: #EFEFEF; color: #777; }
-    .award-metal-count-inline { font-weight: 700; }
+    .awards-section { background: #F7F4EE; padding: 40px; }
+    .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 24px; }
+    .award-list { display: flex; flex-direction: column; gap: 20px; max-width: 480px; }
+    .award-item { display: flex; flex-direction: column; gap: 6px; }
+    .award-item-header { display: flex; align-items: center; gap: 10px; }
+    .award-item-icon { width: 28px; height: 28px; background: #E8E3DA; border-radius: 4px; padding: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 13px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; }
+    .award-metals { display: flex; flex-direction: column; gap: 3px; padding-left: 38px; }
+    .award-metal-row { display: flex; align-items: center; gap: 8px; font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 13px; color: rgba(10,10,10,0.6); }
+    .award-metal-dot { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 20px; border-radius: 3px; flex-shrink: 0; font-family: 'Inter', sans-serif; font-size: 7px; font-weight: 700; letter-spacing: 0.04em; }
+    .award-metal-dot.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
+    .award-metal-dot.metal-gold   { background: #A8874A; color: #fff; }
+    .award-metal-dot.metal-silver { background: #9AAFA8; color: #fff; }
+    .award-metal-dot.metal-bronze { background: #926650; color: #fff; }
+    .award-metal-dot.metal-other  { background: #C8C3B8; color: #555; }
+    .award-metal-count { font-weight: 700; color: #0A0A0A; min-width: 20px; }
 
     /* ── GALLERY ── */
-    .gallery-section { background: #FFFFFF; display: flex; flex-direction: column; gap: 24px; padding: 24px 40px; box-sizing: border-box; }
-    .media-block { width: 100%; }
-    .media-image img { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
-    .media-video-local video { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
+    .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
+    .media-block { width: 100%; background: #F7F4EE; }
+    .media-image img { width: 100%; height: auto; display: block; }
+    .media-video-local video { width: 100%; height: auto; display: block; }
     .media-video-yt { position: relative; }
     .yt-thumb-link { display: block; position: relative; cursor: pointer; }
-    .yt-thumb-img { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
+    .yt-thumb-img { width: 100%; height: auto; display: block; }
     .yt-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 72px; height: 72px; transition: transform 0.2s; pointer-events: none; }
     .yt-thumb-link:hover .yt-play-btn { transform: translate(-50%, -50%) scale(1.1); }
-    .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border: 1px solid #E5E5E5; }
+    .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
     .embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    .media-text { padding: 0; }
-    .media-text p { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #666666; line-height: 1.7; max-width: 640px; }
+    .media-text { padding: 40px; background: #F7F4EE; }
+    .media-text p { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 10px; color: rgba(10,10,10,0.5); line-height: 1.85; max-width: 640px; }
 
     /* ── FOOTER NAV ── */
-    .project-nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 14px 40px; background: #FFFFFF; border-top: 1px solid #E5E5E5; }
+    .project-nav-bottom { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #F7F4EE; border-top: 1px solid rgba(10,10,10,0.08); }
 
     /* ── FOOTER ── */
-    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #0A0A0A; margin-top: auto; }
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #F7F4EE; margin-top: auto; }
     .footer-left, .footer-right { display: flex; gap: 20px; }
-    .footer-left a, .footer-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
-    .footer-left a:hover, .footer-right a:hover { color: #FFFFFF; }
+    .footer-left a, .footer-right a { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.35); text-decoration: none; transition: color 0.2s; }
+    .footer-left a:hover, .footer-right a:hover { color: #0A0A0A; }
 
-    .loading { padding: 80px 40px; text-align: center; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; background: #FFFFFF; }
+    .loading { padding: 80px 40px; text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,10,10,0.3); background: #F7F4EE; }
 
     @media (max-width: 600px) {
-      nav, .project-nav, .project-header, .awards-section, .gallery-section, .project-nav-bottom, footer { padding-left: 20px; padding-right: 20px; }
+      nav, .project-nav, .project-header, .awards-section, .project-nav-bottom, footer { padding-left: 20px; padding-right: 20px; }
       .gallery-row.cols-2, .gallery-row.cols-3 { grid-template-columns: 1fr; }
       .project-title { font-size: clamp(18px, 5vw, 28px); }
     }
@@ -174,7 +172,6 @@ function parseCSV(text) {
     return cols;
   }
 
-  parseRow(); // skip decorative label row
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
@@ -216,89 +213,65 @@ function metalLabel(awardName, metal) {
 }
 
 function buildAwards(p) {
-  const AWARD_KEYS = ['ame','archive','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
-  const ICON_ONLY = ['archive'];
-  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
   const cols = [];
-  AWARD_KEYS.forEach(function(show) {
-    if (ICON_ONLY.includes(show)) {
-      const val = (p[show] || '').toString().trim();
-      if (val && val !== '0' && val.toUpperCase() !== 'FALSE') {
-        cols.push({name:show, metals:[], iconOnly:true});
-      }
-      return;
-    }
+  for (let i = 1; i <= 10; i++) {
+    const name = (p['award'+i]||'').trim();
+    if (!name || name.toUpperCase()==='NA') continue;
     const metals = [];
+    const metalMap = { gp: 'Gp', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
-      const col = show + '_' + metalColMap[m];
-      const v = parseInt(p[col] || 0);
+      const col = metalMap[m] + i;
+      const v = parseInt(p[col] || p[col.toLowerCase()] || 0);
       if (v > 0) metals.push({metal:m, count:v});
     });
-    if (metals.length) cols.push({name:show, metals:metals, iconOnly:false});
-  });
+    if (metals.length) cols.push({name:name, metals:metals});
+  }
   if (!cols.length) return '';
 
   const AWARD_NAMES = {
-    ame:       'AME Awards',
-    archive:   "Lürzer's Archive",
-    andys:     "Andy's Awards",
-    cannes:    'Cannes Lions',
-    caples:    'Caples',
-    clio:      'Clio Awards',
-    cliohealth:'Clio Health',
-    dandad:    'D&AD',
-    elojo:     'El Ojo de Iberoamérica',
-    euro:      'Eurobest',
-    fiap:      'FIAP',
-    lia:       'London International Awards',
-    loeries:   'Loeries',
-    lynx:      'Dubai Lynx',
-    madstars:  'Mad Stars',
-    newyork:   'New York Festivals',
-    one:       'One Show',
-    phnks:     'Ad Forum PHNX',
-    wark:      'WARK',
-    wave:      'Wave Festival',
-    webby:     'Webby Awards',
-    wpp:       'WPP Cream'
+    ame: 'AME by New York Festivals',
+    archive: "Lürzer's Archive Magazine",
+    cannes: 'Cannes Lions',
+    caples: 'Caples',
+    clio: 'Clio',
+    cliohealth: 'Clio Health',
+    dandad: 'D&AD',
+    elojo: 'El Ojo de Iberoamérica',
+    fiap: 'Festival Iberoamericano de la Publicidad',
+    lia: 'London International Awards (LIA)',
+    loeries: 'Loeries',
+    lynx: 'Dubai Lynx',
+    madstars: 'Mad Stars',
+    newyork: 'New York Festivals',
+    one: 'One Show',
+    phnks: 'Ad Forum PHNX',
+    wark: 'WARK',
+    wave: 'Wave Festival in Rio',
+    webby: 'Webby Awards',
+    wpp: 'WPP Cream'
   };
 
-  const METAL_FULL   = { gp:'Grand Prix', gold:'Gold', silver:'Silver', bronze:'Bronze', short:'Shortlist' };
-  const DANDAD_FULL  = { gp:'Black Pencil', gold:'Yellow Pencil', silver:'Graphite Pencil', bronze:'Wood Pencil', short:'Shortlist' };
+  const METAL_FULL = { gp: 'Grand Prix', gold: 'Gold', silver: 'Silver', bronze: 'Bronze', short: 'Shortlist' };
+  const DANDAD_FULL = { gp: 'Black Pencil', gold: 'Yellow Pencil', silver: 'Graphite Pencil', bronze: 'Wood Pencil', short: 'Shortlist' };
 
   const itemsHTML = cols.map(function(col) {
     const isDandad = col.name.toLowerCase() === 'dandad';
     const displayName = AWARD_NAMES[col.name.toLowerCase()] || col.name;
-
-    // Total metals excluding shortlist (for display in header)
-    const total = col.iconOnly ? 0 : col.metals.reduce(function(sum, m) {
-      return m.metal === 'short' ? sum : sum + m.count;
-    }, 0);
-
-    const totalHTML = (!col.iconOnly && total > 0)
-      ? '<span class="award-item-total">' + total + '</span>'
-      : '';
-
-    let metalsHTML = '';
-    if (!col.iconOnly) {
-      metalsHTML = '<div class="award-metals">' + col.metals.map(function(m) {
-        const label = isDandad ? (DANDAD_FULL[m.metal] || m.metal) : (METAL_FULL[m.metal] || m.metal);
-        return '<div class="award-metal-row">'
-          + '<span class="award-metal-dot ' + metalClass(m.metal) + '">'
-          + '<span>' + label + '</span>'
-          + '<span class="award-metal-count-inline">' + m.count + '</span>'
-          + '</span>'
-          + '</div>';
-      }).join('') + '</div>';
-    }
+    const metalsHTML = col.metals.map(function(m) {
+      const label = isDandad ? (DANDAD_FULL[m.metal] || m.metal) : (METAL_FULL[m.metal] || m.metal);
+      const countStr = m.count > 1 ? m.count + 'x' : '';
+      return '<div class="award-metal-row">'
+        + '<span class="award-metal-dot ' + metalClass(m.metal) + '">' + label + '</span>'
+        + (countStr ? '<span class="award-metal-count">' + countStr + '</span>' : '')
+        + '</div>';
+    }).join('');
 
     return '<div class="award-item">'
       + '<div class="award-item-header">'
       + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + displayName + '"></div>'
       + '<span class="award-item-name">' + displayName + '</span>'
-      + totalHTML
       + '</div>'
-      + metalsHTML
+      + '<div class="award-metals">' + metalsHTML + '</div>'
       + '</div>';
   }).join('');
 
@@ -322,14 +295,31 @@ function buildGallery(p) {
       const file = item.slice(4).trim();
       return '<div class="media-block media-image"><img src="media/' + file + '" alt="" loading="lazy"></div>';
     } else if (item.startsWith('vid:')) {
-      const url = item.slice(4).trim();
+      // Parse optional size hints: "vid:https://... w:420 h:315"
+      const raw = item.slice(4).trim();
+      const wMatch = raw.match(/\bw:(\d+)/);
+      const hMatch = raw.match(/\bh:(\d+)/);
+      const customW = wMatch ? parseInt(wMatch[1]) : null;
+      const customH = hMatch ? parseInt(hMatch[1]) : null;
+      const url = raw.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').trim();
       const isLocal = url.endsWith('.mp4') || url.endsWith('.webm');
       if (isLocal) {
-        return '<div class="media-block media-video-local"><video src="media/' + url + '" controls playsinline></video></div>';
+        const sizeStyle = customW ? ' style="width:' + customW + 'px;max-width:100%;"' : '';
+        return '<div class="media-block media-video-local"' + sizeStyle + '><video src="media/' + url + '" controls playsinline style="width:100%;height:auto;"></video></div>';
       } else {
         const id = youtubeID(url);
         if (!id) return '';
         const thumb = 'https://img.youtube.com/vi/' + id + '/maxresdefault.jpg';
+        if (customW || customH) {
+          const w = customW || 560;
+          const h = customH || Math.round(w * 9 / 16);
+          const ratio = Math.round(h / w * 100);
+          return '<div class="media-block media-video-yt" id="yt-' + id + '" style="width:' + w + 'px;max-width:100%;">'
+            + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')" style="position:relative;padding-top:' + ratio + '%;">'
+            + '<img src="' + thumb + '" alt="Video" loading="lazy" class="yt-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">'
+            + '<div class="yt-play-btn"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="18,10 62,36 18,62" fill="#fff"/></svg></div>'
+            + '</div></div>';
+        }
         return '<div class="media-block media-video-yt" id="yt-' + id + '">'
           + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')">'
           + '<img src="' + thumb + '" alt="Video" loading="lazy" class="yt-thumb-img">'
