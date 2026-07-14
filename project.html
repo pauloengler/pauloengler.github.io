@@ -172,12 +172,16 @@ function parseCSV(text) {
     return cols;
   }
 
+  parseRow(); // skip decorative label row
   const headers = parseRow().map(h => h.toLowerCase().trim());
   while (pos < normalized.length) {
     const cols = parseRow();
     if (cols.every(c => !c)) continue;
     const obj = {};
-    headers.forEach((h, i) => { obj[h] = cols[i] || ''; });
+    cols.forEach(function(val, i) {
+      const key = (headers[i] && headers[i] !== '') ? headers[i] : 'col' + (i + 1);
+      obj[key] = val || '';
+    });
     if (obj.name) result.push(obj);
   }
   return result;
