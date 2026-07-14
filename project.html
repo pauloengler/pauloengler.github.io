@@ -43,23 +43,24 @@
     /* ── AWARDS ── */
     .awards-section { background: #F7F4EE; padding: 40px; }
     .awards-label { font-family: 'Unbounded', sans-serif; font-weight: 300; font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(10,10,10,0.25); margin-bottom: 24px; }
-    .award-list { display: flex; flex-direction: column; gap: 16px; }
-    .award-item { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    /* Award name pill: icon + name unified bar, fixed min-width so all are same size */
-    .award-item-header { display: inline-flex; align-items: center; background: #E8E3DA; border-radius: 3px; overflow: hidden; flex-shrink: 0; min-width: 200px; }
-    .award-item-icon { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-list { display: flex; flex-direction: column; gap: 12px; }
+    /* Each row: name pill + metals below */
+    .award-item { display: flex; flex-direction: column; gap: 6px; }
+    /* Name bar: icon + text, all same width */
+    .award-item-header { display: inline-flex; align-items: center; background: #E8E3DA; border-radius: 3px; overflow: hidden; width: 320px; }
+    .award-item-icon { width: 32px; height: 32px; padding: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #E8E3DA; }
     .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
-    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 10px 0 6px; white-space: nowrap; }
-    /* Metal chips: all same fixed width so they line up */
-    .award-metals { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
-    .award-cell { display: inline-flex; align-items: center; justify-content: space-between; gap: 5px; width: 52px; height: 20px; padding: 0 5px; border-radius: 3px; font-family: 'Unbounded', sans-serif; flex-shrink: 0; }
-    .award-cell .cell-metal { font-size: 7px; font-weight: 300; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; }
-    .award-cell .cell-count { font-size: 8px; font-weight: 700; line-height: 1; }
-    .award-cell.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
-    .award-cell.metal-gold   { background: #A8874A; color: #fff; }
-    .award-cell.metal-silver { background: #9AAFA8; color: #fff; }
-    .award-cell.metal-bronze { background: #926650; color: #fff; }
-    .award-cell.metal-other  { background: #C8C3B8; color: #555; }
+    .award-item-name { font-family: 'Unbounded', sans-serif; font-weight: 700; font-size: 9px; color: #0A0A0A; text-transform: uppercase; letter-spacing: -0.01em; padding: 0 10px 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Metals row: chips all same size */
+    .award-metals { display: flex; gap: 3px; flex-wrap: wrap; }
+    .award-cell { display: inline-flex; align-items: center; justify-content: space-between; gap: 4px; width: 80px; height: 22px; padding: 0 8px; border-radius: 3px; font-family: 'Unbounded', sans-serif; flex-shrink: 0; }
+    .award-cell .cell-metal { font-size: 7px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; }
+    .award-cell .cell-count { font-size: 9px; font-weight: 700; line-height: 1; }
+    .award-cell.metal-gp     { background: #0A0A0A; color: #FFFFFF; }
+    .award-cell.metal-gold   { background: #FFD400; color: #0A0A0A; }
+    .award-cell.metal-silver { background: #808080; color: #FFFFFF; }
+    .award-cell.metal-bronze { background: #FF6B00; color: #FFFFFF; }
+    .award-cell.metal-other  { background: #EFEFEF; color: #777; }
 
     /* ── GALLERY ── */
     .gallery-section { background: #F7F4EE; display: flex; flex-direction: column; gap: 40px; padding: 40px; }
@@ -268,10 +269,10 @@ function buildAwards(p) {
 
     const metalsHTML = col.metals.map(function(m) {
       const label = isDandad ? (DANDAD_SHORT[m.metal] || m.metal) : (METAL_SHORT[m.metal] || m.metal);
-      const countHTML = m.count > 1 ? '<span class="cell-count">' + m.count + '</span>' : '';
+      // Always show count — 1 if single, number if multiple
       return '<div class="award-cell ' + metalClass(m.metal) + '">'
         + '<span class="cell-metal">' + label + '</span>'
-        + countHTML
+        + '<span class="cell-count">' + m.count + '</span>'
         + '</div>';
     }).join('');
 
