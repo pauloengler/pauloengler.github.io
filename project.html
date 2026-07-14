@@ -47,33 +47,34 @@
     .award-list { display: flex; flex-direction: column; gap: 16px; }
     /* Each award = name bar on top, metals flush below — one unified block */
     .award-item { display: inline-flex; flex-direction: column; gap: 0; }
-    /* Name bar: exactly 4×80px = 320px wide */
-    .award-item-header { display: flex; align-items: center; width: 320px; height: 36px; border: 1px solid #E5E5E5; overflow: hidden; flex-shrink: 0; }
-    .award-item-icon { width: 36px; height: 36px; padding: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-right: 1px solid #E5E5E5; }
-    .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; opacity: 0.6; }
-    .award-item-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; color: #0A0A0A; text-transform: uppercase; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
-    /* Metals: flush below the name bar, no gaps */
+    /* Name bar: exactly 5×64px = 320px wide */
+    .award-item-header { display: flex; align-items: center; width: 320px; height: 32px; background: #E8E3DA; overflow: hidden; flex-shrink: 0; }
+    .award-item-icon { width: 32px; height: 32px; padding: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .award-item-icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .award-item-name { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; color: #0A0A0A; text-transform: uppercase; padding: 0 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    /* Metals row: always 320px wide, 5 fixed slots of 64px each */
     .award-metals { display: flex; gap: 0; width: 320px; }
-    .award-cell { display: inline-flex; align-items: center; justify-content: space-between; flex: 1; height: 26px; padding: 0 8px; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; min-width: 0; }
-    .award-cell .cell-metal { font-size: 7px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .award-cell .cell-count { font-size: 9px; font-weight: 700; line-height: 1; flex-shrink: 0; }
-    .award-cell.metal-gp     { background: #1A1A1A; color: #F7F4EE; }
-    .award-cell.metal-gold   { background: #A8874A; color: #fff; }
-    .award-cell.metal-silver { background: #9AAFA8; color: #fff; }
-    .award-cell.metal-bronze { background: #926650; color: #fff; }
-    .award-cell.metal-other  { background: #C8C3B8; color: #555; }
+    .award-cell { display: inline-flex; align-items: center; justify-content: space-between; width: 64px; height: 22px; padding: 0 6px; font-family: 'Inter', sans-serif; flex-shrink: 0; }
+    .award-cell-empty { width: 64px; height: 22px; flex-shrink: 0; background: transparent; }
+    .award-cell .cell-metal { font-size: 7px; font-weight: 400; letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+    .award-cell .cell-count { font-size: 8px; font-weight: 700; line-height: 1; flex-shrink: 0; }
+    .award-cell.metal-gp     { background: #0A0A0A; color: #FFFFFF; }
+    .award-cell.metal-gold   { background: #FFD400; color: #0A0A0A; }
+    .award-cell.metal-silver { background: #808080; color: #FFFFFF; }
+    .award-cell.metal-bronze { background: #FF6B00; color: #FFFFFF; }
+    .award-cell.metal-other  { background: #EFEFEF; color: #777; }
 
     /* ── GALLERY ── */
     .gallery-section { background: #FFFFFF; display: flex; flex-direction: column; gap: 24px; padding: 24px 40px; }
     .media-block { width: 100%; }
-    .media-image img { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
-    .media-video-local video { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
+    .media-image img { width: 100%; height: auto; display: block; }
+    .media-video-local video { width: 100%; height: auto; display: block; }
     .media-video-yt { position: relative; }
     .yt-thumb-link { display: block; position: relative; cursor: pointer; }
-    .yt-thumb-img { width: 100%; height: auto; display: block; border: 1px solid #E5E5E5; }
+    .yt-thumb-img { width: 100%; height: auto; display: block; }
     .yt-play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 72px; height: 72px; transition: transform 0.2s; pointer-events: none; }
     .yt-thumb-link:hover .yt-play-btn { transform: translate(-50%, -50%) scale(1.1); }
-    .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border: 1px solid #E5E5E5; }
+    .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
     .embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .media-text { padding: 0; }
     .media-text p { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #666666; line-height: 1.7; max-width: 640px; }
@@ -270,19 +271,22 @@ function buildAwards(p) {
 
     const metalsHTML = col.metals.map(function(m) {
       const label = isDandad ? (DANDAD_SHORT[m.metal] || m.metal) : (METAL_SHORT[m.metal] || m.metal);
-      // Always show count — 1 if single, number if multiple
+      const countHTML = m.count > 1 ? '<span class="cell-count">' + m.count + '</span>' : '';
       return '<div class="award-cell ' + metalClass(m.metal) + '">'
         + '<span class="cell-metal">' + label + '</span>'
-        + '<span class="cell-count">' + m.count + '</span>'
+        + countHTML
         + '</div>';
     }).join('');
+    // Pad to always 5 slots so metals row is always 320px
+    const emptySlots = Math.max(0, 5 - col.metals.length);
+    const paddingHTML = '<div class="award-cell-empty"></div>'.repeat(emptySlots);
 
     return '<div class="award-item">'
       + '<div class="award-item-header">'
       + '<div class="award-item-icon"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + displayName + '"></div>'
       + '<span class="award-item-name">' + displayName + '</span>'
       + '</div>'
-      + '<div class="award-metals">' + metalsHTML + '</div>'
+      + '<div class="award-metals">' + metalsHTML + paddingHTML + '</div>'
       + '</div>';
   }).join('');
 
@@ -334,9 +338,10 @@ function buildGallery(p) {
             + '<div class="yt-play-btn"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="18,10 62,36 18,62" fill="#fff"/></svg></div>'
             + '</div></div></div>';
         }
+        const thumbSd = 'https://img.youtube.com/vi/' + id + '/sddefault.jpg';
         return '<div class="media-block media-video-yt" id="yt-' + id + '">'
-          + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')">'
-          + '<img src="' + thumb + '" alt="Video" loading="lazy" class="yt-thumb-img">'
+          + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')" style="position:relative;padding-top:56.25%;overflow:hidden;">'
+          + '<img src="' + thumbSd + '" onerror="this.src=\'https://img.youtube.com/vi/' + id + '/hqdefault.jpg\'" alt="Video" loading="lazy" class="yt-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">'
           + '<div class="yt-play-btn"><svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="18,10 62,36 18,62" fill="#fff"/></svg></div>'
           + '</div></div>';
       }
