@@ -60,9 +60,9 @@
     .award-metal-count { font-weight: 700; color: #0A0A0A; min-width: 20px; }
 
     /* ── GALLERY ── */
-    .gallery-section { background: #0A0A0A; display: flex; flex-direction: column; gap: 2px; }
-    .media-block { width: 100%; background: #F7F4EE; }
-    .media-image img { width: 100%; height: auto; display: block; }
+    .gallery-section { background: #F7F4EE; display: flex; flex-direction: column; gap: 40px; padding: 40px; }
+    .media-block { width: 100%; }
+    .media-image img { width: 100%; height: auto; display: block; border-radius: 2px; }
     .media-video-local video { width: 100%; height: auto; display: block; }
     .media-video-yt { position: relative; }
     .yt-thumb-link { display: block; position: relative; cursor: pointer; }
@@ -217,19 +217,18 @@ function metalLabel(awardName, metal) {
 }
 
 function buildAwards(p) {
+  const AWARD_KEYS = ['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+  const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
   const cols = [];
-  for (let i = 1; i <= 10; i++) {
-    const name = (p['award'+i]||'').trim();
-    if (!name || name.toUpperCase()==='NA') continue;
+  AWARD_KEYS.forEach(function(show) {
     const metals = [];
-    const metalMap = { gp: 'Gp', gold: 'G', silver: 'S', bronze: 'B', short: 'Sh' };
     METALS.forEach(function(m) {
-      const col = metalMap[m] + i;
-      const v = parseInt(p[col] || p[col.toLowerCase()] || 0);
+      const col = show + '_' + metalColMap[m];
+      const v = parseInt(p[col] || 0);
       if (v > 0) metals.push({metal:m, count:v});
     });
-    if (metals.length) cols.push({name:name, metals:metals});
-  }
+    if (metals.length) cols.push({name:show, metals:metals});
+  });
   if (!cols.length) return '';
 
   const AWARD_NAMES = {
@@ -320,7 +319,7 @@ function buildGallery(p) {
           const ratio = Math.round(h / w * 100);
           // Use hqdefault as fallback — always available unlike maxresdefault
           const thumbHq = 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
-          return '<div class="media-block" style="background:#F7F4EE;padding:32px 40px;">'
+          return '<div class="media-block">'
             + '<div class="media-video-yt" id="yt-' + id + '" style="width:' + w + 'px;max-width:100%;">'
             + '<div class="yt-thumb-link" onclick="playYT(\'' + id + '\')" style="position:relative;padding-top:' + ratio + '%;">'
             + '<img src="' + thumbHq + '" alt="Video" loading="lazy" class="yt-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">'
