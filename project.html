@@ -302,7 +302,8 @@ function buildGallery(p) {
   const mediaRaw = (p.media || '').trim();
   if (!mediaRaw) return '';
 
-  const items = mediaRaw.split('|').map(s => s.trim()).filter(Boolean);
+  // Normalize: replace any newlines (from CSV multiline cells) with spaces before splitting
+  const items = mediaRaw.replace(/[\r\n]+/g,' ').split('|').map(s => s.trim()).filter(Boolean);
   if (!items.length) return '';
 
   const blocks = items.map(function(item) {
