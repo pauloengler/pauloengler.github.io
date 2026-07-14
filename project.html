@@ -313,10 +313,13 @@ function buildGallery(p) {
       const imgW = wMatchI ? parseInt(wMatchI[1]) : null;
       const imgH = hMatchI ? parseInt(hMatchI[1]) : null;
       const imgFile = rawImg.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').trim();
-      const imgStyle = imgW
-        ? ' style="width:' + imgW + 'px;max-width:100%;' + (imgH ? 'height:' + imgH + 'px;object-fit:cover;' : 'height:auto;') + '"'
+      // Width constraint on the wrapper, image fills it naturally
+      const wrapStyle = imgW
+        ? ' style="width:' + imgW + 'px;max-width:100%;"'
         : '';
-      const wrapStyle = imgW ? ' style="display:inline-block;max-width:100%;"' : '';
+      const imgStyle = imgH
+        ? ' style="width:100%;height:' + imgH + 'px;object-fit:cover;display:block;"'
+        : ' style="width:100%;height:auto;display:block;"';
       return '<div class="media-block media-image"' + wrapStyle + '><img src="media/' + imgFile + '" alt="" loading="lazy"' + imgStyle + '></div>';
     } else if (item.startsWith('vid:')) {
       // Parse optional size hints: "vid:https://... w:420 h:315"
