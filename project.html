@@ -271,7 +271,7 @@ function buildAwards(p) {
 
     const metalsHTML = col.metals.map(function(m) {
       const label = isDandad ? (DANDAD_SHORT[m.metal] || m.metal) : (METAL_SHORT[m.metal] || m.metal);
-      const countHTML = m.count > 1 ? '<span class="cell-count">' + m.count + '</span>' : '';
+      const countHTML = '<span class="cell-count">' + m.count + '</span>';
       return '<div class="award-cell ' + metalClass(m.metal) + '">'
         + '<span class="cell-metal">' + label + '</span>'
         + countHTML
