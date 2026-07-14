@@ -357,6 +357,9 @@ function buildGallery(p) {
     } else if (item.startsWith('txt:')) {
       const text = item.slice(4).trim();
       return '<div class="media-block media-text"><p>' + text + '</p></div>';
+    } else if (item.startsWith('empty:')) {
+      const px = parseInt(item.slice(6).trim()) || 40;
+      return '<div style="height:' + px + 'px;"></div>';
     }
     return '';
   }).join('');
