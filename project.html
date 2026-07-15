@@ -348,18 +348,15 @@ function buildGallery(p) {
       } else {
         // R2 / direct video file
         if (url.match(/\.(mp4|webm|mov)$/i) || url.includes('r2.dev') || url.includes('cloudflarestorage')) {
-          const sizeStyle = customW ? ' style="width:' + customW + 'px;max-width:100%;"' : '';
-          const wrapStyle = customW ? ' style="width:' + customW + 'px;max-width:100%;"' : '';
           if (customW || customH) {
             const w = customW || 560;
             const h = customH || Math.round(w * 9 / 16);
-            const ratio = Math.round(h / w * 100);
-            return '<div class="media-block"><div id="vid-' + url + '" style="width:' + w + 'px;max-width:100%;position:relative;padding-top:' + ratio + '%;background:#000;">'
-              + '<video src="' + url + '" controls playsinline style="position:absolute;inset:0;width:100%;height:100%;"></video>'
+            return '<div class="media-block"><div style="width:' + w + 'px;max-width:100%;">'
+              + '<video src="' + url + '" controls playsinline style="width:100%;height:auto;display:block;"></video>'
               + '</div></div>';
           }
-          return '<div class="media-block" id="vid-' + url + '" style="position:relative;padding-top:56.25%;background:#000;">'
-            + '<video src="' + url + '" controls playsinline style="position:absolute;inset:0;width:100%;height:100%;"></video>'
+          return '<div class="media-block">'
+            + '<video src="' + url + '" controls playsinline style="width:100%;height:auto;display:block;"></video>'
             + '</div>';
         }
         const ytId = youtubeID(url);
