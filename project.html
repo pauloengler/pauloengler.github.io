@@ -341,7 +341,8 @@ function buildGallery(p) {
       const customW = wMatch ? parseInt(wMatch[1]) : null;
       const customH = hMatch ? parseInt(hMatch[1]) : null;
       const url = raw.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').trim();
-      const isLocal = url.endsWith('.mp4') || url.endsWith('.webm');
+      // Local = no protocol (not http/https), not r2.dev, not cloudflarestorage
+      const isLocal = !url.startsWith('http') && !url.includes('r2.dev') && !url.includes('cloudflarestorage');
       if (isLocal) {
         const sizeStyle = customW ? ' style="width:' + customW + 'px;max-width:100%;"' : '';
         return '<div class="media-block media-video-local"' + sizeStyle + '><video src="media/' + url + '" controls playsinline style="width:100%;height:auto;"></video></div>';
