@@ -349,16 +349,19 @@ function buildGallery(p) {
       } else {
         // R2 / direct video file
         if (url.match(/\.(mp4|webm|mov)$/i) || url.includes('r2.dev') || url.includes('cloudflarestorage')) {
+          const autoThumb2 = url.replace(/\.(mp4|webm|mov)$/i, '_thumb.jpg');
           if (customW || customH) {
             const w = customW || 560;
             const h = customH || Math.round(w * 9 / 16);
             return '<div class="media-block"><div style="width:' + w + 'px;max-width:100%;position:relative;padding-top:' + Math.round(h/w*100) + '%;">'
-              + '<video src="' + url + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
+              + '<video src="' + url + '" poster="' + autoThumb2 + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
               + '</div></div>';
           }
-          // Standard 16:9 wrapper — forces correct height before metadata loads
+          // Auto-detect thumbnail: same URL with _thumb.jpg suffix
+          const autoThumb = url.replace(/\.(mp4|webm|mov)$/i, '_thumb.jpg');
+          // Standard 16:9 wrapper
           return '<div class="media-block"><div style="position:relative;padding-top:56.25%;width:100%;">'
-            + '<video src="' + url + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
+            + '<video src="' + url + '" poster="' + autoThumb + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
             + '</div></div>';
         }
         const ytId = youtubeID(url);
