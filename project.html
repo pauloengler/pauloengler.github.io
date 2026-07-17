@@ -422,11 +422,11 @@ function buildGallery(p) {
             : 'width:100%;';
           const videoSrc = url;
           const posterAttr = ' poster="' + posterUrl + '"';
-          const arStyle = 'aspect-ratio:' + (customAR || '16/9') + ';';
-          const placeholderStyle = 'width:100%;height:auto;display:block;background:#E8E8E8;' + arStyle;
+          const ar = customAR || '16/9';
+          // Put aspect-ratio on the wrapper so it has size before video loads
           return '<div class="media-block"><div style="' + wrapStyle + '">'
-            + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')">'
-            + '<video src="' + videoSrc + '"' + posterAttr + ' playsinline preload="none" style="' + placeholderStyle + '"></video>'
+            + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')" style="aspect-ratio:' + ar + ';background:#E8E8E8;width:100%;">'
+            + '<video src="' + videoSrc + '"' + posterAttr + ' playsinline preload="none" style="width:100%;height:100%;display:block;object-fit:cover;"></video>'
             + '<div class="r2-overlay"><div class="r2-play-icon"><svg viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg></div></div>'
             + '<div class="r2-controls" onclick="event.stopPropagation()">'
             + '<div class="r2-progress" onmousedown="r2Seek(event,\'' + pid + '\')" ontouchstart="r2Seek(event,\'' + pid + '\')">'
