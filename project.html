@@ -83,7 +83,7 @@
     .media-row .media-block { flex: 1; min-width: 0; }
 
     /* ── CUSTOM VIDEO PLAYER ── */
-    .r2-player { position: relative; width: 100%; background: #000; cursor: pointer; }
+    .r2-player { position: relative; width: 100%; background: transparent; cursor: pointer; }
     .r2-player video { display: block; width: 100%; height: auto; }
     .r2-player .r2-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
     .r2-player.paused .r2-overlay { opacity: 1; }
@@ -343,16 +343,21 @@ function buildGallery(p) {
   const segments = [];
   let inRow = false;
   let rowItems = [];
+  let rowWidth = null;
   rawItems.forEach(function(item) {
     if (item.toLowerCase().startsWith('row:')) {
       inRow = true;
       const rest = item.slice(4).trim();
-      if (rest) rowItems.push(rest);
+      // Check for w: on the row tag itself e.g. "row: w:800"
+      const rowWMatch = rest.match(/^w:(\d+)\s*/);
+      if (rowWMatch) { rowWidth = parseInt(rowWMatch[1]); }
+      else if (rest) rowItems.push(rest);
     } else if (item.toLowerCase().endsWith(':row')) {
       const rest = item.slice(0, -4).trim();
       if (rest) rowItems.push(rest);
-      segments.push({ type: 'row', items: rowItems });
+      segments.push({ type: 'row', items: rowItems, width: rowWidth });
       rowItems = [];
+      rowWidth = null;
       inRow = false;
     } else if (inRow) {
       rowItems.push(item);
@@ -361,12 +366,13 @@ function buildGallery(p) {
     }
   });
   // Close any unclosed row
-  if (rowItems.length) segments.push({ type: 'row', items: rowItems });
+  if (rowItems.length) segments.push({ type: 'row', items: rowItems, width: rowWidth });
 
   const blocks = segments.map(function(seg) {
     if (seg.type === 'row') {
       const rowBlocks = seg.items.map(function(item) { return renderItem(item); }).join('');
-      return '<div class="media-row">' + rowBlocks + '</div>';
+      const rowStyle = seg.width ? 'width:' + seg.width + 'px;max-width:100%;' : 'width:100%;';
+      return '<div class="media-row" style="' + rowStyle + '">' + rowBlocks + '</div>';
     }
     return renderItem(seg.item);
   });
