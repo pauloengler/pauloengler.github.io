@@ -77,6 +77,20 @@
     .embed-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
     .embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .media-text { padding: 40px 0; width: 100%; max-width: 800px; }
+
+    /* ── CUSTOM VIDEO PLAYER ── */
+    .r2-player { position: relative; width: 100%; background: #000; cursor: pointer; }
+    .r2-player video { display: block; width: 100%; height: auto; }
+    .r2-player .r2-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+    .r2-player.paused .r2-overlay { opacity: 1; }
+    .r2-play-icon { width: 56px; height: 56px; background: rgba(255,255,255,0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.25); }
+    .r2-play-icon svg { width: 20px; height: 20px; margin-left: 4px; }
+    .r2-controls { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px 12px 8px; background: linear-gradient(transparent, rgba(0,0,0,0.5)); opacity: 0; transition: opacity 0.25s; }
+    .r2-player:hover .r2-controls,
+    .r2-player.paused .r2-controls { opacity: 1; }
+    .r2-progress { width: 100%; height: 3px; background: rgba(255,255,255,0.25); cursor: pointer; position: relative; border-radius: 2px; }
+    .r2-progress-fill { height: 100%; background: #fff; border-radius: 2px; width: 0%; pointer-events: none; transition: width 0.1s linear; }
+    .r2-progress:hover { height: 5px; }
     .media-text p { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: #666666; line-height: 1.7; max-width: 640px; text-align: left; }
 
     /* ── FOOTER NAV ── */
@@ -349,19 +363,19 @@ function buildGallery(p) {
       } else {
         // R2 / direct video file
         if (url.match(/\.(mp4|webm|mov)$/i) || url.includes('r2.dev') || url.includes('cloudflarestorage')) {
-          const autoThumb2 = url.replace(/\.(mp4|webm|mov)$/i, '_thumb.jpg');
-          if (customW || customH) {
-            const w = customW || 560;
-            const h = customH || Math.round(w * 9 / 16);
-            return '<div class="media-block"><div style="width:' + w + 'px;max-width:100%;position:relative;padding-top:' + Math.round(h/w*100) + '%;">'
-              + '<video src="' + url + '" poster="' + autoThumb2 + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
-              + '</div></div>';
-          }
-          // Auto-detect thumbnail: same URL with _thumb.jpg suffix
           const autoThumb = url.replace(/\.(mp4|webm|mov)$/i, '_thumb.jpg');
-          // Standard 16:9 wrapper
-          return '<div class="media-block"><div style="position:relative;padding-top:56.25%;width:100%;">'
-            + '<video src="' + url + '" poster="' + autoThumb + '" controls playsinline preload="metadata" style="position:absolute;inset:0;width:100%;height:100%;background:#111;"></video>'
+          const pid = 'r2p-' + Math.random().toString(36).slice(2,7);
+          const wrapStyle = (customW || customH)
+            ? 'width:' + (customW||560) + 'px;max-width:100%;'
+            : 'width:100%;';
+          return '<div class="media-block"><div style="' + wrapStyle + '">'
+            + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')">'
+            + '<video src="' + url + '" poster="' + autoThumb + '" playsinline preload="metadata" style="width:100%;height:auto;display:block;"></video>'
+            + '<div class="r2-overlay"><div class="r2-play-icon"><svg viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg></div></div>'
+            + '<div class="r2-controls" onclick="event.stopPropagation()">'
+            + '<div class="r2-progress" onmousedown="r2Seek(event,\'' + pid + '\')" ontouchstart="r2Seek(event,\'' + pid + '\')">'
+            + '<div class="r2-progress-fill" id="' + pid + '-fill"></div>'
+            + '</div></div></div>'
             + '</div></div>';
         }
         const ytId = youtubeID(url);
@@ -479,6 +493,63 @@ async function loadProject() {
     console.error(err);
   }
 }
+
+// ── CUSTOM R2 PLAYER ──────────────────────────────────────────
+function r2Toggle(pid) {
+  const wrap = document.getElementById(pid);
+  if (!wrap) return;
+  const vid = wrap.querySelector('video');
+  if (vid.paused) {
+    vid.play();
+    wrap.classList.remove('paused');
+  } else {
+    vid.pause();
+    wrap.classList.add('paused');
+  }
+}
+
+function r2Seek(e, pid) {
+  e.stopPropagation();
+  const wrap = document.getElementById(pid);
+  if (!wrap) return;
+  const vid = wrap.querySelector('video');
+  const bar = wrap.querySelector('.r2-progress');
+  function doSeek(evt) {
+    const t = evt.touches ? evt.touches[0] : evt;
+    const rect = bar.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (t.clientX - rect.left) / rect.width));
+    vid.currentTime = pct * vid.duration;
+  }
+  doSeek(e);
+  function onMove(ev) { doSeek(ev); }
+  function onUp() {
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  document.addEventListener('touchmove', onMove);
+  document.addEventListener('touchend', onUp);
+}
+
+// Update progress bars
+document.addEventListener('timeupdate', function(e) {
+  if (e.target.tagName !== 'VIDEO') return;
+  const vid = e.target;
+  const wrap = vid.closest('.r2-player');
+  if (!wrap) return;
+  const fill = wrap.querySelector('.r2-progress-fill');
+  if (fill && vid.duration) fill.style.width = (vid.currentTime / vid.duration * 100) + '%';
+}, true);
+
+// Reset to paused state when video ends
+document.addEventListener('ended', function(e) {
+  if (e.target.tagName !== 'VIDEO') return;
+  const wrap = e.target.closest('.r2-player');
+  if (wrap) wrap.classList.add('paused');
+}, true);
 
 loadProject();
 </script>
