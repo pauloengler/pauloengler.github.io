@@ -398,10 +398,12 @@ function buildGallery(p) {
       const wMatch = raw.match(/\bw:(\d+)/);
       const hMatch = raw.match(/\bh:(\d+)/);
       const pMatch = raw.match(/\bp:([^\s|]+)/);
+      const arMatch = raw.match(/\bar:(\d+):(\d+)/);
       const customW = wMatch ? parseInt(wMatch[1]) : null;
       const customH = hMatch ? parseInt(hMatch[1]) : null;
       const customPoster = pMatch ? pMatch[1] : null;
-      const url = raw.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').replace(/\s+p:[^\s|]+/,'').trim();
+      const customAR = arMatch ? (parseInt(arMatch[1]) + '/' + parseInt(arMatch[2])) : null;
+      const url = raw.replace(/\s+w:\d+/,'').replace(/\s+h:\d+/,'').replace(/\s+p:[^\s|]+/,'').replace(/\s+ar:\d+:\d+/,'').trim();
       // Local = no protocol (not http/https), not r2.dev, not cloudflarestorage
       const isLocal = !url.startsWith('http') && !url.includes('r2.dev') && !url.includes('cloudflarestorage');
       if (isLocal) {
@@ -416,12 +418,12 @@ function buildGallery(p) {
           const wrapStyle = (customW || customH)
             ? 'width:' + (customW||560) + 'px;max-width:100%;'
             : 'width:100%;';
-          // Use #t=0.1 so browser renders first frame without a separate poster file
-          const videoSrc = url + '#t=0.1';
+          const videoSrc = url;
           const posterAttr = customPosterUrl ? ' poster="' + customPosterUrl + '"' : '';
+          const arStyle = customAR ? 'aspect-ratio:' + customAR + ';' : 'aspect-ratio:16/9;';
           return '<div class="media-block"><div style="' + wrapStyle + '">'
             + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')">'
-            + '<video src="' + videoSrc + '"' + posterAttr + ' playsinline preload="metadata" style="width:100%;height:auto;display:block;background:transparent;"></video>'
+            + '<video src="' + videoSrc + '"' + posterAttr + ' playsinline preload="metadata" style="width:100%;height:auto;display:block;background:#E8E8E8;' + arStyle + '"></video>'
             + '<div class="r2-overlay"><div class="r2-play-icon"><svg viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg></div></div>'
             + '<div class="r2-controls" onclick="event.stopPropagation()">'
             + '<div class="r2-progress" onmousedown="r2Seek(event,\'' + pid + '\')" ontouchstart="r2Seek(event,\'' + pid + '\')">'
