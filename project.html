@@ -414,12 +414,14 @@ function buildGallery(p) {
         if (url.match(/\.(mp4|webm|mov)$/i) || url.includes('r2.dev') || url.includes('cloudflarestorage')) {
           const customPosterUrl = customPoster ? (customPoster.startsWith('http') ? customPoster : 'media/' + customPoster) : null;
           const autoThumb = url.replace(/\.(mp4|webm|mov)$/i, '_thumb.jpg');
+          // Use custom poster if set, otherwise always try auto-thumb
+          const posterUrl = customPosterUrl || autoThumb;
           const pid = 'r2p-' + Math.random().toString(36).slice(2,7);
           const wrapStyle = (customW || customH)
             ? 'width:' + (customW||560) + 'px;max-width:100%;'
             : 'width:100%;';
           const videoSrc = url;
-          const posterAttr = customPosterUrl ? ' poster="' + customPosterUrl + '"' : '';
+          const posterAttr = ' poster="' + posterUrl + '"';
           const arStyle = customAR ? 'aspect-ratio:' + customAR + ';' : '';
           return '<div class="media-block"><div style="' + wrapStyle + '">'
             + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')">'
@@ -469,7 +471,7 @@ function buildGallery(p) {
     return '';
   }
 
-  return '<div class="gallery-section">' + blocks + '</div>';
+  return '<div class="gallery-section">' + blocks.join('') + '</div>';
 }
 
 function buildNavHTML(prev, next) {
