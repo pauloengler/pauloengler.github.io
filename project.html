@@ -78,6 +78,10 @@
     .embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .media-text { padding: 40px 0; width: 100%; max-width: 800px; }
 
+    /* ── ROW LAYOUT ── */
+    .media-row { display: flex; gap: 0; width: 100%; align-items: flex-start; }
+    .media-row .media-block { flex: 1; min-width: 0; }
+
     /* ── CUSTOM VIDEO PLAYER ── */
     .r2-player { position: relative; width: 100%; background: #000; cursor: pointer; }
     .r2-player video { display: block; width: 100%; height: auto; }
@@ -328,10 +332,45 @@ function buildGallery(p) {
   if (!mediaRaw) return '';
 
   // Normalize: replace any newlines (from CSV multiline cells) with spaces before splitting
-  const items = mediaRaw.replace(/[\r\n]+/g,' ').split('|').map(s => s.trim()).filter(Boolean);
-  if (!items.length) return '';
+  const normalized = mediaRaw.replace(/[\r\n]+/g,' ');
 
-  const blocks = items.map(function(item) {
+  // Parse row: ... :row groups and standalone items
+  // Strategy: split on | first, then group consecutive items inside row: ... :row
+  const rawItems = normalized.split('|').map(s => s.trim()).filter(Boolean);
+  if (!rawItems.length) return '';
+
+  // Group into segments: either a single item or an array of items (row group)
+  const segments = [];
+  let inRow = false;
+  let rowItems = [];
+  rawItems.forEach(function(item) {
+    if (item.toLowerCase().startsWith('row:')) {
+      inRow = true;
+      const rest = item.slice(4).trim();
+      if (rest) rowItems.push(rest);
+    } else if (item.toLowerCase().endsWith(':row')) {
+      const rest = item.slice(0, -4).trim();
+      if (rest) rowItems.push(rest);
+      segments.push({ type: 'row', items: rowItems });
+      rowItems = [];
+      inRow = false;
+    } else if (inRow) {
+      rowItems.push(item);
+    } else {
+      segments.push({ type: 'single', item: item });
+    }
+  });
+  // Close any unclosed row
+  if (rowItems.length) segments.push({ type: 'row', items: rowItems });
+
+  const blocks = segments.map(function(seg) {
+    if (seg.type === 'row') {
+      const rowBlocks = seg.items.map(function(item) { return renderItem(item); }).join('');
+      return '<div class="media-row">' + rowBlocks + '</div>';
+    }
+    return renderItem(seg.item);
+  });
+  function renderItem(item) {
     if (item.startsWith('img:')) {
       const rawImg = item.slice(4).trim();
       const wMatchI = rawImg.match(/\bw:(\d+)/);
@@ -420,7 +459,7 @@ function buildGallery(p) {
       return '<div style="height:' + px + 'px;"></div>';
     }
     return '';
-  }).join('');
+  }
 
   return '<div class="gallery-section">' + blocks + '</div>';
 }
