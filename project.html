@@ -426,7 +426,7 @@ function buildGallery(p) {
           // Put aspect-ratio on the wrapper so it has size before video loads
           return '<div class="media-block"><div style="' + wrapStyle + '">'
             + '<div class="r2-player paused" id="' + pid + '" onclick="r2Toggle(\'' + pid + '\')" style="aspect-ratio:' + ar + ';background:#E8E8E8;width:100%;">'
-            + '<video src="' + videoSrc + '"' + posterAttr + ' playsinline preload="none" style="width:100%;height:100%;display:block;object-fit:cover;"></video>'
+            + '<video src="' + videoSrc + '" data-src="' + videoSrc + '"' + posterAttr + ' playsinline preload="none" style="width:100%;height:100%;display:block;object-fit:cover;"></video>'
             + '<div class="r2-overlay"><div class="r2-play-icon"><svg viewBox="0 0 24 24" fill="white"><polygon points="6,3 20,12 6,21"/></svg></div></div>'
             + '<div class="r2-controls" onclick="event.stopPropagation()">'
             + '<div class="r2-progress" onmousedown="r2Seek(event,\'' + pid + '\')" ontouchstart="r2Seek(event,\'' + pid + '\')">'
@@ -538,6 +538,22 @@ async function loadProject() {
       + buildGallery(p)
       + buildAwards(p);
 
+    // For each R2 player, test if the auto-thumb exists — if not, capture a frame
+    requestAnimationFrame(function() {
+      document.querySelectorAll('.r2-player video').forEach(function(vid) {
+        const poster = vid.getAttribute('poster');
+        if (!poster) { r2CapturePoster(vid); return; }
+        // Test if poster image loads — if 404, capture frame instead
+        const img = new Image();
+        img.onload = function() {}; // poster exists, all good
+        img.onerror = function() {
+          vid.removeAttribute('poster');
+          r2CapturePoster(vid);
+        };
+        img.src = poster;
+      });
+    });
+
     // Bottom nav
     const navBottom = document.getElementById('project-nav-bottom');
     navBottom.innerHTML = buildNavHTML(prev, next);
@@ -547,6 +563,35 @@ async function loadProject() {
   } catch(err) {
     document.getElementById('project-content').innerHTML = '<div class="loading">Could not load project.</div>';
     console.error(err);
+  }
+}
+
+// ── AUTO FRAME CAPTURE ────────────────────────────────────────
+// When a video has no real poster (thumb failed to load), capture a frame from the video
+function r2CapturePoster(vid) {
+  // Only capture if poster failed or wasn't set
+  if (vid.dataset.posterCaptured) return;
+  vid.dataset.posterCaptured = '1';
+  // Seek to 0.5s to get a real frame
+  const doCapture = function() {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = vid.videoWidth;
+      canvas.height = vid.videoHeight;
+      canvas.getContext('2d').drawImage(vid, 0, 0);
+      const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+      vid.poster = dataURL;
+    } catch(e) {}
+  };
+  if (vid.readyState >= 2) {
+    vid.currentTime = 0.5;
+    vid.addEventListener('seeked', doCapture, { once: true });
+  } else {
+    vid.addEventListener('loadeddata', function() {
+      vid.currentTime = 0.5;
+      vid.addEventListener('seeked', doCapture, { once: true });
+    }, { once: true });
+    vid.load();
   }
 }
 
