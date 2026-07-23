@@ -570,7 +570,7 @@ function generateResume(btn) {
 
           // Medals as text (cleaner than pills at small size)
           const medals = [];
-          [['gp','GP'],['g','Gold'],['s','Silver'],['b','Bronze'],['sh','Short']].forEach(function(pair){
+          [['gp','Grand Prix'],['g','Gold'],['s','Silver'],['b','Bronze'],['sh','Shortlist']].forEach(function(pair){
             if(aw[pair[0]]>0) medals.push(pair[1]+' '+aw[pair[0]]);
           });
           doc.setFont('helvetica','normal');
@@ -617,6 +617,7 @@ function generateResume(btn) {
         cr.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])cl.push(r[k]);}));
         // Ensure Etihad Airways is in the list
         if (!cl.some(c=>c.toLowerCase().includes('etihad'))) cl.push('Etihad Airways');
+        if (!cl.some(c=>c.toLowerCase().includes('homecentre')||c.toLowerCase().includes('home centre'))) cl.push('HomeCentre');
         doc.setFont('helvetica','normal');
         doc.setFontSize(8);
         doc.setTextColor(...MID);
