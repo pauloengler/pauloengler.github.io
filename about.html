@@ -74,6 +74,11 @@
     .footer-left a, .footer-right a { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
     .footer-left a:hover, .footer-right a:hover { color: #FFFFFF; }
     .loading { padding: 80px 40px; text-align: center; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: #999999; }
+    /* ── RESUME BUTTON ── */
+    .resume-dl-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #FFFFFF; background: #0A0A0A; border: none; cursor: pointer; padding: 14px 24px; transition: background 0.2s; }
+    .resume-dl-btn:hover { background: #333; }
+    .resume-dl-btn:disabled { opacity: 0.5; cursor: wait; }
+
     @media (max-width: 600px) {
       nav, .about-header, .about-section, footer { padding-left: 20px; padding-right: 20px; }
       .about-header { flex-direction: column; align-items: flex-start; }
@@ -81,6 +86,7 @@
       .exp-role, .exp-location { display: none; }
     }
   </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 <div class="site">
@@ -314,7 +320,9 @@ function buildAbout(rows, projects) {
       +(contact.col3?'<div class="contact-item"><span class="contact-label">LinkedIn</span><a class="contact-value" href="'+contact.col3+'" target="_blank">'+contact.col3.replace('https://','')+'</a></div>':'')
       +(contact.col4?'<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col4+'" target="_blank">@'+contact.col4+'</a></div>':'')
       +(contact.col5?'<div class="contact-item"><span class="contact-label">Instagram</span><a class="contact-value" href="https://instagram.com/'+contact.col5+'" target="_blank">@'+contact.col5+'</a></div>':'')
-      +'</div></div>';
+      + '</div>'
+      + '<button class="resume-dl-btn" onclick="generateResume(this)">&#8595; Download Resume</button>'
+      + '</div>';
   }
 
   return html;
@@ -338,6 +346,8 @@ async function loadAbout() {
     ]);
     const rows = parseCSV(aboutText, false);
     const projects = parseCSV(projectsText, true);
+    window._aboutRows = rows;
+    window._aboutProjects = projects;
     document.getElementById('about-content').innerHTML = buildAbout(rows, projects);
   } catch(err) {
     document.getElementById('about-content').innerHTML = '<div class="loading">Could not load content.</div>';
@@ -345,6 +355,145 @@ async function loadAbout() {
   }
 }
 loadAbout();
+
+function generateResume(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
+  setTimeout(function() {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+      const rows = window._aboutRows || [];
+      const projects = window._aboutProjects || [];
+      const W=210,H=297,ML=18,MR=18,MT=18;
+      let y=MT;
+      const cW=W-ML-MR;
+      const BK=[10,10,10],MI=[120,120,110],LT=[180,178,172];
+      function chk(n){ if(y+n>H-16){doc.addPage();y=MT;} }
+      function rule(c){ doc.setDrawColor(...c);doc.setLineWidth(0.3);doc.line(ML,y,W-MR,y);y+=4; }
+      function lbl(t){ doc.setFont('helvetica','bold');doc.setFontSize(6);doc.setTextColor(...LT);doc.text(t.toUpperCase(),ML,y);y+=5; }
+
+      // Header
+      const hdr=rows.find(r=>r.block==='header');
+      if(hdr){
+        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(...MI);
+        doc.text((hdr.col1||'').toUpperCase(),ML,y);y+=7;
+        doc.setFontSize(28);doc.setTextColor(...BK);
+        doc.text(hdr.col2||'',ML,y);y+=10;
+      }
+
+      // Sublines with token replacement
+      const AWARD_KEYS=['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+      let tot=0,can=0,gp=0;
+      projects.forEach(function(p){
+        AWARD_KEYS.forEach(function(s){
+          ['gp','g','s','b','sh'].forEach(function(m){const v=parseInt(p[s+'_'+m]||0);if(v>0)tot+=v;if(s==='cannes'&&m!=='sh'&&v>0)can+=v;});
+        });
+        const g=parseInt(p['cannes_gp']||0);if(g>0)gp+=g;
+      });
+      function tok(s){return s.replace(/\{\{total\}\}/g,tot).replace(/\{\{cannes\}\}/g,can).replace(/\{\{gp\}\}/g,gp);}
+      const subs=rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block,undefined,{numeric:true}));
+      if(subs.length){
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
+        subs.forEach(r=>{doc.text(tok(r.col1||''),ML,y);y+=5;});
+      }
+      y+=4;rule(BK);
+
+      // Intro
+      const intros=rows.filter(r=>r.block==='intro');
+      if(intros.length){
+        lbl('About');doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(...BK);
+        intros.forEach(r=>{const ls=doc.splitTextToSize(r.col1||'',cW);chk(ls.length*4.5+4);doc.text(ls,ML,y);y+=ls.length*4.5+3;});
+        y+=2;rule(LT);
+      }
+
+      // Experience
+      const exps=rows.filter(r=>r.block==='experience');
+      if(exps.length){
+        lbl('Experience');
+        exps.forEach(r=>{
+          chk(8);
+          const yrs=(r.col2&&r.col3)?r.col2+' – '+r.col3:(r.col2||r.col3||'');
+          doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...BK);
+          doc.text((r.col1||'').toUpperCase(),ML,y);
+          doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
+          doc.text(yrs,ML+60,y);doc.text(r.col4||'',ML+90,y);
+          doc.setTextColor(...LT);doc.text(r.col5||'',ML+150,y);y+=6;
+        });
+        y+=2;rule(LT);
+      }
+
+      // Awards
+      const AN={ame:'AME',archive:"Lürzer's Archive",cannes:'Cannes Lions',caples:'Caples',clio:'Clio',cliohealth:'Clio Health',dandad:'D&AD',elojo:'El Ojo',fiap:'FIAP',lia:'LIA',loeries:'Loeries',lynx:'Dubai Lynx',madstars:'Mad Stars',newyork:'New York Festivals',one:'One Show',phnks:'PHNX',wark:'WARK',wave:'Wave Festival',webby:'Webby',wpp:'WPP Cream'};
+      const am={};
+      projects.forEach(function(p){AWARD_KEYS.forEach(function(s){['gp','g','s','b','sh'].forEach(function(m){const v=parseInt(p[s+'_'+m]||0);if(v>0){if(!am[s])am[s]={gp:0,g:0,s:0,b:0,sh:0,total:0};am[s][m]+=v;am[s].total+=v;}});});});
+      const ak=Object.keys(am).sort((a,b)=>am[b].total-am[a].total);
+      if(ak.length){
+        chk(20);lbl('Awards');
+        const AC={gp:[26,26,26],g:[168,135,74],s:[154,175,168],b:[146,102,80],sh:[200,195,184]};
+        ak.forEach(function(s){
+          chk(7);
+          doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...BK);
+          doc.text((AN[s]||s).toUpperCase(),ML,y);
+          let px=ML+55;
+          [['gp','GP'],['g','G'],['s','S'],['b','B'],['sh','Sh']].forEach(function(p){
+            if(am[s][p[0]]>0){
+              doc.setFillColor(...(AC[p[0]]||LT));
+              const pw=7+(am[s][p[0]]>9?2:0);
+              doc.roundedRect(px,y-3.5,pw,4.5,0.8,0.8,'F');
+              doc.setFont('helvetica','bold');doc.setFontSize(6);doc.setTextColor(247,244,238);
+              doc.text(p[1],px+1.5,y);px+=pw+1.5;
+              doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...MI);
+              doc.text(String(am[s][p[0]]),px,y);px+=5;
+            }
+          });
+          y+=6;
+        });
+        y+=2;rule(LT);
+      }
+
+      // Expertise
+      const er=rows.filter(r=>r.block==='expertise');
+      if(er.length){
+        chk(12);lbl('Expertise');
+        const tags=[];er.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])tags.push(r[k]);}));
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
+        const tl=doc.splitTextToSize(tags.join('  ·  '),cW);doc.text(tl,ML,y);y+=tl.length*4.5+4;rule(LT);
+      }
+
+      // Clients
+      const cr=rows.filter(r=>r.block==='clients');
+      if(cr.length){
+        chk(12);lbl('Selected Clients');
+        const cl=[];cr.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])cl.push(r[k]);}));
+        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
+        const cll=doc.splitTextToSize(cl.join('  ·  '),cW);doc.text(cll,ML,y);y+=cll.length*4.5+4;rule(LT);
+      }
+
+      // Contact
+      const ct=rows.find(r=>r.block==='contact');
+      if(ct){
+        chk(20);lbl('Contact');
+        [['Email',ct.col1],['Phone',ct.col2],['LinkedIn',ct.col3],['Instagram',ct.col4?'@'+ct.col4:'']].forEach(function(p){
+          if(!p[1])return;
+          doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(...LT);doc.text(p[0].toUpperCase(),ML,y);
+          doc.setFont('helvetica','normal');doc.setTextColor(...BK);doc.text(p[1],ML+28,y);y+=5.5;
+        });
+      }
+
+      // Footer timestamp
+      const now=new Date();
+      const stamp='Generated '+now.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      for(let i=1;i<=doc.getNumberOfPages();i++){
+        doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(6);doc.setTextColor(...LT);
+        doc.text(stamp,ML,H-8);doc.text('pauloengler.com',W-MR,H-8,{align:'right'});
+      }
+
+      const fn='PauloEngler_Resume_'+now.getFullYear()+('0'+(now.getMonth()+1)).slice(-2)+('0'+now.getDate()).slice(-2)+'.pdf';
+      doc.save(fn);
+    } catch(e) { console.error(e); alert('Could not generate PDF.'); }
+    if(btn){btn.disabled=false;btn.textContent='↓ Download Resume';}
+  }, 50);
+}
 </script>
 </body>
 </html>
