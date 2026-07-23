@@ -364,134 +364,309 @@ function generateResume(btn) {
       const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
       const rows = window._aboutRows || [];
       const projects = window._aboutProjects || [];
-      const W=210,H=297,ML=18,MR=18,MT=18;
-      let y=MT;
-      const cW=W-ML-MR;
-      const BK=[10,10,10],MI=[120,120,110],LT=[180,178,172];
-      function chk(n){ if(y+n>H-16){doc.addPage();y=MT;} }
-      function rule(c){ doc.setDrawColor(...c);doc.setLineWidth(0.3);doc.line(ML,y,W-MR,y);y+=4; }
-      function lbl(t){ doc.setFont('helvetica','bold');doc.setFontSize(6);doc.setTextColor(...LT);doc.text(t.toUpperCase(),ML,y);y+=5; }
 
-      // Header
-      const hdr=rows.find(r=>r.block==='header');
-      if(hdr){
-        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(...MI);
-        doc.text((hdr.col1||'').toUpperCase(),ML,y);y+=7;
-        doc.setFontSize(28);doc.setTextColor(...BK);
-        doc.text(hdr.col2||'',ML,y);y+=10;
+      const W=210, H=297, ML=16, MR=16, MT=16, FOOTER=12;
+      const cW = W-ML-MR;
+      let y = MT;
+
+      // Colour palette
+      const BK  = [10,10,10];
+      const MID = [100,100,100];
+      const LT  = [170,170,170];
+      const ACC = [10,10,10];   // accent = black for clean look
+
+      // Award chip colours
+      const CHIP = { gp:[10,10,10], g:[168,135,74], s:[154,175,168], b:[146,102,80], sh:[210,205,198] };
+      const CHIPT= { gp:[247,244,238], g:[247,244,238], s:[247,244,238], b:[247,244,238], sh:[80,78,75] };
+
+      function chk(n) {
+        if (y+n > H-FOOTER-6) { doc.addPage(); y=MT; }
       }
 
-      // Sublines with token replacement
+      function hRule(weight, col) {
+        doc.setDrawColor(...col);
+        doc.setLineWidth(weight);
+        doc.line(ML, y, W-MR, y);
+      }
+
+      function sectionLabel(t) {
+        chk(12);
+        y += 6;
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(6.5);
+        doc.setTextColor(...LT);
+        doc.text(t.toUpperCase(), ML, y);
+        y += 1.5;
+        hRule(0.2, [220,218,214]);
+        y += 4;
+      }
+
+      // ── AWARD TOTALS ──────────────────────────────────────────
       const AWARD_KEYS=['ame','archive','cannes','caples','clio','cliohealth','dandad','elojo','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
-      let tot=0,can=0,gp=0;
+      let tot=0, can=0, gp=0;
       projects.forEach(function(p){
         AWARD_KEYS.forEach(function(s){
-          ['gp','g','s','b','sh'].forEach(function(m){const v=parseInt(p[s+'_'+m]||0);if(v>0)tot+=v;if(s==='cannes'&&m!=='sh'&&v>0)can+=v;});
+          ['gp','g','s','b','sh'].forEach(function(m){
+            const v=parseInt(p[s+'_'+m]||0);
+            if(v>0) tot+=v;
+            if(s==='cannes'&&m!=='sh'&&v>0) can+=v;
+          });
         });
-        const g=parseInt(p['cannes_gp']||0);if(g>0)gp+=g;
+        const g=parseInt(p['cannes_gp']||0); if(g>0) gp+=g;
       });
-      function tok(s){return s.replace(/\{\{total\}\}/g,tot).replace(/\{\{cannes\}\}/g,can).replace(/\{\{gp\}\}/g,gp);}
-      const subs=rows.filter(r=>/^subline\d+$/.test(r.block)).sort((a,b)=>a.block.localeCompare(b.block,undefined,{numeric:true}));
-      if(subs.length){
-        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
-        subs.forEach(r=>{doc.text(tok(r.col1||''),ML,y);y+=5;});
-      }
-      y+=4;rule(BK);
+      function tok(s){ return s.replace(/\{\{total\}\}/g,tot).replace(/\{\{cannes\}\}/g,can).replace(/\{\{gp\}\}/g,gp); }
 
-      // Intro
-      const intros=rows.filter(r=>r.block==='intro');
-      if(intros.length){
-        lbl('About');doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor(...BK);
-        intros.forEach(r=>{const ls=doc.splitTextToSize(r.col1||'',cW);chk(ls.length*4.5+4);doc.text(ls,ML,y);y+=ls.length*4.5+3;});
-        y+=2;rule(LT);
-      }
+      // ── HEADER ────────────────────────────────────────────────
+      // Black bar at top
+      doc.setFillColor(...BK);
+      doc.rect(0, 0, W, 38, 'F');
 
-      // Experience
-      const exps=rows.filter(r=>r.block==='experience');
-      if(exps.length){
-        lbl('Experience');
-        exps.forEach(r=>{
-          chk(8);
-          const yrs=(r.col2&&r.col3)?r.col2+' – '+r.col3:(r.col2||r.col3||'');
-          doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(...BK);
-          doc.text((r.col1||'').toUpperCase(),ML,y);
-          doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
-          doc.text(yrs,ML+60,y);doc.text(r.col4||'',ML+90,y);
-          doc.setTextColor(...LT);doc.text(r.col5||'',ML+150,y);y+=6;
+      const hdr = rows.find(r=>r.block==='header');
+      const ct  = rows.find(r=>r.block==='contact');
+
+      // Name
+      doc.setFont('helvetica','bold');
+      doc.setFontSize(22);
+      doc.setTextColor(247,244,238);
+      doc.text(hdr ? hdr.col2||'Paulo Engler' : 'Paulo Engler', ML, 16);
+
+      // Title
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(7.5);
+      doc.setTextColor(180,178,172);
+      doc.text(hdr ? (hdr.col1||'').toUpperCase() : '', ML, 23);
+
+      // Nationality / age line
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(7);
+      doc.setTextColor(130,128,124);
+      doc.text('Brazilian  ·  Based in Dubai, UAE  ·  41 years old', ML, 30);
+
+      // Contact info right-aligned in header
+      if (ct) {
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(7);
+        doc.setTextColor(180,178,172);
+        const contactLines = [
+          ct.col1||'',
+          ct.col2||'',
+          ct.col3 ? ct.col3.replace('https://','') : '',
+          'pauloengler.com'
+        ].filter(Boolean);
+        let cy = 10;
+        contactLines.forEach(function(line) {
+          doc.text(line, W-MR, cy, { align:'right' });
+          cy += 5;
         });
-        y+=2;rule(LT);
       }
 
-      // Awards
-      const AN={ame:'AME',archive:"Lürzer's Archive",cannes:'Cannes Lions',caples:'Caples',clio:'Clio',cliohealth:'Clio Health',dandad:'D&AD',elojo:'El Ojo',fiap:'FIAP',lia:'LIA',loeries:'Loeries',lynx:'Dubai Lynx',madstars:'Mad Stars',newyork:'New York Festivals',one:'One Show',phnks:'PHNX',wark:'WARK',wave:'Wave Festival',webby:'Webby',wpp:'WPP Cream'};
-      const am={};
-      projects.forEach(function(p){AWARD_KEYS.forEach(function(s){['gp','g','s','b','sh'].forEach(function(m){const v=parseInt(p[s+'_'+m]||0);if(v>0){if(!am[s])am[s]={gp:0,g:0,s:0,b:0,sh:0,total:0};am[s][m]+=v;am[s].total+=v;}});});});
-      const ak=Object.keys(am).sort((a,b)=>am[b].total-am[a].total);
-      if(ak.length){
-        chk(20);lbl('Awards');
-        const AC={gp:[26,26,26],g:[168,135,74],s:[154,175,168],b:[146,102,80],sh:[200,195,184]};
-        ak.forEach(function(s){
-          chk(7);
-          doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.setTextColor(...BK);
-          doc.text((AN[s]||s).toUpperCase(),ML,y);
-          let px=ML+55;
-          [['gp','GP'],['g','G'],['s','S'],['b','B'],['sh','Sh']].forEach(function(p){
-            if(am[s][p[0]]>0){
-              doc.setFillColor(...(AC[p[0]]||LT));
-              const pw=7+(am[s][p[0]]>9?2:0);
-              doc.roundedRect(px,y-3.5,pw,4.5,0.8,0.8,'F');
-              doc.setFont('helvetica','bold');doc.setFontSize(6);doc.setTextColor(247,244,238);
-              doc.text(p[1],px+1.5,y);px+=pw+1.5;
-              doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...MI);
-              doc.text(String(am[s][p[0]]),px,y);px+=5;
+      // Sublines as stats row below black bar
+      y = 44;
+      const subs = rows.filter(r=>/^subline\d+$/.test(r.block))
+        .sort((a,b)=>a.block.localeCompare(b.block,undefined,{numeric:true}));
+      if (subs.length) {
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...MID);
+        const statLine = subs.map(r=>tok(r.col1||'')).join('   ·   ');
+        const wrapped = doc.splitTextToSize(statLine, cW);
+        doc.text(wrapped, ML, y);
+        y += wrapped.length * 4.5 + 2;
+      }
+      hRule(0.5, [10,10,10]);
+      y += 6;
+
+      // ── ABOUT ─────────────────────────────────────────────────
+      const intros = rows.filter(r=>r.block==='intro');
+      if (intros.length) {
+        sectionLabel('About');
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8.5);
+        doc.setTextColor(...BK);
+        intros.forEach(function(r) {
+          const ls = doc.splitTextToSize(r.col1||'', cW);
+          chk(ls.length*4.8+4);
+          doc.text(ls, ML, y);
+          y += ls.length*4.8 + 3;
+        });
+      }
+
+      // ── EXPERIENCE ────────────────────────────────────────────
+      const exps = rows.filter(r=>r.block==='experience');
+      if (exps.length) {
+        sectionLabel('Experience');
+        // Column widths: company 60mm | years 22mm | role 60mm | location rest
+        const C1=ML, C2=ML+62, C3=ML+86, C4=ML+148;
+        exps.forEach(function(r) {
+          chk(9);
+          const yrs = (r.col2&&r.col3) ? r.col2+' – '+r.col3 : (r.col2||r.col3||'');
+          const role = r.col4||'';
+          const loc  = r.col5||'';
+          const company = (r.col1||'').toUpperCase();
+
+          // Company name — bold
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(8);
+          doc.setTextColor(...BK);
+          doc.text(company, C1, y);
+
+          // Years
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...MID);
+          doc.text(yrs, C2, y);
+
+          // Role
+          doc.setTextColor(...BK);
+          doc.text(role, C3, y);
+
+          // Location
+          doc.setTextColor(...LT);
+          if (loc) doc.text(loc, C4, y);
+
+          y += 7;
+        });
+      }
+
+      // ── AWARDS ────────────────────────────────────────────────
+      const AN = {
+        ame:'AME', archive:"Lürzer's Archive", cannes:'Cannes Lions', caples:'Caples',
+        clio:'Clio', cliohealth:'Clio Health', dandad:'D&AD', elojo:'El Ojo',
+        fiap:'FIAP', lia:'LIA', loeries:'Loeries', lynx:'Dubai Lynx',
+        madstars:'Mad Stars', newyork:'New York Festivals', one:'One Show',
+        phnks:'PHNX', wark:'WARK', wave:'Wave Festival', webby:'Webby', wpp:'WPP Cream'
+      };
+      const MNAME = { gp:'Grand Prix', g:'Gold', s:'Silver', b:'Bronze', sh:'Shortlist' };
+      const am = {};
+      projects.forEach(function(p){
+        AWARD_KEYS.forEach(function(s){
+          ['gp','g','s','b','sh'].forEach(function(m){
+            const v=parseInt(p[s+'_'+m]||0);
+            if(v>0){
+              if(!am[s]) am[s]={gp:0,g:0,s:0,b:0,sh:0,total:0};
+              am[s][m]+=v; am[s].total+=v;
             }
           });
-          y+=6;
         });
-        y+=2;rule(LT);
+      });
+      const ak = Object.keys(am).sort((a,b)=>am[b].total-am[a].total);
+
+      if (ak.length) {
+        sectionLabel('Awards');
+        // Two-column award layout
+        const col1Awards = ak.filter((_,i)=>i%2===0);
+        const col2Awards = ak.filter((_,i)=>i%2===1);
+        const AW = (W-ML-MR)/2 - 4; // width of each column
+        const startY = y;
+        let yLeft = y, yRight = y;
+
+        function drawAwardRow(show, xOff, yPos) {
+          const aw = am[show];
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...BK);
+          doc.text((AN[show]||show).toUpperCase(), xOff, yPos);
+          yPos += 4.5;
+
+          // Medals as text (cleaner than pills at small size)
+          const medals = [];
+          [['gp','GP'],['g','Gold'],['s','Silver'],['b','Bronze'],['sh','Short']].forEach(function(pair){
+            if(aw[pair[0]]>0) medals.push(pair[1]+' '+aw[pair[0]]);
+          });
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(7);
+          doc.setTextColor(...MID);
+          doc.text(medals.join('  '), xOff, yPos);
+          yPos += 6;
+          return yPos;
+        }
+
+        col1Awards.forEach(function(show, i) {
+          chk(14);
+          yLeft = drawAwardRow(show, ML, yLeft);
+        });
+
+        const midX = ML + AW + 8;
+        col2Awards.forEach(function(show, i) {
+          yRight = drawAwardRow(show, midX, startY + i * 11);
+        });
+
+        y = Math.max(yLeft, startY + col2Awards.length * 11) + 2;
       }
 
-      // Expertise
-      const er=rows.filter(r=>r.block==='expertise');
-      if(er.length){
-        chk(12);lbl('Expertise');
-        const tags=[];er.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])tags.push(r[k]);}));
-        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
-        const tl=doc.splitTextToSize(tags.join('  ·  '),cW);doc.text(tl,ML,y);y+=tl.length*4.5+4;rule(LT);
+      // ── EXPERTISE ─────────────────────────────────────────────
+      const er = rows.filter(r=>r.block==='expertise');
+      if (er.length) {
+        sectionLabel('Expertise');
+        const tags = [];
+        er.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])tags.push(r[k]);}));
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...MID);
+        const tl = doc.splitTextToSize(tags.join('  ·  '), cW);
+        chk(tl.length*5+4);
+        doc.text(tl, ML, y);
+        y += tl.length*5 + 3;
       }
 
-      // Clients
-      const cr=rows.filter(r=>r.block==='clients');
-      if(cr.length){
-        chk(12);lbl('Selected Clients');
-        const cl=[];cr.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])cl.push(r[k]);}));
-        doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...MI);
-        const cll=doc.splitTextToSize(cl.join('  ·  '),cW);doc.text(cll,ML,y);y+=cll.length*4.5+4;rule(LT);
+      // ── CLIENTS ───────────────────────────────────────────────
+      const cr = rows.filter(r=>r.block==='clients');
+      if (cr.length) {
+        sectionLabel('Selected Clients');
+        const cl = [];
+        cr.forEach(r=>Object.keys(r).filter(k=>/^col\d+$/.test(k)).sort().forEach(k=>{if(r[k])cl.push(r[k]);}));
+        // Ensure Etihad Airways is in the list
+        if (!cl.some(c=>c.toLowerCase().includes('etihad'))) cl.push('Etihad Airways');
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8);
+        doc.setTextColor(...MID);
+        const cll = doc.splitTextToSize(cl.join('  ·  '), cW);
+        chk(cll.length*5+4);
+        doc.text(cll, ML, y);
+        y += cll.length*5 + 3;
       }
 
-      // Contact
-      const ct=rows.find(r=>r.block==='contact');
-      if(ct){
-        chk(20);lbl('Contact');
-        [['Email',ct.col1],['Phone',ct.col2],['LinkedIn',ct.col3],['Instagram',ct.col4?'@'+ct.col4:'']].forEach(function(p){
-          if(!p[1])return;
-          doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(...LT);doc.text(p[0].toUpperCase(),ML,y);
-          doc.setFont('helvetica','normal');doc.setTextColor(...BK);doc.text(p[1],ML+28,y);y+=5.5;
+      // ── JURY ──────────────────────────────────────────────────
+      const jury = rows.filter(r=>r.block==='jury');
+      if (jury.length) {
+        sectionLabel('Jury');
+        jury.forEach(function(r) {
+          chk(8);
+          doc.setFont('helvetica','bold');
+          doc.setFontSize(8);
+          doc.setTextColor(...BK);
+          doc.text(r.col1||'', ML, y);
+          doc.setFont('helvetica','normal');
+          doc.setFontSize(7.5);
+          doc.setTextColor(...MID);
+          doc.text(r.col2||'', ML+100, y);
+          y += 7;
         });
       }
 
-      // Footer timestamp
-      const now=new Date();
-      const stamp='Generated '+now.toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})+' '+now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      for(let i=1;i<=doc.getNumberOfPages();i++){
-        doc.setPage(i);doc.setFont('helvetica','normal');doc.setFontSize(6);doc.setTextColor(...LT);
-        doc.text(stamp,ML,H-8);doc.text('pauloengler.com',W-MR,H-8,{align:'right'});
+      // ── FOOTER ON EVERY PAGE ──────────────────────────────────
+      const now = new Date();
+      const stamp = 'pauloengler.com  ·  pauloengler@gmail.com  ·  Generated '+
+        now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+      const pages = doc.getNumberOfPages();
+      for (let i=1; i<=pages; i++) {
+        doc.setPage(i);
+        // Footer line
+        doc.setDrawColor(...LT);
+        doc.setLineWidth(0.2);
+        doc.line(ML, H-FOOTER, W-MR, H-FOOTER);
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(6);
+        doc.setTextColor(...LT);
+        doc.text(stamp, ML, H-FOOTER+4);
+        doc.text(i+' / '+pages, W-MR, H-FOOTER+4, { align:'right' });
       }
 
       const fn='PauloEngler_Resume_'+now.getFullYear()+('0'+(now.getMonth()+1)).slice(-2)+('0'+now.getDate()).slice(-2)+'.pdf';
       doc.save(fn);
-    } catch(e) { console.error(e); alert('Could not generate PDF.'); }
-    if(btn){btn.disabled=false;btn.textContent='↓ Download Resume';}
+
+    } catch(e) { console.error(e); alert('Could not generate PDF: '+e.message); }
+    if (btn) { btn.disabled=false; btn.textContent='↓ Download Resume'; }
   }, 50);
 }
 </script>
