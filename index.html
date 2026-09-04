@@ -816,8 +816,9 @@ document.addEventListener('keydown', function(e) {
         if(lastVote){
           var s=lastState;
           fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',palette:s.palLabel||'',
-              position:s.posLabel||'',vAlign:s.vAlign||'',base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
+            body:JSON.stringify({vote:lastVote,shape:s.shape||'',font:s.sfLabel||'',ampFont:s.afLabel||'',
+              bg:s.bgLabel||'',tex:s.texLabel||'',position:s.posLabel||'',vAlign:s.vAlign||'',
+              base:s.s23||'',s1:s.s1||'',sA:s.sA||''})
           }).catch(function(){});
         }
         timer=setTimeout(heroRender,100);

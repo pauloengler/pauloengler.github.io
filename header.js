@@ -204,8 +204,10 @@ function injectFontLink(allFonts){
 }
 
 // Start with the static fallback pool (used for all 3 roles) so the header renders immediately
-let SENIOR_FONTS = pickSessionFonts(ALL_FONTS,SEEN_KEYS.senior);
-let AMP_FONTS     = pickSessionFonts(ALL_FONTS,SEEN_KEYS.amp);
+// Cloned (not shared) so Senior and & can carry independent vote-driven weights below,
+// even when the same font lands in both pools.
+let SENIOR_FONTS = pickSessionFonts(ALL_FONTS,SEEN_KEYS.senior).map(f=>({...f}));
+let AMP_FONTS     = pickSessionFonts(ALL_FONTS,SEEN_KEYS.amp).map(f=>({...f}));
 let BODY_FONTS    = []; // empty by default — CD/HoA use Unbounded unless the sheet provides a column
 injectFontLink(SENIOR_FONTS.concat(AMP_FONTS).concat(BODY_FONTS));
 
@@ -224,10 +226,11 @@ injectFontLink(SENIOR_FONTS.concat(AMP_FONTS).concat(BODY_FONTS));
         const b=fontEntryFromName(cells[1]); if(b) colB.push(b);
         const c=fontEntryFromName(cells[2]); if(c) colC.push(c);
       });
-      if(colA.length>=3) SENIOR_FONTS=pickSessionFonts(colA,SEEN_KEYS.senior);
-      if(colB.length>=3) AMP_FONTS=pickSessionFonts(colB,SEEN_KEYS.amp);
+      if(colA.length>=3) SENIOR_FONTS=pickSessionFonts(colA,SEEN_KEYS.senior).map(f=>({...f}));
+      if(colB.length>=3) AMP_FONTS=pickSessionFonts(colB,SEEN_KEYS.amp).map(f=>({...f}));
       if(colC.length>=3) BODY_FONTS=pickSessionFonts(colC,SEEN_KEYS.body);
       injectFontLink(SENIOR_FONTS.concat(AMP_FONTS).concat(BODY_FONTS));
+      if(typeof applyWeights==='function') applyWeights();
     })
     .catch(()=>{ /* sheet unavailable — keep using ALL_FONTS fallback for Senior/& */ });
 })();
@@ -311,6 +314,43 @@ const SHAPES=[
   {id:'star11-med',  cat:'star',cf:false,draw:(cx,cy,r,m,f,s,sw)=>`<path d="${tStar(star(11,r,r*.5),cx,cy)}" ${attrs(m,f,s,sw)}/>`},
 ];
 SHAPES.forEach(sh=>{if(sh.cat==='star')sh.w=1;if(sh.cat==='solid')sh.w=2.5;if(sh.cat==='hollow')sh.w=1.5;});
+
+// ─── Vote-driven weighting ──────────────────────────────────────────────────
+// Every 50 votes on the live header, a script tallies like-rate per font/shape/
+// background/texture and publishes it here. We nudge (never override) the
+// hand-tuned base weights above toward what people actually liked.
+SHAPES.forEach(sh=>{sh._baseW=sh.w;});
+BG_PALETTES.forEach(p=>{p._baseW=p.w;});
+TEXTURES.forEach(t=>{t._baseW=t.w;});
+const WEIGHTS_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1G93V1T7d-TDcJeTg5yQIcqxLzTTmIXP2VOqyaFlFzX8/export?format=csv&gid=1569653314';
+let PARAM_WEIGHTS = {};
+function blendWeight(base,score){return score==null?base:base*(0.5+score);}
+function applyWeights(){
+  SHAPES.forEach(sh=>{sh.w=blendWeight(sh._baseW,PARAM_WEIGHTS.shape&&PARAM_WEIGHTS.shape[sh.id]);});
+  BG_PALETTES.forEach(p=>{p.w=blendWeight(p._baseW,PARAM_WEIGHTS.bg&&PARAM_WEIGHTS.bg[p.label]);});
+  TEXTURES.forEach(t=>{t.w=blendWeight(t._baseW,PARAM_WEIGHTS.tex&&PARAM_WEIGHTS.tex[t.id]);});
+  SENIOR_FONTS.forEach(f=>{f.w=blendWeight(1,PARAM_WEIGHTS.font&&PARAM_WEIGHTS.font[f.label]);});
+  AMP_FONTS.forEach(f=>{f.w=blendWeight(1,PARAM_WEIGHTS.ampFont&&PARAM_WEIGHTS.ampFont[f.label]);});
+}
+(function loadWeights(){
+  fetch(WEIGHTS_SHEET_URL,{mode:'cors',credentials:'omit',redirect:'follow'})
+    .then(r=>r.text())
+    .then(text=>{
+      const lines=text.replace(/\r\n/g,'\n').split('\n').filter(l=>l.trim());
+      const rows=lines.slice(1); // skip header row
+      const w={};
+      rows.forEach(line=>{
+        const cells=line.split(',').map(c=>c.trim().replace(/^"|"$/g,''));
+        const cat=cells[0],val=cells[1],score=parseFloat(cells[4]);
+        if(!cat||!val||isNaN(score)) return;
+        if(!w[cat]) w[cat]={};
+        w[cat][val]=score;
+      });
+      PARAM_WEIGHTS=w;
+      applyWeights();
+    })
+    .catch(()=>{ /* weights sheet unavailable — keep hand-tuned defaults */ });
+})();
 
 const SHAPE_MODES=[{m:'filled',w:3},{m:'stroke',w:5}];
 function pickMode(){return weightedPick(SHAPE_MODES).m;}
