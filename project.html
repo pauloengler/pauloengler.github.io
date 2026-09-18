@@ -462,6 +462,20 @@ function buildGallery(p) {
           + '<img src="' + thumb + '" onerror="this.src=\'' + thumbFb + '\'" alt="Video" loading="lazy" class="yt-thumb-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">'
           + playBtn + '</div></div>';
       }
+    } else if (item.startsWith('embed:')) {
+      // Generic iframe embed — Canva, Google Slides, Figma, etc.
+      // Syntax: embed:https://www.canva.com/design/XXXX/view?embed w:800 ar:16:9
+      const raw = item.slice(6).trim();
+      const wMatch = raw.match(/\bw:(\d+)/);
+      const arMatch = raw.match(/\bar:(\d+):(\d+)/);
+      const customW = wMatch ? parseInt(wMatch[1]) : null;
+      const customAR = arMatch ? (parseInt(arMatch[1]) + '/' + parseInt(arMatch[2])) : null;
+      const url = raw.replace(/\s+w:\d+/,'').replace(/\s+ar:\d+:\d+/,'').trim();
+      const ar = customAR || '16/9';
+      const wrapStyle = customW ? 'width:' + customW + 'px;max-width:100%;' : 'width:100%;';
+      return '<div class="media-block"><div style="' + wrapStyle + 'aspect-ratio:' + ar + ';">'
+        + '<iframe src="' + url + '" loading="lazy" allow="autoplay; fullscreen" allowfullscreen frameborder="0" style="width:100%;height:100%;border:0;"></iframe>'
+        + '</div></div>';
     } else if (item.startsWith('txt:')) {
       const text = item.slice(4).trim();
       return '<div class="media-block media-text"><p>' + text + '</p></div>';
