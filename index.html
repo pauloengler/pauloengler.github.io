@@ -59,7 +59,8 @@
     .search-input { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 12px; color: #0A0A0A !important; outline: none !important; border: none !important; box-shadow: none !important; background: #FFFFFF !important; width: 100%; -webkit-appearance: none; appearance: none; color-scheme: light; }
     .search-input:focus { outline: none !important; border: none !important; box-shadow: none !important; }
     .search-input::placeholder { color: #B0B0B0 !important; opacity: 1; }
-    .award-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 16px 40px 0; background: #FFFFFF; }
+    .awards-label { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.04em; text-transform: uppercase; color: #999999; text-align: center; padding: 16px 40px 0; background: #FFFFFF; }
+    .award-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; padding: 8px 40px 0; background: #FFFFFF; }
     .legend-item { display: flex; align-items: center; gap: 4px; font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 9px; letter-spacing: 0.02em; color: #777777; }
     .legend-dot { width: 8px; height: 8px; flex-shrink: 0; }
     .chapter-header { display: flex; justify-content: center; align-items: center; padding: 80px 40px 20px; background: #FFFFFF; border-bottom: 1px solid #E5E5E5; }
@@ -449,6 +450,11 @@ function renderProjects(projects) {
   main.innerHTML = '';
 
   // Award color legend — shown once, above the first chapter
+  const awardsLabel = document.createElement('p');
+  awardsLabel.className = 'awards-label';
+  awardsLabel.textContent = 'Awards';
+  main.appendChild(awardsLabel);
+
   const legend = document.createElement('div');
   legend.className = 'award-legend';
   legend.innerHTML = ''
@@ -529,6 +535,30 @@ function buildCard(p) {
   }
 
   const AWARD_KEYS = ['ame','archive','andys','cannes','caples','clio','cliohealth','dandad','elojo','euro','fiap','lia','loeries','lynx','madstars','newyork','one','phnks','wark','wave','webby','wpp'];
+  const AWARD_NAMES = {
+    ame: 'AME by New York Festivals',
+    archive: "Lürzer's Archive Magazine",
+    andys: "The Andys",
+    cannes: 'Cannes Lions',
+    caples: 'Caples',
+    clio: 'Clio',
+    cliohealth: 'Clio Health',
+    dandad: 'D&AD',
+    elojo: 'El Ojo de Iberoamérica',
+    euro: 'Eurobest',
+    fiap: 'Festival Iberoamericano de la Publicidad',
+    lia: 'London International Awards (LIA)',
+    loeries: 'Loeries',
+    lynx: 'Dubai Lynx',
+    madstars: 'Mad Stars',
+    newyork: 'New York Festivals',
+    one: 'One Show',
+    phnks: 'Ad Forum PHNX',
+    wark: 'WARK',
+    wave: 'Wave Festival in Rio',
+    webby: 'Webby Awards',
+    wpp: 'WPP Cream'
+  };
   const metalColMap = { gp:'gp', gold:'g', silver:'s', bronze:'b', short:'sh' };
   const ICON_ONLY_SHOWS = ['archive'];
 
@@ -567,7 +597,8 @@ function buildCard(p) {
       const cells = col.iconOnly ? '' : col.metals.map(function(m) {
         return '<div class="award-cell ' + metalClass(m.metal) + '"><span class="cell-count">' + m.count + '</span></div>';
       }).join('');
-      const iconCell = '<div class="award-icon-cell"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + col.name + '" loading="lazy"></div>';
+      const showName = AWARD_NAMES[col.name.toLowerCase()] || col.name;
+      const iconCell = '<div class="award-icon-cell" title="' + showName + '"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + showName + '" loading="lazy"></div>';
       return '<div class="award-col">' + cells + iconCell + '</div>';
     }).join('');
 
