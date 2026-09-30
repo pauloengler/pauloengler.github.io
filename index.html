@@ -82,6 +82,8 @@
     .award-cell.metal-other  { background: #EFEFEF; color: #777; }
     .award-icon-cell { display: flex; align-items: center; justify-content: center; aspect-ratio: 1; width: 100%; background: #FFFFFF; padding: 3px; }
     .award-icon-cell img { width: 75%; height: 75%; object-fit: contain; display: block; opacity: 0.5; }
+    .award-tooltip { position: fixed; z-index: 9999; background: #0A0A0A; color: #FFFFFF; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.02em; padding: 4px 8px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.06s; }
+    .award-tooltip.visible { opacity: 1; }
     .award-overflow-box { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 9px; color: #999999; background: #F2F2F2; letter-spacing: 0; }
     .award-spacer { margin-bottom: 0; }
     .project-thumb { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background: #F2F2F2; border-radius: 0; border: 1px solid #0A0A0A; }
@@ -598,7 +600,7 @@ function buildCard(p) {
         return '<div class="award-cell ' + metalClass(m.metal) + '"><span class="cell-count">' + m.count + '</span></div>';
       }).join('');
       const showName = AWARD_NAMES[col.name.toLowerCase()] || col.name;
-      const iconCell = '<div class="award-icon-cell" title="' + showName + '"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + showName + '" loading="lazy"></div>';
+      const iconCell = '<div class="award-icon-cell" data-tooltip="' + showName + '"><img src="icons/' + col.name.toLowerCase() + '.png" alt="' + showName + '" loading="lazy"></div>';
       return '<div class="award-col">' + cells + iconCell + '</div>';
     }).join('');
 
@@ -771,6 +773,25 @@ document.getElementById('search-input').addEventListener('input', function() {
 });
 
 loadProjects();
+
+// Fast custom tooltip for award-show icons — the native `title` attribute
+// has a slow, non-configurable OS hover delay, so we drive our own instead.
+const awardTooltip = document.createElement('div');
+awardTooltip.className = 'award-tooltip';
+document.body.appendChild(awardTooltip);
+document.addEventListener('mouseover', function(e) {
+  const cell = e.target.closest('.award-icon-cell');
+  if (!cell || !cell.dataset.tooltip) return;
+  const rect = cell.getBoundingClientRect();
+  awardTooltip.textContent = cell.dataset.tooltip;
+  awardTooltip.style.left = (rect.left + rect.width / 2) + 'px';
+  awardTooltip.style.top = (rect.top - 8) + 'px';
+  awardTooltip.style.transform = 'translate(-50%, -100%)';
+  awardTooltip.classList.add('visible');
+});
+document.addEventListener('mouseout', function(e) {
+  if (e.target.closest('.award-icon-cell')) awardTooltip.classList.remove('visible');
+});
 
 function getYouTubeId(url) {
   const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|v\/))([\w-]{11})/);
