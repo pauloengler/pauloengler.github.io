@@ -785,8 +785,8 @@ document.addEventListener('mouseover', function(e) {
   const rect = cell.getBoundingClientRect();
   awardTooltip.textContent = cell.dataset.tooltip;
   awardTooltip.style.left = (rect.left + rect.width / 2) + 'px';
-  awardTooltip.style.top = (rect.top - 8) + 'px';
-  awardTooltip.style.transform = 'translate(-50%, -100%)';
+  awardTooltip.style.top = (rect.bottom + 8) + 'px';
+  awardTooltip.style.transform = 'translate(-50%, 0)';
   awardTooltip.classList.add('visible');
 });
 document.addEventListener('mouseout', function(e) {
